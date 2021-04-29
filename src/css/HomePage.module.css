@@ -3,24 +3,25 @@
     height: auto;
     /* background-color: rgb(202, 202, 202); */
     margin: 2rem 0;
-    display: flex;
+    /* display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: center; */
 }
 
 .mockup {
     position: relative;
     background-image: url("https://www.instagram.com/static/images/homepage/home-phones.png/43cc71bb1b43.png");
     background-color: #fff;
+    background-repeat: no-repeat;
     height: 618px;
     width: 454px;
 }
 
 .wrap {
     width: 100%;
-    margin: auto;
     display: flex;
-    /* justify-content: space-between; */
+    align-items: center;
+    justify-content: center;
 }
 
 .mockImg1 {
@@ -28,14 +29,18 @@
     top: 100px;
     border: 1px solid #333;
     left: 150px;
+    z-index: 2;
 }
 
 
 .auth {
-    height: 380px;
+    height: auto;
     text-align: center;
     width: 50%;
-    margin-top: 3rem;
+    max-width: 350px;
+}
+
+.authmain{
     border: 1px solid #DBDBDB;
 }
 
@@ -59,6 +64,11 @@
     margin: 1rem 0;
 }
 
+.loginError{
+    text-align: center;
+    margin: 0.8rem 0;
+    color: #ED4956;
+}
 .userInput {
     background-color: rgb(248, 248, 248);
     color: #262626;
@@ -75,7 +85,7 @@
 
 
 .userForm {
-    margin: 1.5rem 3rem 3rem 3rem;
+    margin: 1.5rem 3rem 1rem 3rem;
 }
 
 .submitButton {
@@ -92,9 +102,12 @@
     border-radius: 3px;
     border: 1px solid rgb(202, 202, 202);
 }
+.changebtnColor{
+    background-color: #0095F6;
+}
 
 .signOption {
-    width: 302px;
+    width: auto;
     margin-top: 1rem;
     text-align: center;
     display: flex;
@@ -152,6 +165,7 @@
 }
 
 .noAccount{
+    margin-top: 1rem;
     border: 1px solid #DBDBDB;
     padding: 15px 0;
 }
@@ -238,12 +252,15 @@
 
 /* 2 */
   @media only screen and (max-width: 450px) {
-    .auth,.noAccount{
+    .authmain,.noAccount{
         border: 0;
     }
-    body{
+    .appLinks{
         overflow-x: hidden;
     }
+    /* body{
+        overflow-x: hidden;
+    } */
     
     .flinks,.footerLinks{
         width: 100%;

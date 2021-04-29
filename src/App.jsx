@@ -2,9 +2,15 @@ import HomePage from "./pages/HomePage";
 import "./css/main.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import UsernamePage from "./pages/UsernamePage";
-
+import { useEffect } from "react";
+import {auth} from './services/firebase'
+import store from './stores/store'
+import { view } from "@risingstack/react-easy-state";
 
 function App() {
+  useEffect(()=>{
+    auth().onAuthStateChanged(user=> user ?  store.auth.user =user : store.auth.user = auth().currentUser);
+},[])
   return (
     <Router>
       <Switch>
@@ -21,4 +27,4 @@ function App() {
   );
 }
 
-export default App;
+export default view(App);
