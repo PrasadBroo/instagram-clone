@@ -1,12 +1,17 @@
 import { view } from "@risingstack/react-easy-state";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Spinner from "../components/Spinner";
 import HomePageCss from "../css/HomePage.module.css";
 import appStorePng from "../media/app-store.png";
 import googleStorePng from "../media/google-storepng.png";
 import inMockOne from "../media/in-mock-1.jpg";
+import inMockTwo from "../media/in-mock-2.jpg";
+import inMockThree from "../media/in-mock-3.jpg";
+import inMockFour from "../media/in-mock-4.jpg";
+import inMockFive from "../media/in-mock-5.jpg";
 import { auth } from "../services/firebase";
 import store from "../stores/store";
+
 
 function LoggedOut() {
   const [email, setEmail] = useState("");
@@ -14,13 +19,24 @@ function LoggedOut() {
   const [spin, setSpin] = useState(false);
   const [password, setPassword] = useState("");
   const [sbtnChange, setSbtnChange] = useState(false);
+  const [dyanamicImg,setDynanmicImg] = useState(inMockOne);
+  
+
+  useEffect(()=>{
+    setInterval(()=>{
+      const caraual = [inMockOne,inMockTwo,inMockThree,inMockFour,inMockFive];
+      let random = Math.floor(Math.random() * caraual.length);
+      setDynanmicImg(caraual[random]);
+    },3000)
+  },[])
+
   return (
     <>
       <div className={HomePageCss.container}>
         <div className={HomePageCss.wrap}>
           <div className={HomePageCss.mockup}>
             <img
-              src={inMockOne}
+              src={dyanamicImg}
               alt="inmockone"
               className={HomePageCss.mockImg1}
             />
@@ -83,7 +99,7 @@ function LoggedOut() {
                           "fab fa-facebook-square " + HomePageCss.fbicon
                         }
                       ></i>
-                      <a href="/comingsoon" className={HomePageCss.fblink}>
+                      <a href="/#" onClick={loginWithFacebook} className={HomePageCss.fblink}>
                         Log In With Facebook
                       </a>
                     </p>
@@ -106,7 +122,7 @@ function LoggedOut() {
               <div className="noacctext">
                 <p className={HomePageCss.noAccText}>
                   Don't have an account?{" "}
-                  <a href="/comingsoon" className={HomePageCss.signupLink}>
+                  <a href="/accounts/emailsignup" className={HomePageCss.signupLink}>
                     Sign up
                   </a>
                 </p>
@@ -244,6 +260,18 @@ function LoggedOut() {
     setPassword(e.target.value);
     handelSubmitBtncolor();
   }
+
+ async function loginWithFacebook(){
+    let provider = new auth.FacebookAuthProvider();
+    try {
+      const res =  await auth().signInWithPopup(provider)
+      store.auth.user = res.user;
+    } catch (error) {
+      return alert(error.message);
+    }
+    
+  }
+  
 }
 
 export default view(LoggedOut);
