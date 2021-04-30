@@ -1,0 +1,287 @@
+.container {
+    width: 100%;
+    height: auto;
+    /* background-color: rgb(202, 202, 202); */
+    margin: 2rem 0;
+    /* display: flex;
+    align-items: center;
+    justify-content: center; */
+}
+
+.mockup {
+    position: relative;
+    background-image: url("https://www.instagram.com/static/images/homepage/home-phones.png/43cc71bb1b43.png");
+    background-color: #fff;
+    background-repeat: no-repeat;
+    height: 618px;
+    width: 454px;
+}
+
+.wrap {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mockImg1 {
+    position: absolute;
+    top: 100px;
+    border: 1px solid #333;
+    left: 150px;
+    z-index: 2;
+    transition: opacity 1.5s ease-in 0s;
+    animation-name: example;
+    animation-duration: 2s;
+}
+
+@keyframes example {
+    from {opacity: 0.1;}
+    to {opacity: 1;}
+  }
+.auth {
+    height: auto;
+    text-align: center;
+    width: 50%;
+    max-width: 370px;
+}
+
+.authmain{
+    border: 1px solid #DBDBDB;
+}
+
+.heading {
+    font-size: 19px;
+    word-spacing: 0px;
+    text-decoration: none solid rgb(38, 38, 38);
+    white-space: nowrap;
+    font-family: 'Lobster Two', cursive;
+    margin: 1rem;
+    padding: 0.5rem;
+    text-align: center;
+
+}
+
+.inputWrap {
+    margin-bottom: 0.5rem;
+}
+
+.inputWrap2 {
+    margin: 1rem 0;
+}
+
+.loginError{
+    text-align: center;
+    margin: 0.8rem 0;
+    color: #ED4956;
+}
+.userInput {
+    background-color: rgb(248, 248, 248);
+    color: #262626;
+    outline: 0;
+    border: 0;
+    width: 90%;
+    padding: 9px 0 7px 8px;
+    height: 35px;
+    border-radius: 3px;
+    border: 1px solid rgb(202, 202, 202);
+
+}
+
+
+
+.userForm {
+    margin: 1.5rem 3rem 1rem 3rem;
+}
+
+.submitButton {
+    background-color: rgba(0, 149, 246, .3);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    outline: 0;
+    border: 0;
+    padding: 2px 0;
+    cursor: pointer;
+    width: 90%;
+    height: 29px;
+    border-radius: 3px;
+    border: 1px solid rgb(202, 202, 202);
+}
+.changebtnColor{
+    background-color: #0095F6;
+}
+
+.signOption {
+    width: auto;
+    margin-top: 1rem;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    
+}
+
+.leftLine,.rightLine {
+    background-color: rgb(209, 209, 209);
+    height: 1px;
+    width: 35%;
+}
+
+
+.orText {
+    font-size: 14px;
+    color: rgb(143, 143, 143);
+}
+
+.otherOptions{
+    margin-top: 2rem;
+
+}
+.fbicon{
+    font-size: 14px;
+    margin-right: 0.5rem;
+    color:  #385185;
+}
+
+.fblink{
+    background-color: #fff;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    color:  #385185;
+    font-weight: 550;
+}
+
+.forgetPass{
+    margin-top: 2rem;
+}
+
+.forgetPassLink{
+    text-decoration: none;
+    color:  #00376B;
+}
+
+.signupLink{
+    text-decoration: none;
+    color: #0095F6;
+    font-weight: 600;
+    
+}
+
+.noAccText{
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.noAccount{
+    margin-top: 1rem;
+    border: 1px solid #DBDBDB;
+    padding: 15px 0;
+}
+
+.appDownload{
+    margin-top: 2rem;
+}
+
+.appLinks{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.appLinks img{
+    margin-left: 0.5rem;
+    width: 135px;
+    height: 40px;
+}
+
+.appDownload p{
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    margin-bottom: 1rem;
+}
+
+.footerLinks{
+    width: 50%;
+    margin: auto;
+    /* margin-top: 4rem; */
+}
+.flinks{
+    width: 90%;
+    margin: auto;
+}
+.flinks{
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.flinks li{
+    margin: 0.2rem 0.6rem;
+    font-size: 14px;
+}
+.flinks li a{
+    text-decoration: none;
+    color: #8E8E8E;
+}
+.footer{
+    margin-top: 2rem;
+    padding: 0.5rem;
+    text-align: center;
+    color: #8E8E8E;
+}
+
+.myHeart{
+    color: red;
+}
+
+
+
+
+
+
+/* 1 */
+@media only screen and (max-width: 875px) {
+    .auth{
+        width: 100%;
+    }
+    .mockup{
+        display: none;
+    }
+    .flinks,.footerLinks{
+        width: 75%;
+    }
+    
+    .wrap{
+        flex-direction: column;
+    }
+
+  }
+
+/* 2 */
+  @media only screen and (max-width: 450px) {
+    .authmain,.noAccount{
+        border: 0;
+    }
+    .appLinks{
+        overflow-x: hidden;
+    }
+    /* body{
+        overflow-x: hidden;
+    } */
+    
+    .flinks,.footerLinks{
+        width: 100%;
+    }
+    .userForm{
+        margin: 0;
+        padding: 0;
+    }
+    
+  }
+
+/* 3 */
+  @media only screen and (max-width: 290px) {
+    .appLinks{
+        flex-direction: column;
+    }
+  }

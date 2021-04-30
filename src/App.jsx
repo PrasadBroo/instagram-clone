@@ -7,10 +7,11 @@ import {auth} from './services/firebase'
 import store from './stores/store'
 import { view } from "@risingstack/react-easy-state";
 import SignupPage from "./pages/SignupPage";
+import LoginPage from "./pages/LoginPage";
 
 function App() {
   useEffect(()=>{
-    auth().onAuthStateChanged(user=> user ?  store.auth.user =user : store.auth.user = auth().currentUser);
+    auth().onAuthStateChanged(user=>  store.auth.user = user );
 },[])
   return (
     <Router>
@@ -22,8 +23,8 @@ function App() {
           component={() => <UsernamePage />}
         ></Route>
         <Route exact path="/accounts/emailsignup" component={() => <SignupPage />}></Route>
-        {/* <Route exact path="/login" component={()=> < Loginpage login={(email,pass)=>loginuser(email,pass)} user={user} />}></Route>
-          <Route exact path="/signup" component={()=> < Signupage signup={(e,p,cp)=>signupuser(e,p,cp)} user={user}  />}></Route> */}
+        <Route exact path="/accounts/login" component={() => < LoginPage/>}></Route>
+        
       </Switch>
     </Router>
   );
