@@ -23,11 +23,14 @@ function LoggedOut() {
   
 
   useEffect(()=>{
-    setInterval(()=>{
+   let interval =  setInterval(()=>{
       const caraual = [inMockOne,inMockTwo,inMockThree,inMockFour,inMockFive];
       let random = Math.floor(Math.random() * caraual.length);
       setDynanmicImg(caraual[random]);
-    },3000)
+    },3000);
+
+    return ()=> {clearInterval(interval)}
+    
   },[])
 
   return (

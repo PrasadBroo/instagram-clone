@@ -1,0 +1,96 @@
+
+.userInput {
+    background-color: rgb(248, 248, 248);
+    color: #8E8E8E;
+    outline: 0;
+    border: 0;
+    padding: 9px 0 7px 8px;
+    height: 30px;
+    border-radius: 3px;
+    border: 1px solid rgb(202, 202, 202);
+    text-align: center;
+  width: 100%;
+
+}
+
+.serachIcon{
+    position: absolute;
+    z-index: 1;
+    top: 10px;
+    left: 70px;
+    font-size: 12px;
+    color: #8E8E8E;
+}
+
+.heading{
+    width: 30%;
+    font-size: 19px;
+    text-align: center;
+    word-spacing: 0px;
+    text-decoration: none solid rgb(38, 38, 38);
+    white-space: nowrap;
+    font-family: 'Lobster Two', cursive;
+    margin: 1rem;
+    color: #6b6b6b;
+    /* text-align: center; */
+}
+.serachBar{
+    min-width: 215px;
+    position: relative;
+}
+.navLinks{
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.someLinks{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30%;
+}
+
+.rightIcons{
+    background-color:  #FFFFFF;
+    color: rgb(214, 214, 214);
+    font-size: 25px;
+}
+
+.userProfilePic{
+    cursor: pointer;
+
+}
+
+.userProfilePic img{
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+}
+
+.someLinks a,.userProfilePic{
+    margin:0 0.6rem;
+}
+
+
+
+
+
+@media only screen and (max-width: 775px){
+    .heading{
+        width: 10%;
+    }
+}
+
+@media only screen and (max-width: 610px){
+    .serachBar{
+        display: none;
+    }
+    .navLinks{
+        justify-content: space-between;
+    }
+    .someLinks{
+        width: 60%;
+    }
+}
