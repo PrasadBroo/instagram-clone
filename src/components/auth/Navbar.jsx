@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
+import React from "react";
 import NavbarCss from "../../css/auth/Navbar.module.css";
-import store from "../../stores/store";
 
 export default function Navbar() {
   
