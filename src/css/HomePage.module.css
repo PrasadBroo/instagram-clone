@@ -247,9 +247,6 @@
     .flinks,.footerLinks{
         width: 100%;
     }
-    .footerLinks{
-        margin-top: 15rem;
-    }
     .wrap{
         flex-direction: column;
     }
