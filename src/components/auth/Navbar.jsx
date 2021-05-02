@@ -1,11 +1,11 @@
 import React from "react";
 import NavbarCss from "../../css/auth/Navbar.module.css";
-
+import myPic from '../../media/my_pic.jpg'
 export default function Navbar() {
   
 
   return (
-    <nav>
+    <nav className={NavbarCss.navBar}>
       <div className={NavbarCss.navLinks}>
         <div className={NavbarCss.heading}>
           <h1>Instagram</h1>
@@ -76,7 +76,7 @@ export default function Navbar() {
           </a>
           <div className={NavbarCss.userProfilePic}>
             <img
-              src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+              src={myPic}
               alt="profile pic"
             />
           </div>
