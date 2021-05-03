@@ -5,6 +5,7 @@
     /* max-height: 915px; */
     margin: 1rem auto;
     border: 1px solid #DBDBDB;
+    border-radius: 5px;
 }
 
 .postHeading {
@@ -67,7 +68,17 @@
     color: #262626;
     font-weight: 600;
 }
+.likeBtnWrap,.commentBtnWrap,.shareBtnWrap,.saveBtn{
+  font-size: 1.8rem;
+  cursor: pointer;
+}
+.heart_red{
+    color: red;
+}
 
+.scaleup{
+    
+}
 .comments {
     padding: 0 1rem;
 }
