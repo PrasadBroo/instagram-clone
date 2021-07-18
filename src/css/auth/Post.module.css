@@ -25,8 +25,14 @@
 .postAuthor a {
     font-size: 14px;
     color: #262626;
+    text-decoration: none;
 }
 
+.viewAllComm{
+    font-size: 14px;
+    padding: 0 1rem;
+    color: #8E8E8E;
+}
 .postAuthor img {
     height: 32px;
     width: 32px;
@@ -76,9 +82,7 @@
     color: red;
 }
 
-.scaleup{
-    
-}
+
 .comments {
     padding: 0 1rem;
 }

@@ -16,8 +16,13 @@
     border-radius: 3px;
     border: 1px solid rgb(202, 202, 202);
     text-align: center;
-  width: 100%;
+    width: 100%;
 
+}
+
+.userInput:active  .serachIcon{
+    left: 10px;
+    transition: 1s;
 }
 
 .serachIcon{
@@ -40,6 +45,10 @@
     margin: 1rem;
     color: #252525;
     /* text-align: center; */
+}
+.heading a{
+    text-decoration: none;
+    color: #252525;
 }
 .serachBar{
     min-width: 240px;

@@ -8,7 +8,7 @@ export default function Navbar() {
     <nav className={NavbarCss.navBar}>
       <div className={NavbarCss.navLinks}>
         <div className={NavbarCss.heading}>
-          <h1>Instagram</h1>
+          <h1><a href="/">Instagram</a> </h1>
         </div>
         <div className={NavbarCss.serachBar}>
           <i className={"fas fa-search " + NavbarCss.serachIcon}></i>
@@ -19,7 +19,7 @@ export default function Navbar() {
             required
             placeholder="Search"
             onChange={null}
-          />
+          ></input>
         </div>
         <div className={NavbarCss.someLinks}>
           <a href="/">

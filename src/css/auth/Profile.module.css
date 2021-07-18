@@ -1,0 +1,89 @@
+.profileWrapper{
+ position: fixed;
+    top: 88px;
+    left: 70%;
+}
+.profile{
+    z-index: 11;
+    padding: 1rem;
+}
+
+.head{
+    display: flex;
+    align-items: center;
+    margin: 0.5rem  0;
+}
+.profileinfo a{
+    text-decoration: none;
+    color: #333;
+}
+.profileImg{
+    margin: 0 0.5rem;
+}
+.profileinfo{
+    margin-right: 1rem;
+}
+
+.profileImg img{
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+}
+.suggeprofileImg img{
+    width: 40px;
+    height: 40px;
+}
+.username{
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.fullName{
+    color: #8E8E8E;
+    font-size: 14px;
+}
+
+.suggestions{
+    margin-top: 1rem;
+}
+
+.suggepara{
+    color: #8E8E8E;
+    margin: 1rem 0 1rem 10px;
+}
+
+.followBtn{
+    border: none;
+    outline: none;
+    background-color: transparent;
+    color: #0095F6;
+    cursor: pointer;
+}
+.followBtnWrap{
+    margin-left: 4rem;
+}
+.bottomLinks{
+    display: flex;
+    padding: 1rem;
+    width: 70%;
+    flex-wrap: wrap;
+}
+.bottomLinks a{
+    font-size: 11px;
+    margin: 0.3rem;
+    color:  #C7C7C7;
+}
+.creditInfo{
+    padding: 1rem;
+    font-size: 11px;
+    color: #C7C7C7;
+}
+
+.creditInfo i{
+    color: red;
+}
+@media only screen and (max-width: 1000px){
+    .profileWrapper{
+        display: none;
+    }
+}

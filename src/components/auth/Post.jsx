@@ -12,7 +12,7 @@ export default function Post() {
             src="https://graph.facebook.com/240349964547826/picture"
             alt="post"
           />
-          <p>prasad__bro</p>
+          <p><a href="/prasad__bro">prasad__bro</a></p>
         </div>
         <div className={PostCss.postOptions}>
           <svg
@@ -70,6 +70,9 @@ export default function Post() {
       </div>
       <div className={PostCss.likesCount}>
         <p>25,143 likes</p>
+      </div>
+      <div className={PostCss.viewAllComm}>
+        <p>View All 12 Comments</p>
       </div>
       <div className={PostCss.comments}>
         <div className={PostCss.comment}>
