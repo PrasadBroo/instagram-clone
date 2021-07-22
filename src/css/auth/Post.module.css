@@ -26,6 +26,8 @@
     font-size: 14px;
     color: #262626;
     text-decoration: none;
+    display: flex;
+    align-items: center;
 }
 
 .viewAllComm{
@@ -42,9 +44,10 @@
 
 .postOptions {
     padding: 0.5rem;
+    cursor: pointer;
 }
 
-.postAuthor p {
+.postAuthor a {
     color: #262626;
     font-weight: 600;
     font-size: 14px;

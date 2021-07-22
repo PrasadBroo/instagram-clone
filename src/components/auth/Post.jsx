@@ -8,11 +8,11 @@ export default function Post() {
     <div className={PostCss.postWrapper}>
       <div className={PostCss.postHeading}>
         <div className={PostCss.postAuthor}>
-          <img
+        <a href="/prasad__bro"><img
             src="https://graph.facebook.com/240349964547826/picture"
             alt="post"
-          />
-          <p><a href="/prasad__bro">prasad__bro</a></p>
+          /></a>
+          <a href="/prasad__bro">prasad__bro</a>
         </div>
         <div className={PostCss.postOptions}>
           <svg

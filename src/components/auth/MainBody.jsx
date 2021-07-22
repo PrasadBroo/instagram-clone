@@ -4,6 +4,7 @@ import MainBodyCss from '../../css/auth/MainBody.module.css'
 import Stories from './Stories'
 import Posts from './Posts'
 import Profile from './Profile'
+import PostModal from '../modals/PostModal'
 
 function MainBody() {
     return (
@@ -12,6 +13,7 @@ function MainBody() {
                 <Stories/>
                 <Posts/>
                 <Profile/>
+                <PostModal/>
             </div>
             
         </div>
