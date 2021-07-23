@@ -72,7 +72,7 @@ export default function Post() {
         <p>25,143 likes</p>
       </div>
       <div className={PostCss.viewAllComm}>
-        <p>View All 12 Comments</p>
+        <button>View All 12 Comments</button>
       </div>
       <div className={PostCss.comments}>
         <div className={PostCss.comment}>

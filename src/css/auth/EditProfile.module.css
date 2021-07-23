@@ -1,0 +1,66 @@
+.wrap{
+    width: 70%;
+}
+
+.wrap input,.wrap textarea{
+    outline: none;
+    border: 1px solid  #DBDBDB;
+    padding: 7px;
+    background-color:  #FAFAFA;
+    width: 100%;
+    border-radius: 3px;
+}
+.wrap textarea{
+    resize: vertical;
+}
+.picName,.OldPass,.NewPass,.ConfirmPass{
+    display: flex;
+    align-items: center;
+    margin: 1rem 0;
+}
+.picName p{
+    font-weight: 600;
+}
+.picName div button{
+    color: #0095F6;
+}
+.picName div:first-child,.OldPass p,.NewPass p,.ConfirmPass p{
+    margin-right: 1rem;
+    font-weight: 600;
+    width: 30%;
+    text-align: right;
+}
+.picName img{
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+}
+.btns{
+    width: 30%;
+    margin: auto;
+}
+.btns button:first-child{
+    display: block;
+    background-color: rgba(0, 149, 246, .3);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    outline: 0;
+    border: 0;
+    padding: 5px;
+    cursor: pointer;
+    /* width: 90%;
+    height: 29px; */
+    border-radius: 3px;
+    border: 1px solid rgb(202, 202, 202);
+    margin-bottom: 1rem;
+}
+
+.btns button:last-child,.picName button{
+    background-color: #fff;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    color:  #385185;
+    font-weight: 550;
+}

@@ -8,6 +8,7 @@ import store from "./stores/store";
 import { view } from "@risingstack/react-easy-state";
 import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
+import SettingsPage from "./pages/SettingsPage";
 
 function App() {
   useEffect(() => {
@@ -17,6 +18,10 @@ function App() {
     <Router>
       <Switch>
         <Route exact path="/" component={() => <HomePage />}></Route>
+        <Route
+          path="/settings"
+          component={() => <SettingsPage />}
+        ></Route>
         <Route
           exact
           path="/:username"

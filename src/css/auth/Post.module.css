@@ -30,10 +30,14 @@
     align-items: center;
 }
 
-.viewAllComm{
+.viewAllComm button{
     font-size: 14px;
     padding: 0 1rem;
     color: #8E8E8E;
+    cursor: pointer;
+    outline: none;
+    border: none;
+    background-color: transparent;
 }
 .postAuthor img {
     height: 32px;
@@ -89,6 +93,7 @@
 .comments {
     padding: 0 1rem;
 }
+
 
 .comment {
     display: flex;
