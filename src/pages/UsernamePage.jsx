@@ -5,7 +5,7 @@ import ProfileMain from '../components/auth/ProfileMain';
 
 
 export default function UsernamePage() {
-    const { username } = useParams();
+    //const { username } = useParams();
     return (
         <>
             <Navbar/>

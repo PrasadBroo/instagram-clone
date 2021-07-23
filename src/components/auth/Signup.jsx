@@ -10,6 +10,7 @@ import Spinner from "../Spinner";
 function Signup() {
   const [sbtnChange, setSbtnChange] = useState(false);
   const [email, setEmail] = useState("");
+  const [loginErrMsg, setLoginErrMsg] = useState(null);
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [username, setUSername] = useState("");
@@ -25,7 +26,10 @@ function Signup() {
             <p>Sign up to see photos and videos from your friends.</p>
           </div>
           <div className={SignupPageCss.loginWithFb}>
-            <button className={SignupPageCss.fblink} onClick={loginWithFacebook}>
+            <button
+              className={SignupPageCss.fblink}
+              onClick={loginWithFacebook}
+            >
               <i
                 className={"fab fa-facebook-square " + SignupPageCss.fbicon}
               ></i>
@@ -112,6 +116,9 @@ function Signup() {
                     Cookies Policy .
                   </a>
                 </p>
+              </div>
+              <div className={SignupPageCss.loginError}>
+                {loginErrMsg ? <p>{loginErrMsg}</p> : null}
               </div>
             </form>
           </div>
@@ -244,7 +251,7 @@ function Signup() {
         await user.updateProfile({ displayName: fullName });
         store.auth.user = res.user;
       } catch (error) {
-        // setLoginErrMsg(error.message);
+        setLoginErrMsg(error.message);
         setSpin(false);
       }
     }, 2000);

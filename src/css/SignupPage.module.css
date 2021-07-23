@@ -52,7 +52,11 @@
     text-align: center;
     margin-top: 1.5rem;
 }
-
+.loginError{
+    text-align: center;
+    margin: 0.8rem 0;
+    color: #ED4956;
+}
 .signOption {
     width: auto;
     margin-top: 1rem;
