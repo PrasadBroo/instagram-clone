@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import myPic from "../../media/my_pic.jpg";
 import ProfileMainCss from "../../css/auth/ProfileMain.module.css";
 import ProfileMainModal from "../modals/ProfileMainModal";
 import { Link } from "react-router-dom";
 
 export default function ProfileMain() {
+  useEffect(()=>{
+    document.body.style.backgroundColor = '#FAFAFA'
+  },[])
   return (
     <div className="ProfilePage">
       <div className={ProfileMainCss.profileWrap}>
