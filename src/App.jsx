@@ -10,6 +10,7 @@ import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
 import SettingsPage from "./pages/SettingsPage";
 import DefaultLoader from "./components/DefaultLoader";
+import PostPage from "./pages/PostPage";
 
 function App() {
   useEffect(() => {
@@ -40,6 +41,11 @@ function App() {
           exact
           path="/accounts/login"
           component={() => <LoginPage />}
+        ></Route>
+        <Route
+          exact
+          path="/post/:postid"
+          component={() => <PostPage />}
         ></Route>
       </Switch>
     </Router>

@@ -1,0 +1,85 @@
+.footerLinks{
+    width: 50%;
+    margin: auto;
+    margin-top: 2rem;
+}
+.flinks{
+    width: 90%;
+    margin: auto;
+}
+.flinks{
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.flinks li{
+    margin: 0.2rem 0.6rem;
+    font-size: 14px;
+}
+.flinks li a{
+    text-decoration: none;
+    color: #8E8E8E;
+}
+.footer{
+    margin-top: 2rem;
+    padding: 0.5rem;
+    text-align: center;
+    color: #8E8E8E;
+}
+
+.myHeart{
+    color: red;
+}
+
+
+
+
+
+
+/* 1 */
+@media only screen and (max-width: 875px) {
+    .auth{
+        width: 100%;
+    }
+    .mockup{
+        display: none;
+    }
+    .flinks,.footerLinks{
+        width: 100%;
+    }
+    .wrap{
+        flex-direction: column;
+    }
+
+  }
+
+/* 2 */
+  @media only screen and (max-width: 450px) {
+    .authmain,.noAccount{
+        border: 0;
+    }
+    .appLinks{
+        overflow-x: hidden;
+    }
+    /* body{
+        overflow-x: hidden;
+    } */
+    
+    .flinks,.footerLinks{
+        width: 100%;
+    }
+    .userForm{
+        margin: 0;
+        padding: 0;
+    }
+    
+  }
+
+/* 3 */
+  @media only screen and (max-width: 290px) {
+    .appLinks{
+        flex-direction: column;
+    }
+  }

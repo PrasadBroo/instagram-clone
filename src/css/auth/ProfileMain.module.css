@@ -1,13 +1,13 @@
 :root {
     --b3f: 250,250,250;
 }
-body{
-    /* background-color: rgba(var(--b3f,250,250,250),1); */
+.profileWrap{
+    width: 80%;
 }
 .wrap{
-    width: 50%;
-    margin: auto;
-    margin-top: 7rem;
+    /* width: 50%;
+    margin: auto; */
+    padding-top: 7rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -26,13 +26,15 @@ body{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: 25px;
+    font-size: 28px;
     color: #262626;
     margin: 1rem 0;
+    
 }
 
 .secone p{
     margin-right: 2rem;
+    font-weight: 300;
 }
 .secone a,.secone button{
     font-size: 1rem;
@@ -77,19 +79,20 @@ body{
 }
 
 .hrline{
+    /* width: 50%;
+    margin: auto; */
+    margin-top: 3rem;
+    
+}
+.hrline hr{
+    border-top: 1px solid  #DBDBDB;
     width: 50%;
     margin: auto;
-    margin-top: 1rem;
-    border-top: 1px solid  #DBDBDB;
-    border-right: 0px solid  #000000;
-    border-bottom: 0px solid  #000000;
-    border-left: 0px solid  #000000;
-    color:  #8E8E8E;
 }
 
 .posts{
-    width: 50%;
-    margin: auto;
+    /* width: 50%;
+    margin: auto; */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -106,7 +109,6 @@ body{
 }
 
 .sharePhotos{
-    width: 50%;
     margin: 2rem auto;
     text-align: center;
 }
