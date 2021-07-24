@@ -7,7 +7,6 @@ import store from '../stores/store'
 function HomePage() {
   return (
     <>
-    {console.log(Boolean(store.auth.user))}
       {store.auth.user ? <LoggedIn/> : <LoggedOut/>}
     </>
   );
