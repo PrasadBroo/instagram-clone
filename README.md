@@ -1,3 +1,5 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/167e84ca-b709-4e40-8949-c4a444fa79de/deploy-status)](https://app.netlify.com/sites/instagram-cloned/deploys)
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
