@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import PostCss from "../../css/auth/Post.module.css";
 import tempImg from "../../media/181184050_246536270301764_5089686745904119707_n.jpg";
+import Comment from './Comment';
 
 export default function Post() {
   const [lc, sLc] = useState(false);
@@ -75,25 +76,8 @@ export default function Post() {
         <button>View All 12 Comments</button>
       </div>
       <div className={PostCss.comments}>
-        <div className={PostCss.comment}>
-          <span>
-            <a href="/prasad_bro">prasad_bro</a>Lorem ipsum dolor sit amet
-            consectetur Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Eos, assumenda?
-          </span>
-          <span>
-          <ion-icon name={lc ? "heart" : "heart-outline"}></ion-icon>
-          </span>
-        </div>
-        <div className={PostCss.comment}>
-          <span>
-            <a href="/prasad_bro">prasad_bro</a>Lorem ipsum dolor sit amet
-            consectetur adipisicing elit. Eos, assumenda?
-          </span>
-          <span>
-          <ion-icon name={lc ? "heart" : "heart-outline"}></ion-icon>
-          </span>
-        </div>
+        <Comment/>
+        <Comment/>
       </div>
       <div className={PostCss.postComment}>
         <div className={PostCss.inputComment}>

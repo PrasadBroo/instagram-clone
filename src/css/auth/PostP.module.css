@@ -114,7 +114,10 @@
     font-size: 1.5rem;
     cursor: pointer;
 }
-
+.commentBtnWrap a{
+    text-decoration: none;
+    color: black;
+}
 .heart_red  {
     color: red;
     animation-name: pulse;
@@ -144,19 +147,6 @@
 }
 
 
-.comment {
-    display: flex;
-    justify-content: space-between;
-    margin: 0.3rem 0;
-    font-size: 14px;
-}
-
-.comment span a {
-    text-decoration: none;
-    color: #262626;
-    margin-right: 0.5rem;
-    font-weight: 600;
-}
 
 .commentForm textarea {
     border: 0;
@@ -200,4 +190,28 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+}
+
+@media only screen and (max-width: 610px){
+    .postWrapper{
+        position: relative;
+        margin-top: 8rem;
+        display: block;
+    }
+    .postHeading{
+        position: absolute;
+        top: -7%;
+        left: 0;
+        right: 0;
+
+    }
+    .comment{
+        font-size: 14px;
+    }
+}
+
+@media only screen and (max-width: 410px){
+    .postHeading{
+        top: -8%;
+    }
 }

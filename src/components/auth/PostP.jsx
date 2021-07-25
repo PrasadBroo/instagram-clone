@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import PostPCss from "../../css/auth/PostP.module.css";
 import tempImg from "../../media/181184050_246536270301764_5089686745904119707_n.jpg";
+import Comment from './Comment';
 
 export default function PostP() {
   const [lc, sLc] = useState(false);
@@ -57,40 +58,31 @@ export default function PostP() {
             </div>
           </div>
           <div className={PostPCss.comments}>
-            <div className={PostPCss.comment}>
-              <span>
-                <a href="/prasad_bro">prasad_bro</a>Lorem ipsum dolor sit amet
-                consectetur Lorem ipsum dolor sit amet consectetur adipisicing
-                elit. Eos, assumenda?
-              </span>
-              <span>
-              <i className={PostPCss.likeBtnWrap + " far fa-heart "} onClick={() => sLc(!lc)}></i>
-              </span>
-            </div>
-            <div className={PostPCss.comment}>
-              <span>
-                <a href="/prasad_bro">prasad_bro</a>Lorem ipsum dolor sit amet
-                consectetur adipisicing elit. Eos, assumenda?
-              </span>
-              <span>
-              <i className={lc
-                    ? PostPCss.likeBtnWrap + " fas fa-heart " + PostPCss.heart_red
-                    : PostPCss.likeBtnWrap + " far fa-heart "} onClick={() => sLc(!lc)}></i>
-              </span>
-            </div>
+            <Comment/>
+            <Comment/>
           </div>
         </div>
         <div className="subsec">
           <div className={PostPCss.likeCS}>
             <div className={PostPCss.leftSide}>
               <span>
-                  <i className={lc
-                    ? PostPCss.likeBtnWrap + " fas fa-heart " + PostPCss.heart_red
-                    : PostPCss.likeBtnWrap + " far fa-heart "} onClick={() => sLc(!lc)}></i>
+                <i
+                  className={
+                    lc
+                      ? PostPCss.likeBtnWrap +
+                        " fas fa-heart " +
+                        PostPCss.heart_red
+                      : PostPCss.likeBtnWrap + " far fa-heart "
+                  }
+                  onClick={() => sLc(!lc)}
+                ></i>
                 {/* <ion-icon name={lc ? "heart" : "heart-outline"}></ion-icon> */}
               </span>
               <span className={PostPCss.commentBtnWrap}>
+                <a href="/post/afsafasfas">
                 <ion-icon name="chatbubble-outline"></ion-icon>
+                </a>
+                
               </span>
               <span className={PostPCss.shareBtnWrap}>
                 <ion-icon name="paper-plane-outline"></ion-icon>
