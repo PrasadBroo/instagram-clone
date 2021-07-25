@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import myPic from "../../media/my_pic.jpg";
 import ProfileMainCss from "../../css/auth/ProfileMain.module.css";
 import ProfileMainModal from "../modals/ProfileMainModal";
 import { Link } from "react-router-dom";
+import modalStore from "../../stores/modalStore";
 
 export default function ProfileMain() {
   useEffect(() => {
@@ -12,7 +13,7 @@ export default function ProfileMain() {
     <div className="ProfilePage">
       <div className={ProfileMainCss.profileWrap}>
         <div className={ProfileMainCss.wrap}>
-          <ProfileMainModal />
+          <ProfileMainModal/>
           <div className={ProfileMainCss.profilePic}>
             <img src={myPic} alt="profile_pic" />
           </div>
@@ -20,7 +21,7 @@ export default function ProfileMain() {
             <div className={ProfileMainCss.secone}>
               <p>prasad__bro</p>
               <Link to="/settings/edit" className={ProfileMainCss.editProLink}>Edit Profile</Link>
-              <button>
+              <button onClick={()=> modalStore.userNamePageModal.display = true}>
                 <ion-icon name="settings-outline"></ion-icon>
               </button>
             </div>

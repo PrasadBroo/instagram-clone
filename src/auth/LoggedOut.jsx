@@ -9,8 +9,7 @@ import inMockTwo from "../media/in-mock-2.jpg";
 import inMockThree from "../media/in-mock-3.jpg";
 import inMockFour from "../media/in-mock-4.jpg";
 import inMockFive from "../media/in-mock-5.jpg";
-import { auth } from "../services/firebase";
-import store from "../stores/store";
+import { loginWithEmailPass,loginWithFacebook } from './../utils/authHandler';
 
 
 function LoggedOut() {
@@ -74,7 +73,7 @@ function LoggedOut() {
                   <div className={HomePageCss.inputWrap2}>
                     <button
                       type="submit"
-                      disabled={!sbtnChange}
+                      disabled={spin}
                       className={
                         sbtnChange
                           ? HomePageCss.submitButton +
@@ -102,7 +101,7 @@ function LoggedOut() {
                           "fab fa-facebook-square " + HomePageCss.fbicon
                         }
                       ></i>
-                      <a href="/#" onClick={loginWithFacebook} className={HomePageCss.fblink}>
+                      <a href="/#" onClick={loginWithFb} className={HomePageCss.fblink}>
                         Log In With Facebook
                       </a>
                     </p>
@@ -238,21 +237,17 @@ function LoggedOut() {
       return setSbtnChange(false);
     }
   }
-  function handelFormSubmit(e) {
+async  function handelFormSubmit(e) {
     e.preventDefault();
     if (!isValidDetails()) {
       return alert("Plz fill the details.");
     }
     setSpin(true);
-    setTimeout(async () => {
-      try {
-        let res = await auth().signInWithEmailAndPassword(email, password);
-        store.auth.user = res.user;
-      } catch (error) {
-        setLoginErrMsg(error.message);
-        setSpin(false);
-      }
-    }, 2000);
+    const res = await  loginWithEmailPass(email,password);
+    if(res.err){
+      setLoginErrMsg(res.err.message);
+    }
+    setSpin(false);
   }
 
   function handelEmailChange(e) {
@@ -264,14 +259,11 @@ function LoggedOut() {
     handelSubmitBtncolor();
   }
 
- async function loginWithFacebook(){
-    let provider = new auth.FacebookAuthProvider();
-    try {
-      const res =  await auth().signInWithPopup(provider)
-      store.auth.user = res.user;
-    } catch (error) {
-      return alert(error.message);
-    }
+ async function loginWithFb(){
+   const {err} = await loginWithFacebook();
+   if(err){
+    alert(err.message)
+   }
     
   }
   

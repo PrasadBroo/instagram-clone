@@ -6,6 +6,7 @@ import store from "../../stores/store";
 import appStorePng from "../../media/app-store.png";
 import googleStorePng from "../../media/google-storepng.png";
 import Spinner from "../Spinner";
+import { signupWithEmailPass } from "../../utils/authHandler";
 
 function Signup() {
   const [sbtnChange, setSbtnChange] = useState(false);
@@ -238,23 +239,18 @@ function Signup() {
       return true;
     }
   }
-  function handelFormSubmit(e) {
+  async function handelFormSubmit(e) {
     e.preventDefault();
     if (!isValidDetails()) {
       return alert("Plz fill the details.");
     }
     setSpin(true);
-    setTimeout(async () => {
-      try {
-        let res = await auth().createUserWithEmailAndPassword(email, password);
-        let user = auth().currentUser;
-        await user.updateProfile({ displayName: fullName });
-        store.auth.user = res.user;
-      } catch (error) {
-        setLoginErrMsg(error.message);
-        setSpin(false);
-      }
-    }, 2000);
+    const { err } = await signupWithEmailPass(email, password,fullName,username);
+    if (err) {
+      setLoginErrMsg(err.message);
+      setSpin(false);
+    }
+    
   }
   async function loginWithFacebook() {
     let provider = new auth.FacebookAuthProvider();
