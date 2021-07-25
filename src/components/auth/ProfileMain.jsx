@@ -5,9 +5,9 @@ import ProfileMainModal from "../modals/ProfileMainModal";
 import { Link } from "react-router-dom";
 
 export default function ProfileMain() {
-  useEffect(()=>{
-    document.body.style.backgroundColor = '#FAFAFA'
-  },[])
+  useEffect(() => {
+    document.body.style.backgroundColor = "#FAFAFA";
+  }, []);
   return (
     <div className="ProfilePage">
       <div className={ProfileMainCss.profileWrap}>
@@ -19,11 +19,15 @@ export default function ProfileMain() {
           <div className={ProfileMainCss.profileInfo}>
             <div className={ProfileMainCss.secone}>
               <p>prasad__bro</p>
-              <Link to="/settings/edit">Edit Profile</Link>
+              <Link to="/settings/edit" className={ProfileMainCss.editProLink}>Edit Profile</Link>
               <button>
                 <ion-icon name="settings-outline"></ion-icon>
               </button>
             </div>
+            <div className={ProfileMainCss.secOnemobile}>
+              <Link to="/settings/edit" className={ProfileMainCss.editProLinkM}>Edit Profile</Link>
+            </div>
+            
             <div className={ProfileMainCss.sectwo}>
               <p>
                 <b>2</b> posts
@@ -43,6 +47,27 @@ export default function ProfileMain() {
               <p>😍Favourite Star-Amir Khan 😍</p>
             </div>
           </div>
+        </div>
+        <div className={ProfileMainCss.mobileFollowInfo}>
+          <ul className={ProfileMainCss.followInfo}>
+            <li>
+              <p>
+                <b>2</b> posts
+              </p>
+            </li>
+            <li>
+              <p>
+                {" "}
+                <b>1054</b> followers
+              </p>
+            </li>
+            <li>
+              <p>
+                {" "}
+                <b>456</b> following
+              </p>
+            </li>
+          </ul>
         </div>
         <div className={ProfileMainCss.hrline}>
           <hr />

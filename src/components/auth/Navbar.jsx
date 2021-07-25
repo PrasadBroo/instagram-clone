@@ -25,7 +25,7 @@ export default function Navbar() {
           <a href="/">
             <svg
               aria-label="Home"
-              className="_8-yf5 "
+              className={NavbarCss.HomeIcon + " " + NavbarCss.NavIcons}
               fill="#262626"
               height="22"
               viewBox="0 0 48 48"
@@ -37,7 +37,7 @@ export default function Navbar() {
           <a href="/direct/inbox/">
             <svg
               aria-label="Messenger"
-              className="_8-yf5 "
+              className={NavbarCss.MessageIcon + " " + NavbarCss.NavIcons}
               fill="#262626"
               height="22"
               viewBox="0 0 48 48"
@@ -49,7 +49,7 @@ export default function Navbar() {
           <a href="/jhg">
             <svg
               aria-label="Find People"
-              className="_8-yf5 "
+              className={NavbarCss.InboxIcon + " " + NavbarCss.NavIcons}
               fill="#262626"
               height="22"
               viewBox="0 0 48 48"
@@ -65,7 +65,7 @@ export default function Navbar() {
           <a href="/hfh">
             <svg
               aria-label="Activity Feed"
-              className="_8-yf5 "
+              className={NavbarCss.FeedIcon + " " + NavbarCss.NavIcons}
               fill="#262626"
               height="22"
               viewBox="0 0 48 48"

@@ -36,7 +36,7 @@
     margin-right: 2rem;
     font-weight: 300;
 }
-.secone a,.secone button{
+.secone a,.secone button,.secOnemobile a{
     font-size: 1rem;
     cursor: pointer;
     text-decoration: none;
@@ -50,8 +50,17 @@
     padding: 5px;
 }
 
-.secone a{
+.secone a.secOnemobile a{
     font-size: 14px;
+}
+.secOnemobile{
+    display: none;
+    margin: 1rem 0;
+}
+.editProLinkM{
+    width: 100%;
+    display: block;
+    text-align: center;
 }
 
 .secone button:last-child{
@@ -132,3 +141,57 @@
     font-size: 1.1rem;
     cursor: pointer;
 }
+.mobileFollowInfo{
+    margin-top: 2rem;
+    border-top: 2px solid #DBDBDB;
+    padding: 0.5rem 0;
+    border-bottom: 2px solid #DBDBDB;
+    display: none;
+}
+.followInfo{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    list-style: none;
+    padding: 0.3rem;
+}
+.followInfo b{
+    display: block;
+    text-align: center;
+}
+@media only screen and (max-width: 735px){
+    .sectwo{
+        display: none;
+    }
+    .mobileFollowInfo{
+        display: block;
+    }
+    .profilePic img{
+        height: 75px;
+        width: 75px;
+        margin: 0;
+    }
+    .profilePic{
+        margin-right: 1rem;
+    }
+    .profileWrap{
+        width: auto;
+    }
+    .wrap{
+        justify-content: start;
+        padding-top: 3rem;
+    }
+    .hrline{
+        margin-top: 0;
+    }
+    .editProLink{
+        display: none;
+    }
+    .secOnemobile{
+        display: block;
+    }
+    .profileInfo{
+        width: 70%;
+    }
+}
+
