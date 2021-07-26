@@ -6,7 +6,7 @@ export default function ChangePassword() {
   return (
     <div className={ChangePasswordCss.wrap}>
       <div className={ChangePasswordCss.picName}>
-        <div>
+        <div className={ChangePasswordCss.pic}>
           <img src={myPic} alt="user-pic" />
         </div>
         <p>Prasad Shinde</p>
