@@ -50,9 +50,10 @@
 }
 
 .btns {
-    width: 30%;
-    margin: auto;
+    /* width: 30%; */
+    /* margin: auto; */
     display: flex;
+    align-items: center;
     justify-content: space-around;
 }
 
