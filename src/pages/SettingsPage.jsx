@@ -1,21 +1,23 @@
 import React from "react";
-import { Link, Route, Switch } from "react-router-dom";
+import { Link, Route, Switch, useLocation } from "react-router-dom";
 import ChangePassword from "../components/auth/ChangePassword";
 import EditProfile from "../components/auth/EditProfile";
 import Navbar from "../components/auth/Navbar";
 import SettingsPageCss from "../css/auth/SettingsPage.module.css";
 
+
 export default function Settings() {
+  let { pathname } = useLocation();
   return (
     <>
       <Navbar />
       <div className={SettingsPageCss.settings}>
         <div className={SettingsPageCss.container}>
           <ul className={SettingsPageCss.list}>
-            <li>
+            <li className={pathname ==='/settings/edit' ? SettingsPageCss.addBorder : null}>
               <Link to="/settings/edit">Edit Profile</Link>
             </li>
-            <li>
+            <li className={pathname ==='/settings/changePassword' ? SettingsPageCss.addBorder : null}>
               <Link to="/settings/changePassword">Change Password</Link>
             </li>
           </ul>

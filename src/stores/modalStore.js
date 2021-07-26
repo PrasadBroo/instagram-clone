@@ -4,6 +4,9 @@ const modalStore = store(
     {
         userNamePageModal:{
             display:false,
+        },
+        postModal:{
+            display:false,
         }
     }
 );

@@ -1,22 +1,20 @@
-import React, { useState } from 'react'
+import { view } from "@risingstack/react-easy-state";
+import React from "react";
 import PostModalCss from "../../css/modals/PostModal.module.css";
+import modalStore from "./../../stores/modalStore";
 
-export default function PostModal() {
-    // eslint-disable-next-line
-    const [openModal,SetOpenModal] = useState(false);
-    // eslint-disable-next-line
-    const [closeModal,SetCloseModal] = useState(false);
-
-    return (
-        openModal ? 
-        <div className={PostModalCss.postModal}>
-            <div className={PostModalCss.modal}>
-                <button>Report</button>
-                <button>Go to post</button>
-                <button>Cancel</button>
-            </div>
-        </div>
-        :
-        null
-    )
+function PostModal() {
+  return modalStore.postModal.display ? (
+    <div className={PostModalCss.postModal}>
+      <div className={PostModalCss.modal}>
+        <button>Report</button>
+        <button>Go to post</button>
+        <button onClick={() => (modalStore.postModal.display = false)}>
+          Cancel
+        </button>
+      </div>
+    </div>
+  ) : null;
 }
+
+export default view(PostModal);
