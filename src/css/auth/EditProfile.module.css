@@ -24,7 +24,7 @@
 .picName div button{
     color: #0095F6;
 }
-.picName div:first-child,.OldPass p,.NewPass p,.ConfirmPass p{
+.picName .pic,.OldPass p,.NewPass p,.ConfirmPass p{
     margin-right: 1rem;
     font-weight: 600;
     width: 30%;
@@ -38,6 +38,8 @@
 .btns{
     width: 30%;
     margin: auto;
+    display: flex;
+    justify-content: space-around;
 }
 .btns button:first-child{
     display: block;
@@ -53,7 +55,6 @@
     height: 29px; */
     border-radius: 3px;
     border: 1px solid rgb(202, 202, 202);
-    margin-bottom: 1rem;
 }
 
 .btns button:last-child,.picName button{
@@ -63,4 +64,26 @@
     cursor: pointer;
     color:  #385185;
     font-weight: 550;
+}
+
+@media only screen and (max-width: 600px){
+    .wrap{
+        width: 100%;
+    }
+    .picName,.OldPass,.NewPass,.ConfirmPass{
+        display: block;
+        align-items: unset;
+        padding: 0.2rem;
+    }
+    .OldPass p,.NewPass p,.ConfirmPass p{
+        text-align: unset;
+    }
+    .btns{
+        width: unset;
+        margin-top: 2.5rem;
+    }
+    .picName .pic{
+        width: 100%;
+        text-align: center;
+    }
 }

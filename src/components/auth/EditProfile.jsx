@@ -6,7 +6,7 @@ export default function EditProfile() {
   return (
     <div className={EditProfileCss.wrap}>
       <div className={EditProfileCss.picName}>
-        <div>
+        <div className={EditProfileCss.pic}>
           <img src={myPic} alt="user-pic" />
         </div>
         <div>
