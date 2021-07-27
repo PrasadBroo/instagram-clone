@@ -101,9 +101,9 @@ function LoggedOut() {
                           "fab fa-facebook-square " + HomePageCss.fbicon
                         }
                       ></i>
-                      <a href="/#" onClick={loginWithFb} className={HomePageCss.fblink}>
+                      <button onClick={loginWithFb} className={HomePageCss.fblink}>
                         Log In With Facebook
-                      </a>
+                      </button>
                     </p>
                   </div>
                   <div className={HomePageCss.loginError}>
