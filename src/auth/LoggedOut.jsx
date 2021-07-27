@@ -262,7 +262,7 @@ async  function handelFormSubmit(e) {
  async function loginWithFb(){
    const {err} = await loginWithFacebook();
    if(err){
-    alert(err.message)
+    alert(err.message + ' yup')
    }
     
   }
