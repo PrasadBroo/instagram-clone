@@ -29,8 +29,7 @@ const login_iwth_email_pass = async (email, password) => {
 const login_with_facebook = async () => {
     try {
         let provider = new auth.FacebookAuthProvider();
-        let res = await auth().signInWithPopup(provider)
-        store.auth.user = res.user;
+        await auth().signInWithPopup(provider).then(user => store.auth.user = user.user)
         return {
             err: false,
             data: true
