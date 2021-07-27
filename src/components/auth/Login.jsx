@@ -237,7 +237,7 @@ function Login() {
   async function handeloginWithFacebook() {
     const { err } = await loginWithFacebook();
     if (err) {
-      return alert(err.message);
+      return alert(err.message + ' yup youare right');
     }
   }
 }
