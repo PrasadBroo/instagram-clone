@@ -39,7 +39,9 @@
     justify-content: space-between;
     flex-direction: column;
 }
-
+.modal button:first-child{
+    color: red;
+}
 .modal button{
     outline: none;
     display: block;

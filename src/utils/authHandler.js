@@ -35,7 +35,6 @@ const login_with_facebook = async () => {
             data: true
         }
     } catch (error) {
-        console.log(error)
         return {
             err: error,
             data: false
