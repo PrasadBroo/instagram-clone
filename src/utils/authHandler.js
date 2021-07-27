@@ -7,6 +7,7 @@ import {
 import {
     registerUser
 } from './fireutils';
+import mystore from '../stores/store';
 
 const login_iwth_email_pass = async (email, password) => {
 
@@ -29,7 +30,9 @@ const login_iwth_email_pass = async (email, password) => {
 const login_with_facebook = async () => {
     try {
         let provider = new auth.FacebookAuthProvider();
-        await auth().signInWithPopup(provider).then(user => store.auth.user = user.user)
+        let res = await auth().signInWithPopup(provider)
+        mystore.auth.user = res.user;
+        //store.auth.user = res.user;
         return {
             err: false,
             data: true
