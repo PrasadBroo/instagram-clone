@@ -1,12 +1,13 @@
 import { view } from "@risingstack/react-easy-state";
 import React, { useState } from "react";
 import SignupPageCss from "../../css/SignupPage.module.css";
-import { auth } from "../../services/firebase";
-import store from "../../stores/store";
 import appStorePng from "../../media/app-store.png";
 import googleStorePng from "../../media/google-storepng.png";
 import Spinner from "../Spinner";
-import { signupWithEmailPass } from "../../utils/authHandler";
+import {
+  signupWithEmailPass,
+  loginWithFacebook,
+} from "../../utils/authHandler";
 
 function Signup() {
   const [sbtnChange, setSbtnChange] = useState(false);
@@ -29,7 +30,7 @@ function Signup() {
           <div className={SignupPageCss.loginWithFb}>
             <button
               className={SignupPageCss.fblink}
-              onClick={loginWithFacebook}
+              onClick={handeloginWithFacebook}
             >
               <i
                 className={"fab fa-facebook-square " + SignupPageCss.fbicon}
@@ -245,20 +246,21 @@ function Signup() {
       return alert("Plz fill the details.");
     }
     setSpin(true);
-    const { err } = await signupWithEmailPass(email, password,fullName,username);
+    const { err } = await signupWithEmailPass(
+      email,
+      password,
+      fullName,
+      username
+    );
     if (err) {
       setLoginErrMsg(err.message);
       setSpin(false);
     }
-    
   }
-  async function loginWithFacebook() {
-    let provider = new auth.FacebookAuthProvider();
-    try {
-      const res = await auth().signInWithPopup(provider);
-      store.auth.user = res.user;
-    } catch (error) {
-      return alert(error.message);
+  async function handeloginWithFacebook() {
+    const { err } = await loginWithFacebook();
+    if (err) {
+      return alert(err.message);
     }
   }
 }

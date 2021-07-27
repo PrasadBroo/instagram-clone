@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { auth } from "../../services/firebase";
-import store from "../../stores/store";
 import appStorePng from "../../media/app-store.png";
 import googleStorePng from "../../media/google-storepng.png";
 import LoginCss from "../../css/auth/Login.module.css";
 import Spinner from "../Spinner";
 import { view } from "@risingstack/react-easy-state";
+import { loginWithFacebook, loginWithEmailPass } from "../../utils/authHandler";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -71,12 +70,10 @@ function Login() {
                   <div className="withFb">
                     <p>
                       <i
-                        className={
-                          "fab fa-facebook-square " + LoginCss.fbicon
-                        }
+                        className={"fab fa-facebook-square " + LoginCss.fbicon}
                       ></i>
                       <button
-                        onClick={loginWithFacebook}
+                        onClick={handeloginWithFacebook}
                         className={LoginCss.fblink}
                       >
                         Log In With Facebook
@@ -87,10 +84,7 @@ function Login() {
                     {loginErrMsg ? <p>{loginErrMsg}</p> : null}
                   </div>
                   <div className={LoginCss.forgetPass}>
-                    <a
-                      href="/comingsoon"
-                      className={LoginCss.forgetPassLink}
-                    >
+                    <a href="/comingsoon" className={LoginCss.forgetPassLink}>
                       Forget Password?
                     </a>
                   </div>
@@ -217,21 +211,18 @@ function Login() {
       return setSbtnChange(false);
     }
   }
-  function handelFormSubmit(e) {
+  async function handelFormSubmit(e) {
     e.preventDefault();
     if (!isValidDetails()) {
       return alert("Plz fill the details.");
     }
     setSpin(true);
-    setTimeout(async () => {
-      try {
-        let res = await auth().signInWithEmailAndPassword(email, password);
-        store.auth.user = res.user;
-      } catch (error) {
-        setLoginErrMsg(error.message);
-        setSpin(false);
-      }
-    }, 2000);
+    const { err } = await loginWithEmailPass(email, password);
+    if (err) {
+      setLoginErrMsg(err.message);
+      setSpin(false);
+      return;
+    }
   }
 
   function handelEmailChange(e) {
@@ -243,15 +234,12 @@ function Login() {
     handelSubmitBtncolor();
   }
 
-  async function loginWithFacebook() {
-    let provider = new auth.FacebookAuthProvider();
-    try {
-      const res = await auth().signInWithPopup(provider);
-      store.auth.user = res.user;
-    } catch (error) {
-      return alert(error.message);
+  async function handeloginWithFacebook() {
+    const { err } = await loginWithFacebook();
+    if (err) {
+      return alert(err.message);
     }
   }
 }
 
-export default  view(Login)
+export default view(Login);
