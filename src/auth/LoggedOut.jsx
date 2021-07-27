@@ -9,8 +9,7 @@ import inMockTwo from "../media/in-mock-2.jpg";
 import inMockThree from "../media/in-mock-3.jpg";
 import inMockFour from "../media/in-mock-4.jpg";
 import inMockFive from "../media/in-mock-5.jpg";
-import { loginWithEmailPass,loginWithFacebook } from './../utils/authHandler';
-
+import { loginWithEmailPass, loginWithFacebook } from "./../utils/authHandler";
 
 function LoggedOut() {
   const [email, setEmail] = useState("");
@@ -18,19 +17,25 @@ function LoggedOut() {
   const [spin, setSpin] = useState(false);
   const [password, setPassword] = useState("");
   const [sbtnChange, setSbtnChange] = useState(false);
-  const [dyanamicImg,setDynanmicImg] = useState(inMockOne);
-  
+  const [dyanamicImg, setDynanmicImg] = useState(inMockOne);
 
-  useEffect(()=>{
-   let interval =  setInterval(()=>{
-      const caraual = [inMockOne,inMockTwo,inMockThree,inMockFour,inMockFive];
+  useEffect(() => {
+    let interval = setInterval(() => {
+      const caraual = [
+        inMockOne,
+        inMockTwo,
+        inMockThree,
+        inMockFour,
+        inMockFive,
+      ];
       let random = Math.floor(Math.random() * caraual.length);
       setDynanmicImg(caraual[random]);
-    },3000);
+    }, 3000);
 
-    return ()=> {clearInterval(interval)}
-    
-  },[])
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
 
   return (
     <>
@@ -101,7 +106,10 @@ function LoggedOut() {
                           "fab fa-facebook-square " + HomePageCss.fbicon
                         }
                       ></i>
-                      <button onClick={loginWithFb} className={HomePageCss.fblink}>
+                      <button
+                        onClick={loginWithFb}
+                        className={HomePageCss.fblink}
+                      >
                         Log In With Facebook
                       </button>
                     </p>
@@ -124,7 +132,10 @@ function LoggedOut() {
               <div className="noacctext">
                 <p className={HomePageCss.noAccText}>
                   Don't have an account?{" "}
-                  <a href="/accounts/emailsignup" className={HomePageCss.signupLink}>
+                  <a
+                    href="/accounts/emailsignup"
+                    className={HomePageCss.signupLink}
+                  >
                     Sign up
                   </a>
                 </p>
@@ -237,14 +248,14 @@ function LoggedOut() {
       return setSbtnChange(false);
     }
   }
-async  function handelFormSubmit(e) {
+  async function handelFormSubmit(e) {
     e.preventDefault();
     if (!isValidDetails()) {
       return alert("Plz fill the details.");
     }
     setSpin(true);
-    const res = await  loginWithEmailPass(email,password);
-    if(res.err){
+    const res = await loginWithEmailPass(email, password);
+    if (res.err) {
       setLoginErrMsg(res.err.message);
     }
     setSpin(false);
@@ -259,14 +270,12 @@ async  function handelFormSubmit(e) {
     handelSubmitBtncolor();
   }
 
- async function loginWithFb(){
-   const {err} = await loginWithFacebook();
-   if(err){
-    alert(err.message + ' yup')
-   }
-    
+  async function loginWithFb() {
+    const { err } = await loginWithFacebook();
+    if (err) {
+      return alert(err.message);
+    }
   }
-  
 }
 
 export default view(LoggedOut);

@@ -1,9 +1,7 @@
 import {
     auth
 } from './../services/firebase';
-import {
-    store
-} from '@risingstack/react-easy-state';
+
 import {
     registerUser
 } from './fireutils';
@@ -13,7 +11,7 @@ const login_iwth_email_pass = async (email, password) => {
 
     try {
         let res = await auth().signInWithEmailAndPassword(email, password);
-        store.auth.user = res.user;
+        mystore.auth.user = res.user;
         return {
             err: false,
             data: true
@@ -32,7 +30,6 @@ const login_with_facebook = async () => {
         let provider = new auth.FacebookAuthProvider();
         let res = await auth().signInWithPopup(provider)
         mystore.auth.user = res.user;
-        //store.auth.user = res.user;
         return {
             err: false,
             data: true
@@ -65,7 +62,7 @@ const signup_with_email_pass = async (email, password, fullName, username) => {
     try {
         let res = await auth().createUserWithEmailAndPassword(email, password);
         await registerUser(fullName, username, 'nopic');
-        store.auth.user = res.user;
+        mystore.auth.user = res.user;
         return {
             err: false,
             data: true
