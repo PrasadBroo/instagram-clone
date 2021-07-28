@@ -39,7 +39,7 @@
     justify-content: space-between;
     flex-direction: column;
 }
-.modal button:first-child{
+.reportbtn{
     color: red;
 }
 .modal button{

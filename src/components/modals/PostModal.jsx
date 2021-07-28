@@ -7,7 +7,7 @@ function PostModal() {
   return modalStore.postModal.display ? (
     <div className={PostModalCss.postModal}>
       <div className={PostModalCss.modal}>
-        <button>Report</button>
+        <button className={PostModalCss.reportbtn}>Report</button>
         <button>Go to post</button>
         <button onClick={() => (modalStore.postModal.display = false)}>
           Cancel

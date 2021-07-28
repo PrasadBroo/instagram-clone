@@ -56,10 +56,12 @@
     font-weight: 600;
     font-size: 14px;
 }
-
+.postMedia{
+    height: 500px;
+}
 .postMedia img {
     width: 100%;
-
+    height: 100%;
 }
 
 .likeCS {

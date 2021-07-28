@@ -1,0 +1,61 @@
+/* basic styles */
+.skeleton {
+    background: #ddd;
+    overflow: hidden;
+    margin: 10px 0;
+    border-radius: 4px;
+  }
+  .skeleton.text {
+    width: 70px;
+    height: 12px;
+    margin-left: 1rem;
+  }
+  .skeleton.title {
+    width: 150px;
+    height: 12px;
+    margin-left: 1rem;
+  }
+  .skeleton.avatar {
+    height: 32px;
+    width: 32px;
+    border-radius: 50%;
+  }
+  .skeleton.thumbnail {
+    width: 100%;
+    height: 500px;
+  }
+  .skeleton-wrapper {
+    margin: 20px auto;
+    padding: 10px 15px;
+  }
+  
+  /* skeleton profile */
+  .skeleton-profile {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    grid-gap: 30px;
+    align-items: center;
+  }
+
+  .applyAnimation{
+    animation-duration: 1s;
+    animation-timing-function: ease-in-out;
+    animation-delay: 0.5s;
+    animation-iteration-count: infinite;
+    animation-direction: normal;
+    animation-fill-mode: none;
+    animation-play-state: running;
+    animation-name: MuiSkeleton-keyframes-pulsee;
+  }
+
+  @keyframes MuiSkeleton-keyframes-pulsee {
+    0%{
+     opacity: 1;
+    } 
+    50%{
+        opacity: 0.4;
+    }
+    100%{
+        opacity: 1;
+    }
+ }
