@@ -1,0 +1,39 @@
+.wrap {
+    display: flex;
+    align-items: center;
+    margin: 0.8rem 0;
+}
+
+.pic a img {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    display: flex;
+}
+
+.name {
+    margin: 0 0.5rem;
+    font-size: 14px;
+}
+
+.name a {
+    font-weight: 600;
+    text-decoration: none;
+    color: #333;
+}
+
+.name p:last-child {
+    color: #999;
+}
+
+.btn {
+    margin-left: auto;
+}
+
+.btn button {
+    background-color: #fafafa;
+    padding: 0.3rem 1.5rem;
+    border: 1px solid #DBDBDB;
+    font-weight: 600;
+    cursor: pointer;
+}

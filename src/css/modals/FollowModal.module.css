@@ -1,0 +1,63 @@
+.followModal{
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: rgba(0,0,0,.65);;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    display: none;
+}
+.modal{
+    animation-name: pulse;
+    animation-duration: 0.2s;
+    animation-iteration-count: 1;
+}
+@keyframes pulse{
+    0%{
+        transform: scale(1);
+    }
+    50%{
+        transform: scale(0.5);
+    }
+    100%{
+        transform: scale(1);
+    }
+}
+
+.modal{
+    padding: 0.2rem;
+    background-color: #fff;
+    border-radius: 10px;
+    border-collapse: separate; 
+    width: 400px;
+}
+.title{
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+.title p{
+    width: 90%;
+    text-align: center;
+    font-weight: 600;
+}
+.title button{
+    margin-left: auto;
+    border: 0;
+    outline: 0;
+    background-color: transparent;
+    font-size: 1rem;
+    padding: 0.3rem;
+    cursor: pointer;
+}
+
+.followList{
+    padding: 0.5rem;
+    max-height: 500px;
+    overflow-y: auto;
+}
+

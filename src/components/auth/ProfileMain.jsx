@@ -4,6 +4,7 @@ import ProfileMainCss from "../../css/auth/ProfileMain.module.css";
 import ProfileMainModal from "../modals/ProfileMainModal";
 import { Link } from "react-router-dom";
 import modalStore from "../../stores/modalStore";
+import FollowModal from "../modals/FollowModal";
 
 export default function ProfileMain() {
   useEffect(() => {
@@ -14,6 +15,7 @@ export default function ProfileMain() {
       <div className={ProfileMainCss.profileWrap}>
         <div className={ProfileMainCss.wrap}>
           <ProfileMainModal/>
+          <FollowModal/>
           <div className={ProfileMainCss.profilePic}>
             <img src={myPic} alt="profile_pic" />
           </div>
@@ -33,14 +35,8 @@ export default function ProfileMain() {
               <p>
                 <b>2</b> posts
               </p>
-              <p>
-                {" "}
-                <b>1054</b> followers
-              </p>
-              <p>
-                {" "}
-                <b>456</b> following
-              </p>
+              <button><b>1054</b>  followers</button> 
+              <button><b>168</b>  following</button> 
             </div>
             <div className={ProfileMainCss.secthree}>
               <h1>Prasad Shinde</h1>

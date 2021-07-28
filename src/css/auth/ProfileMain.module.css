@@ -76,8 +76,15 @@
     align-items: center;
     justify-content: space-between;
 }
-.sectwo p{
+.sectwo p,.sectwo button{
     color: #262626;
+    outline: none;
+    border: none;
+    font-size: 1rem;
+    background-color: transparent;
+}
+.sectwo button{
+    cursor: pointer;
 }
 .secthree h1{
     font-size: 1rem;
@@ -192,6 +199,9 @@
     }
     .profileInfo{
         width: 70%;
+    }
+    .hrline hr{
+        display: none;
     }
 }
 

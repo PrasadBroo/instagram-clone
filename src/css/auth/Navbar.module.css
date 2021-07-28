@@ -12,7 +12,7 @@
     color: #8E8E8E;
     outline: 0;
     border: 0;
-    padding: 9px 0 7px 8px;
+    padding: 9px 25px;
     height: 30px;
     border-radius: 3px;
     border: 1px solid rgb(202, 202, 202);
@@ -21,16 +21,15 @@
 
 }
 
-.userInput:active .serachIcon {
-    left: 10px;
-    transition: 1s;
+.userInput:focus {
+    text-align: left;
 }
 
 .serachIcon {
     position: absolute;
     z-index: 1;
     top: 10px;
-    left: 70px;
+    left: 5%;
     font-size: 12px;
     color: #8E8E8E;
 }

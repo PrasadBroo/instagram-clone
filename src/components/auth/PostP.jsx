@@ -65,7 +65,7 @@ export default function PostP() {
         <div className="subsec">
           <div className={PostPCss.likeCS}>
             <div className={PostPCss.leftSide}>
-              <span>
+              <span>;
                 <i
                   className={
                     lc
