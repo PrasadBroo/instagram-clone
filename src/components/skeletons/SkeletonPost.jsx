@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import PostCss from "../../css/auth/Post.module.css";
 import SkeletonElement from "../skeletons/SkeletonElement";
 
 export default function SkeletonPost() {
-  const [lc, sLc] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
+
   return (
     <div className={PostCss.postWrapper}>
       <div className={PostCss.postHeading}>

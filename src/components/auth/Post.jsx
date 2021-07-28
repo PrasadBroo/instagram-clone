@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import PostCss from "../../css/auth/Post.module.css";
-import tempImg from "../../media/181184050_246536270301764_5089686745904119707_n.jpg";
 import Comment from "./Comment";
 import modalStore from "./../../stores/modalStore";
 import SkeletonPost from "../skeletons/SkeletonPost";
