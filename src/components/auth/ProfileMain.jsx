@@ -14,10 +14,12 @@ function ProfileMain() {
   useEffect(() => {
     document.body.style.backgroundColor = "#FAFAFA";
     fetchDatails();
+    setHasPosts(true)
   }, []);
   async function fetchDatails() {
     let user_details = await getUserDetails();
     console.log(mystore.auth.user);
+    console.log(user_details)
   }
   const [hasPosts, setHasPosts] = useState(true);
   return (
