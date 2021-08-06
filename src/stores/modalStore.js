@@ -7,6 +7,10 @@ const modalStore = store(
         },
         postModal:{
             display:false,
+        },
+        followModal:{
+            display:false,
+            type:'followers'
         }
     }
 );
