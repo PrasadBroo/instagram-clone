@@ -128,11 +128,7 @@
     margin: 2rem auto;
     text-align: center;
 }
-.userPosts{
-    /* display: flex;
-    align-items: center;
-    flex-wrap: wrap; */
-}
+
 .postsMainWrap{
     max-width: 850px;
     display: flex;

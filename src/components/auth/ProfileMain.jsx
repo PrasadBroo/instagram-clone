@@ -1,27 +1,35 @@
 import React, { useEffect, useState } from "react";
-import myPic from "../../media/my_pic.jpg";
+import defaultProfilePic from "../../media/defaultProfilePic.jpg";
 import ProfileMainCss from "../../css/auth/ProfileMain.module.css";
 import ProfileMainModal from "../modals/ProfileMainModal";
 import { Link } from "react-router-dom";
 import modalStore from "../../stores/modalStore";
 import FollowModal from "../modals/FollowModal";
 import { view } from "@risingstack/react-easy-state";
-import { addPost, getUserDetails } from "../../utils/fireutils";
+import { addPost, getUserDetails,getUserPosts } from "../../utils/fireutils";
 import UserPost from "../subcomponents/UserPost";
-import mystore from './../../stores/store';
+
+
 
 function ProfileMain() {
   useEffect(() => {
     document.body.style.backgroundColor = "#FAFAFA";
     fetchDatails();
-    setHasPosts(true)
+    setHasPosts(false);
+    return () => (document.body.style.backgroundColor = "unset");
   }, []);
   async function fetchDatails() {
-    let user_details = await getUserDetails();
-    console.log(mystore.auth.user);
-    console.log(user_details)
+    const {data} = await getUserDetails();
+    const {data:postsData} = await getUserPosts();
+    
+    setUserDetails(data);
+    setHasPosts(postsData.length !== 0)
+    setUserPosts(postsData);
+    console.log(postsData)
   }
   const [hasPosts, setHasPosts] = useState(true);
+  const [userDetails, setUserDetails] = useState({});
+  const [userPosts, setUserPosts] = useState([]);
   return (
     <div className="ProfilePage">
       <div className={ProfileMainCss.profileWrap}>
@@ -29,11 +37,11 @@ function ProfileMain() {
           <ProfileMainModal />
           <FollowModal />
           <div className={ProfileMainCss.profilePic}>
-            <img src={myPic} alt="profile_pic" />
+            <img src={userDetails.profilePic ? userDetails.profilePic :  defaultProfilePic} alt="profile_pic" />
           </div>
           <div className={ProfileMainCss.profileInfo}>
             <div className={ProfileMainCss.secone}>
-              <p>prasad_bro</p>
+              <p>{userDetails.username}</p>
               <Link to="/settings/edit" className={ProfileMainCss.editProLink}>
                 Edit Profile
               </Link>
@@ -71,7 +79,7 @@ function ProfileMain() {
               </button>
             </div>
             <div className={ProfileMainCss.secthree}>
-              <h1>Prasad Shinde</h1>
+              <h1>{userDetails.fullName}</h1>
               <p>🍰Wish Me On 2 Dec🍰</p>
               <p>😍Favourite Star-Amir Khan 😍</p>
             </div>
@@ -136,14 +144,15 @@ function ProfileMain() {
             </button>
           </div>
         </div>
-        <div className={ProfileMainCss.userPosts}>
+        <div className={ProfileMainCss.userPosts} style={{ display: hasPosts ? "block" : "none" }}>
           <div className={ProfileMainCss.postsMainWrap}>
+            {userPosts.map(post => <UserPost imageUrl={post.postsMedia} postid={post.postId} key={post.postId}/>)}
+            {/* <UserPost />
             <UserPost />
             <UserPost />
             <UserPost />
             <UserPost />
-            <UserPost />
-            <UserPost />
+            <UserPost /> */}
           </div>
         </div>
       </div>

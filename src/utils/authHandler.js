@@ -60,7 +60,7 @@ const log_out = async () => {
 const signup_with_email_pass = async (email, password, fullName, username) => {
     try {
         let res = await auth().createUserWithEmailAndPassword(email, password);
-        await registerUser(fullName, username, 'nopic');
+        await registerUser(fullName, username, null);
         mystore.auth.user = res.user;
         return {
             err: false,

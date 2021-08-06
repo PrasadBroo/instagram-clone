@@ -54,9 +54,9 @@ const register_user = async (fullName, username, profilePic) => {
 
 }
 
-const get_user_posts = async (uid = null) => {
+const get_user_posts = async (uid = auth().currentUser.uid) => {
   try {
-    const details = (await postsRef.get()).docs.map(snapshot => snapshot.data())
+    const details = (await postsRef.limit(6).where('byUser','==',uid).get()).docs.map(snapshot => snapshot.data())
     return {
       err: false,
       data: details
@@ -78,7 +78,7 @@ const add_post = async(file)=>{
     const givenData = {
       byUser: auth().currentUser.uid,
       createdAt: firestore.Timestamp.now(),
-      postsMedia: mediaUrl,
+      postMediaUrl: mediaUrl,
       postId:1
     }
     const details = await postsRef.add(givenData);
