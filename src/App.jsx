@@ -13,12 +13,19 @@ import PostPage from "./pages/PostPage";
 import mystore from "./stores/store";
 import { getUserDetailsByUid } from "./utils/firebase_api";
 
-
 function App() {
   useEffect(() => {
     auth().onAuthStateChanged((userSate) => {
       mystore.auth.user = userSate;
-      getUserDetailsByUid().then(res =>{mystore.currentUser = res.data;setLoading(false)})
+      if (!userSate) {
+        setLoading(false);
+      }
+      if (userSate) {
+        getUserDetailsByUid().then((res) => {
+          mystore.currentUser = res.data;
+          setLoading(false);
+        });
+      }
     });
   }, []);
 
