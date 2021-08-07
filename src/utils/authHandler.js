@@ -4,7 +4,7 @@ import {
 
 import {
     registerUser
-} from './fireutils';
+} from './firebase_api';
 import mystore from '../stores/store';
 
 const login_iwth_email_pass = async (email, password) => {

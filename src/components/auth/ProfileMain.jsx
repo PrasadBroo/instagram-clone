@@ -2,33 +2,44 @@ import React, { useEffect, useState } from "react";
 import defaultProfilePic from "../../media/defaultProfilePic.jpg";
 import ProfileMainCss from "../../css/auth/ProfileMain.module.css";
 import ProfileMainModal from "../modals/ProfileMainModal";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import modalStore from "../../stores/modalStore";
 import FollowModal from "../modals/FollowModal";
 import { view } from "@risingstack/react-easy-state";
-import { addPost, getUserDetails,getUserPosts } from "../../utils/fireutils";
+
+import {
+  addPost,
+  getUserPosts,
+  getUserDetailsByUsername,
+  updateProfilePic,
+} from "../../utils/firebase_api";
 import UserPost from "../subcomponents/UserPost";
-
-
+import mystore from "../../stores/store";
 
 function ProfileMain() {
+  const { username } = useParams();
   useEffect(() => {
     document.body.style.backgroundColor = "#FAFAFA";
+    async function fetchDatails() {
+      const { data: user_details } = await getUserDetailsByUsername(username);
+      const { data: postsData } = await getUserPosts(username);
+      if (user_details && postsData) {
+        setUserDetails(user_details);
+        setHasPosts(postsData.length !== 0);
+        setUserPosts(postsData);
+        return;
+      }
+    }
     fetchDatails();
-    setHasPosts(false);
     return () => (document.body.style.backgroundColor = "unset");
-  }, []);
-  async function fetchDatails() {
-    const {data} = await getUserDetails();
-    const {data:postsData} = await getUserPosts();
-    
-    setUserDetails(data);
-    setHasPosts(postsData.length !== 0)
-    setUserPosts(postsData);
-    console.log(postsData)
-  }
-  const [hasPosts, setHasPosts] = useState(true);
-  const [userDetails, setUserDetails] = useState({});
+  }, [username]);
+
+  const [hasPosts, setHasPosts] = useState(false);
+  const [userDetails, setUserDetails] = useState({
+    username: username,
+    profilePic: null,
+    uid: null,
+  });
   const [userPosts, setUserPosts] = useState([]);
   return (
     <div className="ProfilePage">
@@ -37,19 +48,46 @@ function ProfileMain() {
           <ProfileMainModal />
           <FollowModal />
           <div className={ProfileMainCss.profilePic}>
-            <img src={userDetails.profilePic ? userDetails.profilePic :  defaultProfilePic} alt="profile_pic" />
+            <input
+              type="file"
+              accept="image/*"
+              alt="Input Image"
+              id="my_file_two"
+              hidden
+              multiple={false}
+              onChange={handelImageChangeProfile}
+            ></input>
+            <img
+              onClick={() => {
+                userDetails.uid === mystore.auth.user.uid &&
+                  document.getElementById("my_file_two").click();
+              }}
+              src={
+                userDetails.profilePic
+                  ? userDetails.profilePic
+                  : defaultProfilePic
+              }
+              alt="profile_pic"
+            />
           </div>
           <div className={ProfileMainCss.profileInfo}>
             <div className={ProfileMainCss.secone}>
               <p>{userDetails.username}</p>
-              <Link to="/settings/edit" className={ProfileMainCss.editProLink}>
-                Edit Profile
-              </Link>
-              <button
-                onClick={() => (modalStore.userNamePageModal.display = true)}
-              >
-                <ion-icon name="settings-outline"></ion-icon>
-              </button>
+              {userDetails.uid === mystore.auth.user.uid && (
+                <Link
+                  to="/settings/edit"
+                  className={ProfileMainCss.editProLink}
+                >
+                  Edit Profile
+                </Link>
+              )}
+              {userDetails.uid === mystore.auth.user.uid && (
+                <button
+                  onClick={() => (modalStore.userNamePageModal.display = true)}
+                >
+                  <ion-icon name="settings-outline"></ion-icon>
+                </button>
+              )}
             </div>
             <div className={ProfileMainCss.secOnemobile}>
               <Link to="/settings/edit" className={ProfileMainCss.editProLinkM}>
@@ -116,45 +154,51 @@ function ProfileMain() {
 
           <p>POSTS</p>
         </div>
-        <div
-          className={ProfileMainCss.sharePhotos}
-          style={{ display: hasPosts ? "none" : "block" }}
-        >
-          <div className={ProfileMainCss.cameraIcon}>
-            <ion-icon name="camera-outline"></ion-icon>
+        {!hasPosts && (
+          <div
+            className={ProfileMainCss.sharePhotos}
+            style={{ display: hasPosts ? "none" : "block" }}
+          >
+            <div className={ProfileMainCss.cameraIcon}>
+              <ion-icon name="camera-outline"></ion-icon>
+            </div>
+            <div className={ProfileMainCss.text}>
+              <p>Share Photos</p>
+            </div>
+            <div className={ProfileMainCss.textTwo}>
+              <p>When you share photos, they will appear on your profile.</p>
+            </div>
+            <div className={ProfileMainCss.uploadLink}>
+              <input
+                type="file"
+                accept="image/*"
+                alt="Input Image"
+                id="my_file"
+                hidden
+                multiple={false}
+                onChange={handelImageChange}
+              ></input>
+              <button
+                onClick={() => document.getElementById("my_file").click()}
+              >
+                Share your first photo
+              </button>
+            </div>
           </div>
-          <div className={ProfileMainCss.text}>
-            <p>Share Photos</p>
+        )}
+        {hasPosts && (
+          <div className={ProfileMainCss.userPosts}>
+            <div className={ProfileMainCss.postsMainWrap}>
+              {userPosts.map((post, i) => (
+                <UserPost
+                  imageUrl={post.postMediaUrl ?? post.postsMedia}
+                  postid={post.postId}
+                  key={i}
+                />
+              ))}
+            </div>
           </div>
-          <div className={ProfileMainCss.textTwo}>
-            <p>When you share photos, they will appear on your profile.</p>
-          </div>
-          <div className={ProfileMainCss.uploadLink}>
-            <input
-              type="file"
-              accept="image/*"
-              alt="Input Image"
-              id="my_file"
-              hidden
-              multiple={false}
-              onChange={handelImageChange}
-            ></input>
-            <button onClick={() => document.getElementById("my_file").click()}>
-              Share your first photo
-            </button>
-          </div>
-        </div>
-        <div className={ProfileMainCss.userPosts} style={{ display: hasPosts ? "block" : "none" }}>
-          <div className={ProfileMainCss.postsMainWrap}>
-            {userPosts.map(post => <UserPost imageUrl={post.postsMedia} postid={post.postId} key={post.postId}/>)}
-            {/* <UserPost />
-            <UserPost />
-            <UserPost />
-            <UserPost />
-            <UserPost />
-            <UserPost /> */}
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );
@@ -162,6 +206,14 @@ function ProfileMain() {
 let handelImageChange = async (e) => {
   const [file] = e.target.files;
   let { err } = await addPost(file);
+  if (err) {
+    alert(err.message);
+  }
+};
+
+let handelImageChangeProfile = async (e) => {
+  const [file] = e.target.files;
+  let { err } = await updateProfilePic(file);
   if (err) {
     alert(err.message);
   }

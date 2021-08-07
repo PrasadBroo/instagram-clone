@@ -5,6 +5,9 @@ const mystore = store(
         auth:{
             user:false,
             
+        },
+        currentUser:{
+
         }
     }
 );

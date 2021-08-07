@@ -1,14 +1,16 @@
+import { view } from "@risingstack/react-easy-state";
 import React from "react";
 import NavbarCss from "../../css/auth/Navbar.module.css";
-import myPic from '../../media/my_pic.jpg'
-export default function Navbar() {
-  
+import mystore from "../../stores/store";
 
+function Navbar() {
   return (
     <nav className={NavbarCss.navBar}>
       <div className={NavbarCss.navLinks}>
         <div className={NavbarCss.heading}>
-          <h1><a href="/">Instagram</a> </h1>
+          <h1>
+            <a href="/">Instagram</a>{" "}
+          </h1>
         </div>
         <div className={NavbarCss.serachBar}>
           <i className={"fas fa-search " + NavbarCss.serachIcon}></i>
@@ -75,16 +77,14 @@ export default function Navbar() {
             </svg>
           </a>
           <div className={NavbarCss.userProfilePic}>
-            <a href="/prasad__bro">
-            <img
-              src={myPic}
-              alt="profile pic"
-            />
+            <a href={"/" + mystore.currentUser.username}>
+              <img src={mystore.currentUser.profilePic} alt="profile pic" />
             </a>
-            
           </div>
         </div>
       </div>
     </nav>
   );
 }
+
+export default view(Navbar);

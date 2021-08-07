@@ -1,6 +1,7 @@
 import React from "react";
 import myPic from "../../media/my_pic.jpg";
 import ProfileCss from "../../css/auth/Profile.module.css";
+import mystore from "../../stores/store";
 
 export default function Profile() {
   return (
@@ -8,13 +9,13 @@ export default function Profile() {
       <div className={ProfileCss.profile}>
         <div className={ProfileCss.head}>
           <div className={ProfileCss.profileImg}>
-            <img src={myPic} alt="img" />
+            <img src={mystore.currentUser.profilePic} alt="img" />
           </div>
           <div className={ProfileCss.profileinfo}>
             <p className={ProfileCss.username}>
-              <a href="/Prasad__bro">Prasad__bro</a>{" "}
+              <a href={'/'+mystore.currentUser.username}>{mystore.currentUser.username}</a>{" "}
             </p>
-            <p className={ProfileCss.fullName}>Prasad Shinde</p>
+            <p className={ProfileCss.fullName}>{mystore.currentUser.fullName}</p>
           </div>
         </div>
         <div className={ProfileCss.suggestions}>
