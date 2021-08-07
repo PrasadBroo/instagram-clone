@@ -90,9 +90,14 @@ function ProfileMain() {
               )}
             </div>
             <div className={ProfileMainCss.secOnemobile}>
-              <Link to="/settings/edit" className={ProfileMainCss.editProLinkM}>
-                Edit Profile
-              </Link>
+              {userDetails.uid === mystore.auth.user.uid && (
+                <Link
+                  to="/settings/edit"
+                  className={ProfileMainCss.editProLinkM}
+                >
+                  Edit Profile
+                </Link>
+              )}
             </div>
 
             <div className={ProfileMainCss.sectwo}>
