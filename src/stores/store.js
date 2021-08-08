@@ -11,7 +11,7 @@ const mystore = store({
         username: 'loading...',
         profilePic: defaultProfilePic,
         uid: null,
-    }
+    },
 });
 
 export default mystore;

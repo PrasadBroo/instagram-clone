@@ -8,15 +8,19 @@ import mystore from '../stores/store';
 const usersRef = firestore().collection('users');
 const postsRef = firestore().collection('posts');
 const postsMedia = firebaseStorage().ref('postsMedia');
+const usersFollowersRef = firestore().collection('followers');
+const usersFollowingsRef = firestore().collection('followings');
 const profilePicsRef = firebaseStorage().ref('profilePics');
 
 
 const get_user_details_by_uid = async (uid = auth().currentUser.uid) => {
   try {
     const details = (await (usersRef.doc(uid)).get()).data();
+    let followDetails = await getFollowsCount();
     return {
       err: false,
-      data: details
+      data: details,
+      followDetails,
     }
   } catch (error) {
     return {
@@ -180,6 +184,48 @@ const update_profile_in_realtime = async () => {
   }
 
 }
+
+const get_follows_count = async(uid=auth().currentUser.uid)=>{
+  try {
+    let followersDetails = (await (usersFollowersRef.doc(uid).collection('users').get())).docs.length;
+    let followingsDetails = (await (usersFollowingsRef.doc(uid).collection('users').get())).docs.length;
+    return {
+      err: false,
+      followersCount:followersDetails,
+      followingsCount:followingsDetails
+    }
+  } catch (error) {
+    return {
+      err: error,
+      data: false,
+      followersCount:false,
+      followingsCount:false
+    }
+  }
+  
+
+}
+
+const follow_user = async(uid,username)=>{
+  try {
+    const givenData = {
+      createdAt: firestore.Timestamp.now(),
+      byUser:username,
+    }
+    let res = await usersFollowersRef.doc(uid).collection('users').doc(auth().currentUser.uid).set(givenData);
+    return {
+      err: false,
+      data: res
+    }
+  } catch (error) {
+    return {
+      err: error,
+      data: false
+    }
+  }
+  
+}
+
 export const registerUser = register_user;
 export const getUserDetailsByUid = get_user_details_by_uid;
 export const getUserPosts = get_user_posts;
@@ -187,3 +233,5 @@ export const addPost = add_post;
 export const getUserDetailsByUsername = get_user_details_by_username;
 export const updateProfilePic = update_profilePic;
 export const updateProfileinRealtime = update_profile_in_realtime;
+export const getFollowsCount = get_follows_count;
+export const followUser = follow_user;

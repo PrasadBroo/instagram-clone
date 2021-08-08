@@ -11,36 +11,51 @@ import {
   getUserPosts,
   getUserDetailsByUsername,
   updateProfilePic,
+  followUser,
+  getFollowsCount
 } from "../../utils/firebase_api";
 import UserPost from "../subcomponents/UserPost";
 import mystore from "../../stores/store";
 
 function ProfileMain() {
-  const isMounted = React.useRef(true)
+  const isMounted = React.useRef(true);
   const { username } = useParams();
-  useEffect(() => {
-    document.body.style.backgroundColor = "#FAFAFA";
-    async function fetchDatails() {
-      const { data: user_details } = await getUserDetailsByUsername(username);
-      const { data: postsData } = await getUserPosts(username);
-      if (user_details && postsData && isMounted.current) {
-        setUserDetails(user_details);
-        setHasPosts(postsData.length !== 0);
-        setUserPosts(postsData);
-        return;
-      }
-    }
-    fetchDatails();
-    return () => {document.body.style.backgroundColor = "unset";isMounted.current=false};
-  }, [username]);
-
-  const [hasPosts, setHasPosts] = useState(false);
   const [userDetails, setUserDetails] = useState({
     username: username,
     profilePic: null,
     uid: null,
   });
+  const [hasPosts, setHasPosts] = useState(false);
+  const [userFollowsDetails, setUserFollowsDetails] = useState({});
   const [userPosts, setUserPosts] = useState([]);
+  useEffect(() => {
+    document.body.style.backgroundColor = "#FAFAFA";
+    async function fetchDatails() {
+      const { data: user_details } = await getUserDetailsByUsername(username);
+      const { data: postsData } = await getUserPosts(username);
+      const {followersCount,followingsCount,err} = await getFollowsCount(user_details.uid);
+      if (user_details && postsData && isMounted.current && !err) {
+        setUserDetails(user_details);
+        setHasPosts(postsData.length !== 0);
+        setUserPosts(postsData);
+        setUserFollowsDetails({followersCount,followingsCount})
+        return;
+      }
+    }
+    fetchDatails();
+    return () => {
+      document.body.style.backgroundColor = "unset";
+      isMounted.current = false;
+    };
+  }, [username]);
+  let handelFollowUser = async()=>{
+    let {data,err} = await followUser(userDetails.uid,userDetails.username);
+    if(err){
+      return alert(err.message)
+    }
+    console.log(err)
+    console.log(data)
+  }
   return (
     <div className="ProfilePage">
       <div className={ProfileMainCss.profileWrap}>
@@ -81,8 +96,12 @@ function ProfileMain() {
                   Edit Profile
                 </Link>
               )}
+              {userDetails.uid !== mystore.auth.user.uid && <div className={ProfileMainCss.followBtnwrap}>
+                <button className={ProfileMainCss.followBtn} onClick={()=>handelFollowUser()}>Follow</button>
+              </div>}
               {userDetails.uid === mystore.auth.user.uid && (
                 <button
+                className={ProfileMainCss.seconeBtn}
                   onClick={() => (modalStore.userNamePageModal.display = true)}
                 >
                   <ion-icon name="settings-outline"></ion-icon>
@@ -110,7 +129,8 @@ function ProfileMain() {
                   modalStore.followModal.type = "followers";
                 }}
               >
-                <b>1054</b> followers
+                <b>{userFollowsDetails.followersCount}</b>{" "}
+                followers
               </button>
               <button
                 onClick={() => {
@@ -118,7 +138,8 @@ function ProfileMain() {
                   modalStore.followModal.type = "followings";
                 }}
               >
-                <b>168</b> following
+                <b>{userFollowsDetails.followingsCount}</b>{" "}
+                following
               </button>
             </div>
             <div className={ProfileMainCss.secthree}>
@@ -223,5 +244,7 @@ let handelImageChangeProfile = async (e) => {
     alert(err.message);
   }
 };
+
+
 
 export default view(ProfileMain);

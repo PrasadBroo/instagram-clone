@@ -37,7 +37,7 @@
     margin-right: 2rem;
     font-weight: 300;
 }
-.secone a,.secone button,.secOnemobile a{
+.secone a,.secone .seconeBtn,.secOnemobile a{
     font-size: 1rem;
     cursor: pointer;
     text-decoration: none;
@@ -64,7 +64,7 @@
     text-align: center;
 }
 
-.secone button:last-child{
+.secone .seconeBtn:last-child{
     border: 0;
     font-size: 1.3rem;
     display: flex;
@@ -121,6 +121,16 @@
     margin-left: 5px;
 }
 
+.followBtnwrap .followBtn{
+    outline: none;
+    border: 0;
+    background-color: #0095F6;
+    padding: 0.3rem 0.5rem;
+    font-size: 1rem;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 0.2rem;
+}
 .postsIcon{
     display: flex;
     font-size: 1.3rem;
@@ -176,6 +186,7 @@
     display: block;
     text-align: center;
 }
+
 @media only screen and (max-width: 735px){
     .sectwo{
         display: none;
