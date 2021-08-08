@@ -2,8 +2,10 @@ import React from "react";
 import myPic from "../../media/my_pic.jpg";
 import ProfileCss from "../../css/auth/Profile.module.css";
 import mystore from "../../stores/store";
+import { view } from "@risingstack/react-easy-state";
+import { Link } from 'react-router-dom';
 
-export default function Profile() {
+function Profile() {
   return (
     <div className={ProfileCss.profileWrapper}>
       <div className={ProfileCss.profile}>
@@ -13,9 +15,13 @@ export default function Profile() {
           </div>
           <div className={ProfileCss.profileinfo}>
             <p className={ProfileCss.username}>
-              <a href={'/'+mystore.currentUser.username}>{mystore.currentUser.username}</a>{" "}
+              <Link to={"/" + mystore.currentUser.username}>
+                {mystore.currentUser.username}
+              </Link>{" "}
             </p>
-            <p className={ProfileCss.fullName}>{mystore.currentUser.fullName}</p>
+            <p className={ProfileCss.fullName}>
+              {mystore.currentUser.fullName}
+            </p>
           </div>
         </div>
         <div className={ProfileCss.suggestions}>
@@ -91,8 +97,13 @@ export default function Profile() {
           <a href="https://about.instagram.com/">Hashtag</a>
           <a href="https://about.instagram.com/">Language</a>
         </div>
-        <p className={ProfileCss.creditInfo}>© Made  By <i className="fas fa-heart" aria-hidden="true"></i>  Prasad Shinde <b>/</b> prasadbro</p>
+        <p className={ProfileCss.creditInfo}>
+          © Made By <i className="fas fa-heart" aria-hidden="true"></i> Prasad
+          Shinde <b>/</b> prasadbro
+        </p>
       </div>
     </div>
   );
 }
+
+export default view(Profile);
