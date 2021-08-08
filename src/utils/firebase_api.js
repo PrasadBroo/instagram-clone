@@ -3,6 +3,7 @@ import {
   auth,
   firebaseStorage
 } from '../services/firebase';
+import mystore from '../stores/store';
 
 const usersRef = firestore().collection('users');
 const postsRef = firestore().collection('posts');
@@ -47,7 +48,7 @@ const register_user = async (fullName, username, profilePic) => {
     email: auth().currentUser.email,
     fullName,
     username,
-    profilePic,
+    profilePic: 'https://i.ibb.co/LCk6LbN/default-Profile-Pic-7fe14f0a.jpg',
     uid: auth().currentUser.uid,
     createdAt: firestore.Timestamp.now()
   }
@@ -133,7 +134,7 @@ const add_media = async (file) => {
 const update_profilePic = async (file) => {
   try {
     let fileName = auth().currentUser.uid;
-    await profilePicsRef.child(fileName).delete()
+    await profilePicsRef.child(fileName).delete().catch(err => err);
     const details = await profilePicsRef.child(fileName).put(file, {
       contentType: file.type
     });
@@ -171,9 +172,18 @@ const get_uid_by_uername = async (username) => {
   }
 }
 
+const update_profile_in_realtime = async () => {
+  try {
+    usersRef.doc(auth().currentUser.uid).onSnapshot(next => mystore.currentUser = next.data())
+  } catch (error) {
+    return;
+  }
+
+}
 export const registerUser = register_user;
 export const getUserDetailsByUid = get_user_details_by_uid;
 export const getUserPosts = get_user_posts;
 export const addPost = add_post;
 export const getUserDetailsByUsername = get_user_details_by_username;
 export const updateProfilePic = update_profilePic;
+export const updateProfileinRealtime = update_profile_in_realtime;

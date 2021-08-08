@@ -15,6 +15,7 @@ import { getUserDetailsByUid } from "./utils/firebase_api";
 
 function App() {
   useEffect(() => {
+    let isMounted = true;
     auth().onAuthStateChanged((userSate) => {
       mystore.auth.user = userSate;
       if (!userSate) {
@@ -22,11 +23,15 @@ function App() {
       }
       if (userSate) {
         getUserDetailsByUid().then((res) => {
-          mystore.currentUser = res.data;
-          setLoading(false);
+          if (isMounted) {
+            mystore.currentUser = res.data;
+            setLoading(false);
+          }
         });
       }
     });
+
+    return ()=> isMounted = false;
   }, []);
 
   const [loading, setLoading] = useState(true);

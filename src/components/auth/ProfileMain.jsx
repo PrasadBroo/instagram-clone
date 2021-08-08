@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import defaultProfilePic from "../../media/defaultProfilePic.jpg";
 import ProfileMainCss from "../../css/auth/ProfileMain.module.css";
 import ProfileMainModal from "../modals/ProfileMainModal";
 import { Link, useParams } from "react-router-dom";
@@ -17,13 +16,14 @@ import UserPost from "../subcomponents/UserPost";
 import mystore from "../../stores/store";
 
 function ProfileMain() {
+  const isMounted = React.useRef(true)
   const { username } = useParams();
   useEffect(() => {
     document.body.style.backgroundColor = "#FAFAFA";
     async function fetchDatails() {
       const { data: user_details } = await getUserDetailsByUsername(username);
       const { data: postsData } = await getUserPosts(username);
-      if (user_details && postsData) {
+      if (user_details && postsData && isMounted.current) {
         setUserDetails(user_details);
         setHasPosts(postsData.length !== 0);
         setUserPosts(postsData);
@@ -31,7 +31,7 @@ function ProfileMain() {
       }
     }
     fetchDatails();
-    return () => (document.body.style.backgroundColor = "unset");
+    return () => {document.body.style.backgroundColor = "unset";isMounted.current=false};
   }, [username]);
 
   const [hasPosts, setHasPosts] = useState(false);
@@ -63,9 +63,9 @@ function ProfileMain() {
                   document.getElementById("my_file_two").click();
               }}
               src={
-                userDetails.profilePic
-                  ? userDetails.profilePic
-                  : defaultProfilePic
+                userDetails.uid === mystore.auth.user.uid
+                  ? mystore.currentUser.profilePic
+                  : userDetails.profilePic
               }
               alt="profile_pic"
             />
