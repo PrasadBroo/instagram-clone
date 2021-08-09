@@ -1,0 +1,78 @@
+.unfollowModal{
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: rgba(0,0,0,.65);;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.modal{
+    animation-name: pulse;
+    animation-duration: 0.2s;
+    animation-iteration-count: 1;
+}
+.picWrap{
+    max-width: 100px;
+    max-height: 100px;
+    width: 90%;
+    margin:1rem auto;
+}
+.picWrap img{
+    height: auto;
+    width: 100%;
+    border-radius: 50%;
+}
+.profilePic{
+    width: 100%;
+    text-align: center;
+}
+.profilePic p{
+    margin: 1rem 0;
+}
+@keyframes pulse{
+    0%{
+        transform: scale(1);
+    }
+    50%{
+        transform: scale(0.5);
+    }
+    100%{
+        transform: scale(1);
+    }
+}
+
+.modal{
+    padding: 0.2rem;
+    background-color: #fff;
+    border-radius: 10px;
+    border-collapse: separate; 
+    width: 400px;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+}
+.reportbtn{
+    color: red;
+    font-weight: 600;
+}
+.modal button{
+    outline: none;
+    display: block;
+    border: none;
+    background-color: #fff;
+    font-size: 14px;
+    width: 100%;
+    padding: 1rem;
+    border-top: 1px solid #DBDBDB;
+    cursor: pointer;
+}
+
+.modal button:first-child{
+    border: 0;
+}

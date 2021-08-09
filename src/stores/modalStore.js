@@ -11,6 +11,10 @@ const modalStore = store(
         followModal:{
             display:false,
             type:'followers'
+        },
+        unfollowModal:{
+            display:false,
+            toUnfollow:null
         }
     }
 );

@@ -52,6 +52,8 @@ const register_user = async (fullName, username, profilePic) => {
     email: auth().currentUser.email,
     fullName,
     username,
+    followersCount:0,
+    followingsCount:0,
     profilePic: 'https://i.ibb.co/LCk6LbN/default-Profile-Pic-7fe14f0a.jpg',
     uid: auth().currentUser.uid,
     createdAt: firestore.Timestamp.now()
@@ -213,6 +215,41 @@ const follow_user = async(uid,username)=>{
       byUser:username,
     }
     let res = await usersFollowersRef.doc(uid).collection('users').doc(auth().currentUser.uid).set(givenData);
+    let previousFollowersCount = (await usersRef.doc(uid).get()).data().followersCount;
+    await usersRef.doc(uid).set({followersCount:previousFollowersCount +=1},{merge:true});
+    return {
+      err: false,
+      data: res
+    }
+  } catch (error) {
+    return {
+      err: error,
+      data: false
+    }
+  }
+  
+}
+const unfollow_user = async(uid)=>{
+  try {
+    let res = await usersFollowersRef.doc(uid).collection('users').doc(auth().currentUser.uid).delete();
+    let previousFollowersCount = (await usersRef.doc(uid).get()).data().followersCount;
+    await usersRef.doc(uid).set({followersCount:previousFollowersCount-=1},{merge:true});
+    return {
+      err: false,
+      data: res
+    }
+  } catch (error) {
+    return {
+      err: error,
+      data: false
+    }
+  }
+  
+}
+
+const has_followed = async(uid)=>{
+  try {
+    let res = (await usersFollowersRef.doc(uid).collection('users').doc(auth().currentUser.uid).get()).exists;
     return {
       err: false,
       data: res
@@ -235,3 +272,5 @@ export const updateProfilePic = update_profilePic;
 export const updateProfileinRealtime = update_profile_in_realtime;
 export const getFollowsCount = get_follows_count;
 export const followUser = follow_user;
+export const unfollowUser = unfollow_user;
+export const hasFollowed = has_followed;

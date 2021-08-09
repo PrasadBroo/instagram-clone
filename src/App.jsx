@@ -25,7 +25,6 @@ function App() {
         getUserDetailsByUid().then((res) => {
           if (isMounted) {
             mystore.currentUser = res.data;
-            mystore.currentUser.followDetails = res.followDetails
             setLoading(false);
           }
         });

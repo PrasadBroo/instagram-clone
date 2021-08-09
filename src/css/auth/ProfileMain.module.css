@@ -77,13 +77,14 @@
     align-items: center;
     justify-content: space-between;
 }
-.sectwo p,.sectwo button{
+.sectwo p,.sectwo button,.followInfo button{
     color: #262626;
     outline: none;
     border: none;
     font-size: 1rem;
     margin-right: 1rem;
     background-color: transparent;
+    cursor: pointer;
 }
 .sectwo button{
     cursor: pointer;
@@ -128,6 +129,16 @@
     padding: 0.3rem 0.5rem;
     font-size: 1rem;
     color: #fff;
+    cursor: pointer;
+    border-radius: 0.2rem;
+}
+.followingBtn{
+    background-color: transparent;
+    border: 1px solid  #DBDBDB;
+    outline: none;
+    padding: 0.3rem 0.5rem;
+    font-size: 1rem;
+    color: #262626;
     cursor: pointer;
     border-radius: 0.2rem;
 }

@@ -5,17 +5,18 @@ import { Link, useParams } from "react-router-dom";
 import modalStore from "../../stores/modalStore";
 import FollowModal from "../modals/FollowModal";
 import { view } from "@risingstack/react-easy-state";
-
+import UserPost from "../subcomponents/UserPost";
+import mystore from "../../stores/store";
+import UnfollowModal from "../modals/UnfollowModal";
 import {
   addPost,
   getUserPosts,
   getUserDetailsByUsername,
   updateProfilePic,
   followUser,
-  getFollowsCount
+  hasFollowed
 } from "../../utils/firebase_api";
-import UserPost from "../subcomponents/UserPost";
-import mystore from "../../stores/store";
+
 
 function ProfileMain() {
   const isMounted = React.useRef(true);
@@ -26,19 +27,20 @@ function ProfileMain() {
     uid: null,
   });
   const [hasPosts, setHasPosts] = useState(false);
-  const [userFollowsDetails, setUserFollowsDetails] = useState({});
   const [userPosts, setUserPosts] = useState([]);
+  const [isFollowed,setIsFollowed] = useState(false)
+
   useEffect(() => {
     document.body.style.backgroundColor = "#FAFAFA";
     async function fetchDatails() {
       const { data: user_details } = await getUserDetailsByUsername(username);
       const { data: postsData } = await getUserPosts(username);
-      const {followersCount,followingsCount,err} = await getFollowsCount(user_details.uid);
-      if (user_details && postsData && isMounted.current && !err) {
+      const {data:isFollowed} = await hasFollowed(user_details.uid)
+      if (user_details && postsData && isMounted.current) {
         setUserDetails(user_details);
         setHasPosts(postsData.length !== 0);
         setUserPosts(postsData);
-        setUserFollowsDetails({followersCount,followingsCount})
+        setIsFollowed(isFollowed);
         return;
       }
     }
@@ -49,12 +51,14 @@ function ProfileMain() {
     };
   }, [username]);
   let handelFollowUser = async()=>{
-    let {data,err} = await followUser(userDetails.uid,userDetails.username);
+    let {err} = await followUser(userDetails.uid,userDetails.username);
     if(err){
       return alert(err.message)
     }
-    console.log(err)
-    console.log(data)
+  }
+  const handelUnFollowUser = async()=>{
+    modalStore.unfollowModal.toUnfollow = userDetails
+    modalStore.unfollowModal.display = true;
   }
   return (
     <div className="ProfilePage">
@@ -62,6 +66,7 @@ function ProfileMain() {
         <div className={ProfileMainCss.wrap}>
           <ProfileMainModal />
           <FollowModal />
+          <UnfollowModal/>
           <div className={ProfileMainCss.profilePic}>
             <input
               type="file"
@@ -96,8 +101,11 @@ function ProfileMain() {
                   Edit Profile
                 </Link>
               )}
-              {userDetails.uid !== mystore.auth.user.uid && <div className={ProfileMainCss.followBtnwrap}>
+              {userDetails.uid !== mystore.auth.user.uid && !isFollowed && <div className={ProfileMainCss.followBtnwrap}>
                 <button className={ProfileMainCss.followBtn} onClick={()=>handelFollowUser()}>Follow</button>
+              </div>}
+              {userDetails.uid !== mystore.auth.user.uid && isFollowed && <div className={ProfileMainCss.followBtnwrap}>
+                <button className={ProfileMainCss.followingBtn} onClick={()=>handelUnFollowUser()}>Following</button>
               </div>}
               {userDetails.uid === mystore.auth.user.uid && (
                 <button
@@ -129,7 +137,7 @@ function ProfileMain() {
                   modalStore.followModal.type = "followers";
                 }}
               >
-                <b>{userFollowsDetails.followersCount}</b>{" "}
+                <b>{userDetails.followersCount}</b>{" "}
                 followers
               </button>
               <button
@@ -138,7 +146,7 @@ function ProfileMain() {
                   modalStore.followModal.type = "followings";
                 }}
               >
-                <b>{userFollowsDetails.followingsCount}</b>{" "}
+                <b>{userDetails.followingsCount}</b>{" "}
                 following
               </button>
             </div>
@@ -151,23 +159,27 @@ function ProfileMain() {
         </div>
         <div className={ProfileMainCss.mobileFollowInfo}>
           <ul className={ProfileMainCss.followInfo}>
-            <li>
-              <p>
+          <p>
                 <b>2</b> posts
               </p>
-            </li>
-            <li>
-              <p>
-                {" "}
-                <b>1054</b> followers
-              </p>
-            </li>
-            <li>
-              <p>
-                {" "}
-                <b>456</b> following
-              </p>
-            </li>
+              <button
+                onClick={() => {
+                  modalStore.followModal.display = true;
+                  modalStore.followModal.type = "followers";
+                }}
+              >
+                <b>{userDetails.followersCount}</b>{" "}
+                followers
+              </button>
+              <button
+                onClick={() => {
+                  modalStore.followModal.display = true;
+                  modalStore.followModal.type = "followings";
+                }}
+              >
+                <b>{userDetails.followingsCount}</b>{" "}
+                following
+              </button>
           </ul>
         </div>
         <div className={ProfileMainCss.hrline}>
@@ -236,6 +248,7 @@ let handelImageChange = async (e) => {
     alert(err.message);
   }
 };
+
 
 let handelImageChangeProfile = async (e) => {
   const [file] = e.target.files;
