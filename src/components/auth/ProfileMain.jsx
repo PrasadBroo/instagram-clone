@@ -15,6 +15,7 @@ import {
   getUserDetailsByUsername,
   updateProfilePic,
   followUser,
+  getFollowerslist
 } from "../../utils/firebase_api";
 
 
@@ -30,22 +31,27 @@ function ProfileMain() {
   const [hasPosts, setHasPosts] = useState(false);
   const [userPosts, setUserPosts] = useState([]);
   const [isFollowed,setIsFollowed] = useState(false)
+  const [followersList,setFollowersList] = useState(null)
 
   useEffect(() => {
+    isMounted.current = true;
     document.body.style.backgroundColor = "#FAFAFA";
     async function fetchDatails() {
-      const { data: user_details } = await getUserDetailsByUsername(username);
-      const { data: postsData } = await getUserPosts(username);
+      const { data: user_details,err:userErr } = await getUserDetailsByUsername(username);
+      const { data: postsData ,err:postsErr} = await getUserPosts(username);
+      const {data:followersList,err:followersListErr} = await getFollowerslist(user_details.uid)
       const usersRef = firestore().collection('users');
       const usersFollowersRef = firestore().collection('followers');
-      if (user_details && postsData && isMounted.current) {
+      if (!userErr && !postsErr && !followersListErr &&isMounted.current) {
         // setUserDetails(user_details);
-        usersRef.doc(user_details.uid).onSnapshot(next => {setUserDetails(next.data())} );
-        usersFollowersRef.doc(user_details.uid).collection('users').doc(mystore.currentUser.uid).onSnapshot(next => setIsFollowed(next.exists))
+        usersRef.doc(user_details.uid).onSnapshot(next => {if(isMounted.current)setUserDetails(next.data())} );
+        usersFollowersRef.doc(user_details.uid).collection('users').doc(mystore.currentUser.uid).onSnapshot(next => {if(isMounted.current)setIsFollowed(next.exists)})
         setHasPosts(postsData.length !== 0);
         setUserPosts(postsData);
+        setFollowersList(followersList)
+        modalStore.followModal.list = followersList;
         // setIsFollowed(isFollowed);
-        return;
+        return
       }
     }
     fetchDatails();
@@ -55,7 +61,7 @@ function ProfileMain() {
     };
   }, [username]);
   let handelFollowUser = async()=>{
-    let {err} = await followUser(userDetails.uid,userDetails.username);
+    let {err} = await followUser(userDetails);
     if(err){
       return alert(err.message)
     }
@@ -163,6 +169,7 @@ function ProfileMain() {
                 <b>2</b> posts
               </p>
               <button
+              disabled={!followersList}
                 onClick={() => {
                   modalStore.followModal.display = true;
                   modalStore.followModal.type = "followers";

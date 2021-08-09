@@ -206,15 +206,20 @@ const get_follows_count = async(uid=auth().currentUser.uid)=>{
 
 }
 
-const follow_user = async(uid,username)=>{
+const follow_user = async(user)=>{
   try {
     const givenData = {
-      createdAt: firestore.Timestamp.now(),
-      byUser:username,
+    fullName:mystore.currentUser.fullName,
+    username:mystore.currentUser.username,
+    profilePic: mystore.currentUser.profilePic,
+    uid: mystore.currentUser.uid,
+    createdAt: firestore.Timestamp.now()
     }
-    let res = await usersFollowersRef.doc(uid).collection('users').doc(auth().currentUser.uid).set(givenData);
-    let previousFollowersCount = (await usersRef.doc(uid).get()).data().followersCount;
-    await usersRef.doc(uid).set({followersCount:previousFollowersCount +=1},{merge:true});
+    let res = await usersFollowersRef.doc(user.uid).collection('users').doc(auth().currentUser.uid).set(givenData);
+    let previousFollowersCount = (await usersRef.doc(user.uid).get()).data().followersCount;
+    await usersRef.doc(user.uid).set({followersCount:previousFollowersCount +=1},{merge:true});
+    let previousFollowingsCount = (await usersRef.doc(auth().currentUser.uid).get()).data().followingsCount;
+    await usersRef.doc(auth().currentUser.uid).set({followingsCount:previousFollowingsCount +=1},{merge:true});
     return {
       err: false,
       data: res
@@ -232,6 +237,8 @@ const unfollow_user = async(uid)=>{
     let res = await usersFollowersRef.doc(uid).collection('users').doc(auth().currentUser.uid).delete();
     let previousFollowersCount = (await usersRef.doc(uid).get()).data().followersCount;
     await usersRef.doc(uid).set({followersCount:previousFollowersCount-=1},{merge:true});
+    let previousFollowingsCount = (await usersRef.doc(auth().currentUser.uid).get()).data().followingsCount;
+    await usersRef.doc(auth().currentUser.uid).set({followingsCount:previousFollowingsCount -=1},{merge:true});
     return {
       err: false,
       data: res
@@ -261,6 +268,22 @@ const has_followed = async(uid)=>{
   
 }
 
+const get_followers_list = async(uid ,endcursor)=>{
+  try {
+    let res = (await usersFollowersRef.doc(uid).collection('users').limit(5).get()).docs.map(doc => doc.data())
+    return {
+      err: false,
+      data: res
+    }
+  } catch (error) {
+    return {
+      err: error,
+      data: false
+    }
+  }
+  
+}
+
 export const registerUser = register_user;
 export const getUserDetailsByUid = get_user_details_by_uid;
 export const getUserPosts = get_user_posts;
@@ -272,3 +295,4 @@ export const getFollowsCount = get_follows_count;
 export const followUser = follow_user;
 export const unfollowUser = unfollow_user;
 export const hasFollowed = has_followed;
+export const getFollowerslist = get_followers_list;

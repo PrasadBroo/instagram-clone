@@ -15,9 +15,7 @@ function FollowModal() {
                     <button onClick={()=> modalStore.followModal.display =false}>X</button>
                 </div>
                 <div className={FollowModalCss.followList}>
-                    <FollowUser/>
-                    <FollowUser/>
-                    <FollowUser/>
+                {modalStore.followModal.list.map((follower,i) => <FollowUser data={follower} key={i}/>)}
                 </div>
             </div>
         </div>
