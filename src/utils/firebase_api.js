@@ -16,11 +16,9 @@ const profilePicsRef = firebaseStorage().ref('profilePics');
 const get_user_details_by_uid = async (uid = auth().currentUser.uid) => {
   try {
     const details = (await (usersRef.doc(uid)).get()).data();
-    let followDetails = await getFollowsCount();
     return {
       err: false,
       data: details,
-      followDetails,
     }
   } catch (error) {
     return {

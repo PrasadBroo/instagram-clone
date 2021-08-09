@@ -3,7 +3,7 @@ import "./css/main.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import UsernamePage from "./pages/UsernamePage";
 import { useEffect, useState } from "react";
-import { auth } from "./services/firebase";
+import { auth, firestore } from "./services/firebase";
 import { view } from "@risingstack/react-easy-state";
 import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
@@ -11,7 +11,7 @@ import SettingsPage from "./pages/SettingsPage";
 import DefaultLoader from "./components/DefaultLoader";
 import PostPage from "./pages/PostPage";
 import mystore from "./stores/store";
-import { getUserDetailsByUid } from "./utils/firebase_api";
+// import { getUserDetailsByUid } from "./utils/firebase_api";
 
 function App() {
   useEffect(() => {
@@ -22,16 +22,20 @@ function App() {
         setLoading(false);
       }
       if (userSate) {
-        getUserDetailsByUid().then((res) => {
-          if (isMounted) {
-            mystore.currentUser = res.data;
-            setLoading(false);
-          }
-        });
+        const usersRef = firestore().collection("users");
+      usersRef
+        .doc(mystore.auth.user.uid)
+        .onSnapshot((next) => {if(isMounted){mystore.currentUser = next.data();setLoading(false)}});
+        // getUserDetailsByUid().then((res) => {
+        //   if (isMounted) {
+        //     mystore.currentUser = res.data;
+        //     setLoading(false);
+        //   }
+        // });
       }
     });
 
-    return ()=> isMounted = false;
+    return () => (isMounted = false);
   }, []);
 
   const [loading, setLoading] = useState(true);

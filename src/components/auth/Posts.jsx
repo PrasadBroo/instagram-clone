@@ -1,8 +1,9 @@
 import React from 'react'
 import Post from './Post'
 import PostCss from '../../css/auth/Posts.module.css'
+import { view } from '@risingstack/react-easy-state'
 
-export default function Posts() {
+function Posts() {
     return (
         <div className={PostCss.posts}>
             <Post/>
@@ -15,3 +16,4 @@ export default function Posts() {
         </div>
     )
 }
+export default view(Posts)

@@ -1,3 +1,4 @@
+import { view } from '@risingstack/react-easy-state';
 import React from 'react'
 import Footer from '../components/Footer';
 import Navbar from './../components/auth/Navbar';
@@ -5,7 +6,7 @@ import PostP from './../components/auth/PostP';
 
 
 
-export default function PostPage() {
+function PostPage() {
     return (
         <div className="Post-Page">
             <Navbar/>
@@ -14,3 +15,4 @@ export default function PostPage() {
         </div>  
     )
 }
+export default view(PostPage)

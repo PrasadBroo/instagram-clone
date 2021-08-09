@@ -1,7 +1,8 @@
+import { view } from '@risingstack/react-easy-state'
 import React from 'react'
 import UserPostCss from '../../css/subcomponents/UserPost.module.css'
 
-export default function UserPost({imageUrl,postid}) {
+function UserPost({imageUrl,postid}) {
     return (
         <div className={UserPostCss.wrap}>
             <a href={`/post/${postid}`}>
@@ -10,3 +11,4 @@ export default function UserPost({imageUrl,postid}) {
         </div>
     )
 }
+export default view(UserPost)

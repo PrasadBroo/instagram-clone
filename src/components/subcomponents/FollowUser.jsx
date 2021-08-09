@@ -1,7 +1,8 @@
+import { view } from '@risingstack/react-easy-state'
 import React from 'react'
 import FollowUserCss from '../../css/subcomponents/FollowUser.module.css'
 
-export default function FollowUser() {
+function FollowUser() {
     return (
         <div className={FollowUserCss.wrap}>
             <div className={FollowUserCss.pic}>
@@ -20,3 +21,4 @@ export default function FollowUser() {
         </div>
     )
 }
+export default view(FollowUser)

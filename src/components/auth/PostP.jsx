@@ -1,9 +1,10 @@
+import { view } from "@risingstack/react-easy-state";
 import React, { useState } from "react";
 import PostPCss from "../../css/auth/PostP.module.css";
 import tempImg from "../../media/181184050_246536270301764_5089686745904119707_n.jpg";
 import Comment from './Comment';
 
-export default function PostP() {
+function PostP() {
   const [lc, sLc] = useState(false);
   return (
     <div className={PostPCss.postWrapper}>
@@ -117,3 +118,5 @@ export default function PostP() {
     </div>
   );
 }
+
+export default view(PostP)

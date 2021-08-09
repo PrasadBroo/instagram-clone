@@ -3,8 +3,9 @@ import PostCss from "../../css/auth/Post.module.css";
 import Comment from "./Comment";
 import modalStore from "./../../stores/modalStore";
 import SkeletonPost from "../skeletons/SkeletonPost";
+import { view } from "@risingstack/react-easy-state";
 
-export default function Post() {
+function Post() {
   const [lc, sLc] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   return (
@@ -122,3 +123,5 @@ export default function Post() {
     </>
   );
 }
+
+export default view(Post)

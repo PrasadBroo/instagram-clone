@@ -1,3 +1,4 @@
+import { view } from "@risingstack/react-easy-state";
 import React from "react";
 import { Link, Route, Switch, useLocation } from "react-router-dom";
 import ChangePassword from "../components/auth/ChangePassword";
@@ -6,7 +7,7 @@ import Navbar from "../components/auth/Navbar";
 import SettingsPageCss from "../css/auth/SettingsPage.module.css";
 
 
-export default function Settings() {
+function Settings() {
   let { pathname } = useLocation();
   return (
     <>
@@ -36,3 +37,4 @@ export default function Settings() {
     </>
   );
 }
+export default view(Settings)

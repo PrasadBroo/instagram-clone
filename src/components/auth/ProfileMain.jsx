@@ -8,14 +8,15 @@ import { view } from "@risingstack/react-easy-state";
 import UserPost from "../subcomponents/UserPost";
 import mystore from "../../stores/store";
 import UnfollowModal from "../modals/UnfollowModal";
+import { firestore } from "../../services/firebase";
 import {
   addPost,
   getUserPosts,
   getUserDetailsByUsername,
   updateProfilePic,
   followUser,
-  hasFollowed
 } from "../../utils/firebase_api";
+
 
 
 function ProfileMain() {
@@ -35,12 +36,15 @@ function ProfileMain() {
     async function fetchDatails() {
       const { data: user_details } = await getUserDetailsByUsername(username);
       const { data: postsData } = await getUserPosts(username);
-      const {data:isFollowed} = await hasFollowed(user_details.uid)
+      const usersRef = firestore().collection('users');
+      const usersFollowersRef = firestore().collection('followers');
       if (user_details && postsData && isMounted.current) {
-        setUserDetails(user_details);
+        // setUserDetails(user_details);
+        usersRef.doc(user_details.uid).onSnapshot(next => {setUserDetails(next.data())} );
+        usersFollowersRef.doc(user_details.uid).collection('users').doc(mystore.currentUser.uid).onSnapshot(next => setIsFollowed(next.exists))
         setHasPosts(postsData.length !== 0);
         setUserPosts(postsData);
-        setIsFollowed(isFollowed);
+        // setIsFollowed(isFollowed);
         return;
       }
     }
@@ -82,11 +86,7 @@ function ProfileMain() {
                 userDetails.uid === mystore.auth.user.uid &&
                   document.getElementById("my_file_two").click();
               }}
-              src={
-                userDetails.uid === mystore.auth.user.uid
-                  ? mystore.currentUser.profilePic
-                  : userDetails.profilePic
-              }
+              src={userDetails.profilePic}
               alt="profile_pic"
             />
           </div>
