@@ -9,6 +9,7 @@ import UserPost from "../subcomponents/UserPost";
 import mystore from "../../stores/store";
 import UnfollowModal from "../modals/UnfollowModal";
 import { firestore } from "../../services/firebase";
+import Spinner from "../spinners/Spinner";
 import {
   addPost,
   getUserPosts,
@@ -18,6 +19,7 @@ import {
   getFollowerslist,
   getFollowingsList
 } from "../../utils/firebase_api";
+
 
 
 
@@ -35,6 +37,8 @@ function ProfileMain() {
 
 
   useEffect(() => {
+    modalStore.spinner.show = true;
+    modalStore.followModal.display = false;
     isMounted.current = true;
     document.body.style.backgroundColor = "#FAFAFA";
     async function fetchDatails() {
@@ -52,6 +56,7 @@ function ProfileMain() {
         setUserPosts(postsData);
         modalStore.followModal.followerslist = followersList;
         modalStore.followModal.followingsList = followingsList;
+        modalStore.spinner.show = false;
         // setIsFollowed(isFollowed);
         return
       }
@@ -72,6 +77,7 @@ function ProfileMain() {
     modalStore.unfollowModal.display = true;
   }
   return (
+    !modalStore.spinner.show ?
     <div className="ProfilePage">
       <div className={ProfileMainCss.profileWrap}>
         <div className={ProfileMainCss.wrap}>
@@ -250,6 +256,8 @@ function ProfileMain() {
         )}
       </div>
     </div>
+    :
+    <Spinner/>
   );
 }
 let handelImageChange = async (e) => {

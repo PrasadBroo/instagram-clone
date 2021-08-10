@@ -17,6 +17,9 @@ const modalStore = store(
         unfollowModal:{
             display:false,
             toUnfollow:null
+        },
+        spinner:{
+            show:true
         }
     }
 );
