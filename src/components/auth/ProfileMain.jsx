@@ -56,7 +56,6 @@ function ProfileMain() {
     }
     fetchDatails();
     return () => {
-      document.body.style.backgroundColor = "unset";
       isMounted.current = false;
     };
   }, [username]);

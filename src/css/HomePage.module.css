@@ -11,7 +11,6 @@
 .mockup {
     position: relative;
     background-image: url("https://www.instagram.com/static/images/homepage/home-phones.png/43cc71bb1b43.png");
-    background-color: #fff;
     background-repeat: no-repeat;
     height: 618px;
     width: 454px;
@@ -48,6 +47,7 @@
 
 .authmain{
     border: 1px solid #DBDBDB;
+    background-color: #fff;
 }
 
 .heading {
@@ -178,10 +178,14 @@
     margin-top: 1rem;
     border: 1px solid #DBDBDB;
     padding: 15px 0;
+    background-color: #fff;
 }
 
 .appDownload{
     margin-top: 2rem;
+    padding: 0.5rem;
+    background-color: #fff;
+    border: 1px solid #DBDBDB;
 }
 
 .appLinks{

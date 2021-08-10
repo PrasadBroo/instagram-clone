@@ -20,6 +20,7 @@ function LoggedOut() {
   const [dyanamicImg, setDynanmicImg] = useState(inMockOne);
 
   useEffect(() => {
+    document.body.style.backgroundColor = "#FAFAFA";
     let interval = setInterval(() => {
       const caraual = [
         inMockOne,
