@@ -12,7 +12,7 @@
 }
 .loader {
     /* margin: 100px auto; */
-    font-size: 25px;
+    font-size: 5px;
     width: 1em;
     height: 1em;
     border-radius: 50%;
@@ -24,7 +24,6 @@
     -ms-transform: translateZ(0);
     transform: translateZ(0);
     z-index: 99;
-    background-color: #333;
   }
   @-webkit-keyframes load5 {
     0%,

@@ -33,7 +33,7 @@
     margin-left: auto;
 }
 
-.btn button {
+.btn .followgBtn,.btn .followingBtn {
     background-color: #0095F6;
     padding: 0.3rem 1.5rem;
     border: 1px solid #DBDBDB;
@@ -41,4 +41,8 @@
     color: #fff;
     cursor: pointer;
     border-radius: 5px;
+}
+.btn .followingBtn{
+    background-color: transparent;
+    color: #333;
 }

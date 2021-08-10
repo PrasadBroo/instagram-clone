@@ -16,8 +16,6 @@ import {
   getUserDetailsByUsername,
   updateProfilePic,
   followUser,
-  getFollowerslist,
-  getFollowingsList
 } from "../../utils/firebase_api";
 
 
@@ -44,18 +42,15 @@ function ProfileMain() {
     async function fetchDatails() {
       const { data: user_details,err:userErr } = await getUserDetailsByUsername(username);
       const { data: postsData ,err:postsErr} = await getUserPosts(username);
-      const {data:followersList,err:followersListErr} = await getFollowerslist(user_details.uid)
-      const {data:followingsList,err:followingsListErr} = await getFollowingsList(user_details.uid)
       const usersRef = firestore().collection('users');
       const usersFollowersRef = firestore().collection('followers');
-      if (!userErr && !postsErr && !followersListErr && !followingsListErr &&isMounted.current) {
+      if (!userErr && !postsErr  &&isMounted.current) {
         // setUserDetails(user_details);
         usersRef.doc(user_details.uid).onSnapshot(next => {if(isMounted.current)setUserDetails(next.data())} );
         usersFollowersRef.doc(user_details.uid).collection('users').doc(mystore.currentUser.uid).onSnapshot(next => {if(isMounted.current)setIsFollowed(next.exists)})
         setHasPosts(postsData.length !== 0);
         setUserPosts(postsData);
-        modalStore.followModal.followerslist = followersList;
-        modalStore.followModal.followingsList = followingsList;
+        modalStore.followModal.user = user_details;
         modalStore.spinner.show = false;
         // setIsFollowed(isFollowed);
         return

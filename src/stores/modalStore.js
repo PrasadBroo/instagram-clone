@@ -12,7 +12,8 @@ const modalStore = store(
             display:false,
             type:'followers',
             followerslist:[],
-            followingsList:[]
+            followingsList:[],
+            user:null
         },
         unfollowModal:{
             display:false,

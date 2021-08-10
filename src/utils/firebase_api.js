@@ -296,9 +296,10 @@ const has_followed = async (uid) => {
 const get_followers_list = async (uid, endcursor) => {
   try {
     let res = (await usersFollowersRef.doc(uid).collection('users').limit(5).get()).docs.map(doc => doc.data())
+    let modifiesRes =await Promise.all(res.map(async(follower) => {follower.isFollowedByUser = (await hasFollowed(follower.uid)).data;return follower})) 
     return {
       err: false,
-      data: res
+      data: modifiesRes
     }
   } catch (error) {
     return {
@@ -311,9 +312,10 @@ const get_followers_list = async (uid, endcursor) => {
 const get_followings_list = async (uid, endcursor) => {
   try {
     let res = (await usersFollowingsRef.doc(uid).collection('users').limit(5).get()).docs.map(doc => doc.data())
+    let modifiesRes =await Promise.all(res.map(async(follower) => {follower.isFollowedByUser = (await hasFollowed(follower.uid)).data;return follower}))
     return {
       err: false,
-      data: res
+      data: modifiesRes
     }
   } catch (error) {
     return {
