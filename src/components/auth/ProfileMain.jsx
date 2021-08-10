@@ -15,7 +15,8 @@ import {
   getUserDetailsByUsername,
   updateProfilePic,
   followUser,
-  getFollowerslist
+  getFollowerslist,
+  getFollowingsList
 } from "../../utils/firebase_api";
 
 
@@ -31,7 +32,7 @@ function ProfileMain() {
   const [hasPosts, setHasPosts] = useState(false);
   const [userPosts, setUserPosts] = useState([]);
   const [isFollowed,setIsFollowed] = useState(false)
-  const [followersList,setFollowersList] = useState(null)
+
 
   useEffect(() => {
     isMounted.current = true;
@@ -40,16 +41,17 @@ function ProfileMain() {
       const { data: user_details,err:userErr } = await getUserDetailsByUsername(username);
       const { data: postsData ,err:postsErr} = await getUserPosts(username);
       const {data:followersList,err:followersListErr} = await getFollowerslist(user_details.uid)
+      const {data:followingsList,err:followingsListErr} = await getFollowingsList(user_details.uid)
       const usersRef = firestore().collection('users');
       const usersFollowersRef = firestore().collection('followers');
-      if (!userErr && !postsErr && !followersListErr &&isMounted.current) {
+      if (!userErr && !postsErr && !followersListErr && !followingsListErr &&isMounted.current) {
         // setUserDetails(user_details);
         usersRef.doc(user_details.uid).onSnapshot(next => {if(isMounted.current)setUserDetails(next.data())} );
         usersFollowersRef.doc(user_details.uid).collection('users').doc(mystore.currentUser.uid).onSnapshot(next => {if(isMounted.current)setIsFollowed(next.exists)})
         setHasPosts(postsData.length !== 0);
         setUserPosts(postsData);
-        setFollowersList(followersList)
-        modalStore.followModal.list = followersList;
+        modalStore.followModal.followerslist = followersList;
+        modalStore.followModal.followingsList = followingsList;
         // setIsFollowed(isFollowed);
         return
       }
@@ -137,6 +139,7 @@ function ProfileMain() {
                 <b>2</b> posts
               </p>
               <button
+              disabled={userDetails.followersCount ===0}
                 onClick={() => {
                   modalStore.followModal.display = true;
                   modalStore.followModal.type = "followers";
@@ -146,6 +149,7 @@ function ProfileMain() {
                 followers
               </button>
               <button
+              disabled={userDetails.followingsCount ===0}
                 onClick={() => {
                   modalStore.followModal.display = true;
                   modalStore.followModal.type = "followings";
@@ -168,7 +172,7 @@ function ProfileMain() {
                 <b>2</b> posts
               </p>
               <button
-              disabled={!followersList}
+              disabled={userDetails.followersCount ===0}
                 onClick={() => {
                   modalStore.followModal.display = true;
                   modalStore.followModal.type = "followers";
@@ -178,6 +182,7 @@ function ProfileMain() {
                 followers
               </button>
               <button
+              disabled={userDetails.followingsCount ===0}
                 onClick={() => {
                   modalStore.followModal.display = true;
                   modalStore.followModal.type = "followings";

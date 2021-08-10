@@ -50,8 +50,8 @@ const register_user = async (fullName, username, profilePic) => {
     email: auth().currentUser.email,
     fullName,
     username,
-    followersCount:0,
-    followingsCount:0,
+    followersCount: 0,
+    followingsCount: 0,
     profilePic: 'https://i.ibb.co/LCk6LbN/default-Profile-Pic-7fe14f0a.jpg',
     uid: auth().currentUser.uid,
     createdAt: firestore.Timestamp.now()
@@ -185,41 +185,57 @@ const update_profile_in_realtime = async () => {
 
 }
 
-const get_follows_count = async(uid=auth().currentUser.uid)=>{
+const get_follows_count = async (uid = auth().currentUser.uid) => {
   try {
     let followersDetails = (await (usersFollowersRef.doc(uid).collection('users').get())).docs.length;
     let followingsDetails = (await (usersFollowingsRef.doc(uid).collection('users').get())).docs.length;
     return {
       err: false,
-      followersCount:followersDetails,
-      followingsCount:followingsDetails
+      followersCount: followersDetails,
+      followingsCount: followingsDetails
     }
   } catch (error) {
     return {
       err: error,
       data: false,
-      followersCount:false,
-      followingsCount:false
+      followersCount: false,
+      followingsCount: false
     }
   }
-  
+
 
 }
 
-const follow_user = async(user)=>{
+const follow_user = async (user) => {
   try {
     const givenData = {
-    fullName:mystore.currentUser.fullName,
-    username:mystore.currentUser.username,
-    profilePic: mystore.currentUser.profilePic,
-    uid: mystore.currentUser.uid,
-    createdAt: firestore.Timestamp.now()
+      fullName: mystore.currentUser.fullName,
+      username: mystore.currentUser.username,
+      profilePic: mystore.currentUser.profilePic,
+      uid: mystore.currentUser.uid,
+      createdAt: firestore.Timestamp.now()
+    }
+    const followingData = {
+      fullName: user.fullName,
+      username: user.username,
+      profilePic: user.profilePic,
+      uid: user.uid,
+      createdAt: firestore.Timestamp.now()
     }
     let res = await usersFollowersRef.doc(user.uid).collection('users').doc(auth().currentUser.uid).set(givenData);
     let previousFollowersCount = (await usersRef.doc(user.uid).get()).data().followersCount;
-    await usersRef.doc(user.uid).set({followersCount:previousFollowersCount +=1},{merge:true});
+    await usersRef.doc(user.uid).set({
+      followersCount: previousFollowersCount += 1
+    }, {
+      merge: true
+    });
     let previousFollowingsCount = (await usersRef.doc(auth().currentUser.uid).get()).data().followingsCount;
-    await usersRef.doc(auth().currentUser.uid).set({followingsCount:previousFollowingsCount +=1},{merge:true});
+    await usersRef.doc(auth().currentUser.uid).set({
+      followingsCount: previousFollowingsCount += 1
+    }, {
+      merge: true
+    });
+    await usersFollowingsRef.doc(auth().currentUser.uid).collection('users').doc(user.uid).set(followingData);
     return {
       err: false,
       data: res
@@ -230,15 +246,24 @@ const follow_user = async(user)=>{
       data: false
     }
   }
-  
+
 }
-const unfollow_user = async(uid)=>{
+const unfollow_user = async (uid) => {
   try {
     let res = await usersFollowersRef.doc(uid).collection('users').doc(auth().currentUser.uid).delete();
     let previousFollowersCount = (await usersRef.doc(uid).get()).data().followersCount;
-    await usersRef.doc(uid).set({followersCount:previousFollowersCount-=1},{merge:true});
+    await usersRef.doc(uid).set({
+      followersCount: previousFollowersCount -= 1
+    }, {
+      merge: true
+    });
     let previousFollowingsCount = (await usersRef.doc(auth().currentUser.uid).get()).data().followingsCount;
-    await usersRef.doc(auth().currentUser.uid).set({followingsCount:previousFollowingsCount -=1},{merge:true});
+    await usersRef.doc(auth().currentUser.uid).set({
+      followingsCount: previousFollowingsCount -= 1
+    }, {
+      merge: true
+    });
+    await usersFollowingsRef.doc(auth().currentUser.uid).collection('users').doc(uid).delete();
     return {
       err: false,
       data: res
@@ -249,10 +274,10 @@ const unfollow_user = async(uid)=>{
       data: false
     }
   }
-  
+
 }
 
-const has_followed = async(uid)=>{
+const has_followed = async (uid) => {
   try {
     let res = (await usersFollowersRef.doc(uid).collection('users').doc(auth().currentUser.uid).get()).exists;
     return {
@@ -265,10 +290,10 @@ const has_followed = async(uid)=>{
       data: false
     }
   }
-  
+
 }
 
-const get_followers_list = async(uid ,endcursor)=>{
+const get_followers_list = async (uid, endcursor) => {
   try {
     let res = (await usersFollowersRef.doc(uid).collection('users').limit(5).get()).docs.map(doc => doc.data())
     return {
@@ -281,9 +306,23 @@ const get_followers_list = async(uid ,endcursor)=>{
       data: false
     }
   }
-  
-}
 
+}
+const get_followings_list = async (uid, endcursor) => {
+  try {
+    let res = (await usersFollowingsRef.doc(uid).collection('users').limit(5).get()).docs.map(doc => doc.data())
+    return {
+      err: false,
+      data: res
+    }
+  } catch (error) {
+    return {
+      err: error,
+      data: false
+    }
+  }
+
+}
 export const registerUser = register_user;
 export const getUserDetailsByUid = get_user_details_by_uid;
 export const getUserPosts = get_user_posts;
@@ -296,3 +335,4 @@ export const followUser = follow_user;
 export const unfollowUser = unfollow_user;
 export const hasFollowed = has_followed;
 export const getFollowerslist = get_followers_list;
+export const getFollowingsList = get_followings_list;

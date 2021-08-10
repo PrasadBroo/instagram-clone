@@ -21,6 +21,9 @@
     text-decoration: none;
     color: #333;
 }
+.name a:hover{
+    text-decoration: underline;
+}
 
 .name p:last-child {
     color: #999;
@@ -31,9 +34,11 @@
 }
 
 .btn button {
-    background-color: #fafafa;
+    background-color: #0095F6;
     padding: 0.3rem 1.5rem;
     border: 1px solid #DBDBDB;
     font-weight: 600;
+    color: #fff;
     cursor: pointer;
+    border-radius: 5px;
 }
