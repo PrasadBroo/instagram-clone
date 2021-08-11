@@ -13,6 +13,8 @@ const modalStore = store(
             type:'followers',
             followerslist:[],
             followingsList:[],
+            isFollowInProgress:false,
+            isUnfollowInProgress:false,
             user:null
         },
         unfollowModal:{

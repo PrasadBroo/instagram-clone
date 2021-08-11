@@ -6,11 +6,31 @@ import modalStore from "./../../stores/modalStore";
 
 function UnfollowModal() {
   const handelUnfollowUser = async () => {
+    modalStore.unfollowModal.display = false;
+    modalStore.followModal.isUnfollowInProgress = true;
     const { err } = await unfollowUser(modalStore.unfollowModal.toUnfollow.uid);
+    modalStore.followModal.isUnfollowInProgress = false;
     if (err) {
       return alert(err.message);
     }
-    modalStore.unfollowModal.display = false
+    if (modalStore.followModal.type === "followers") {
+      modalStore.followModal.followerslist =
+        modalStore.followModal.followerslist.map((ele) => {
+          if (ele.uid === modalStore.unfollowModal.toUnfollow.uid) {
+            ele.isFollowedByUser = false;
+          }
+          return ele;
+        });
+    }
+    if (modalStore.followModal.type === "followings") {
+      modalStore.followModal.followingsList =
+        modalStore.followModal.followingsList.map((ele) => {
+          if (ele.uid === modalStore.unfollowModal.toUnfollow.uid) {
+            ele.isFollowedByUser = false;
+          }
+          return ele;
+        });
+    }
   };
   return modalStore.unfollowModal.display ? (
     <div className={UnfollowModalCss.unfollowModal}>

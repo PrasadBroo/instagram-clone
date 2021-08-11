@@ -34,6 +34,7 @@
 }
 
 .btn .followgBtn,.btn .followingBtn {
+    position: relative;
     background-color: #0095F6;
     padding: 0.3rem 1.5rem;
     border: 1px solid #DBDBDB;

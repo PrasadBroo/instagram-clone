@@ -11,6 +11,7 @@ import UnfollowModal from "../modals/UnfollowModal";
 import { firestore } from "../../services/firebase";
 import Spinner from "../spinners/Spinner";
 import {
+
   addPost,
   getUserPosts,
   getUserDetailsByUsername,
@@ -19,10 +20,7 @@ import {
 } from "../../utils/firebase_api";
 
 
-
-
 function ProfileMain() {
-  const isMounted = React.useRef(true);
   const { username } = useParams();
   const [userDetails, setUserDetails] = useState({
     username: username,
@@ -31,54 +29,64 @@ function ProfileMain() {
   });
   const [hasPosts, setHasPosts] = useState(false);
   const [userPosts, setUserPosts] = useState([]);
-  const [isFollowed,setIsFollowed] = useState(false)
-
+  const [isFollowed, setIsFollowed] = useState(false);
 
   useEffect(() => {
+    let isMounted = true;
     modalStore.spinner.show = true;
     modalStore.followModal.display = false;
-    isMounted.current = true;
+    // isMounted.current = true;
     document.body.style.backgroundColor = "#FAFAFA";
     async function fetchDatails() {
-      const { data: user_details,err:userErr } = await getUserDetailsByUsername(username);
-      const { data: postsData ,err:postsErr} = await getUserPosts(username);
-      const usersRef = firestore().collection('users');
-      const usersFollowersRef = firestore().collection('followers');
-      if (!userErr && !postsErr  &&isMounted.current) {
+      const { data: user_details, err: userErr } =
+        await getUserDetailsByUsername(username);
+      const { data: postsData, err: postsErr } = await getUserPosts(username);
+      const usersRef = firestore().collection("users");
+      const usersFollowersRef = firestore().collection("followers");
+      if (!userErr && !postsErr && isMounted) {
         // setUserDetails(user_details);
-        usersRef.doc(user_details.uid).onSnapshot(next => {if(isMounted.current)setUserDetails(next.data())} );
-        usersFollowersRef.doc(user_details.uid).collection('users').doc(mystore.currentUser.uid).onSnapshot(next => {if(isMounted.current)setIsFollowed(next.exists)})
+        usersRef.doc(user_details.uid).onSnapshot((next) => {
+          if (isMounted) setUserDetails(next.data());
+        });
+        usersFollowersRef
+          .doc(user_details.uid)
+          .collection("users")
+          .doc(mystore.currentUser.uid)
+          .onSnapshot((next) => {
+            if (isMounted) setIsFollowed(next.exists);
+          });
         setHasPosts(postsData.length !== 0);
         setUserPosts(postsData);
         modalStore.followModal.user = user_details;
         modalStore.spinner.show = false;
         // setIsFollowed(isFollowed);
-        return
+        return;
       }
     }
     fetchDatails();
     return () => {
-      isMounted.current = false;
+      isMounted = false;
     };
   }, [username]);
-  let handelFollowUser = async()=>{
-    let {err} = await followUser(userDetails);
-    if(err){
-      return alert(err.message)
+  let handelFollowUser = async () => {
+    modalStore.followModal.isFollowInProgress = true;
+    let { err } = await followUser(userDetails);
+    modalStore.followModal.isFollowInProgress = false;
+    if (err) {
+      return alert(err.message);
     }
-  }
-  const handelUnFollowUser = async()=>{
-    modalStore.unfollowModal.toUnfollow = userDetails
+  };
+  const handelUnFollowUser = async () => {
+    modalStore.unfollowModal.toUnfollow = userDetails;
     modalStore.unfollowModal.display = true;
-  }
-  return (
-    !modalStore.spinner.show ?
+  };
+  return !modalStore.spinner.show ? (
     <div className="ProfilePage">
       <div className={ProfileMainCss.profileWrap}>
         <div className={ProfileMainCss.wrap}>
           <ProfileMainModal />
           <FollowModal />
-          <UnfollowModal/>
+          <UnfollowModal />
           <div className={ProfileMainCss.profilePic}>
             <input
               type="file"
@@ -109,15 +117,31 @@ function ProfileMain() {
                   Edit Profile
                 </Link>
               )}
-              {userDetails.uid !== mystore.auth.user.uid && !isFollowed && <div className={ProfileMainCss.followBtnwrap}>
-                <button className={ProfileMainCss.followBtn} onClick={()=>handelFollowUser()}>Follow</button>
-              </div>}
-              {userDetails.uid !== mystore.auth.user.uid && isFollowed && <div className={ProfileMainCss.followBtnwrap}>
-                <button className={ProfileMainCss.followingBtn} onClick={()=>handelUnFollowUser()}>Following</button>
-              </div>}
+              {userDetails.uid !== mystore.auth.user.uid && !isFollowed && (
+                <div className={ProfileMainCss.followBtnwrap}>
+                  <button
+                  disabled={modalStore.followModal.isFollowInProgress}
+                    className={ProfileMainCss.followBtn}
+                    onClick={() => handelFollowUser()}
+                  >
+                    Follow
+                  </button>
+                </div>
+              )}
+              {userDetails.uid !== mystore.auth.user.uid && isFollowed && (
+                <div className={ProfileMainCss.followBtnwrap}>
+                  <button
+                  disabled={modalStore.followModal.isFollowInProgress}
+                    className={ProfileMainCss.followingBtn}
+                    onClick={() => handelUnFollowUser()}
+                  >
+                    Following
+                  </button>
+                </div>
+              )}
               {userDetails.uid === mystore.auth.user.uid && (
                 <button
-                className={ProfileMainCss.seconeBtn}
+                  className={ProfileMainCss.seconeBtn}
                   onClick={() => (modalStore.userNamePageModal.display = true)}
                 >
                   <ion-icon name="settings-outline"></ion-icon>
@@ -140,24 +164,22 @@ function ProfileMain() {
                 <b>2</b> posts
               </p>
               <button
-              disabled={userDetails.followersCount ===0}
+                disabled={userDetails.followersCount === 0}
                 onClick={() => {
                   modalStore.followModal.display = true;
                   modalStore.followModal.type = "followers";
                 }}
               >
-                <b>{userDetails.followersCount}</b>{" "}
-                followers
+                <b>{userDetails.followersCount}</b> followers
               </button>
               <button
-              disabled={userDetails.followingsCount ===0}
+                disabled={userDetails.followingsCount === 0}
                 onClick={() => {
                   modalStore.followModal.display = true;
                   modalStore.followModal.type = "followings";
                 }}
               >
-                <b>{userDetails.followingsCount}</b>{" "}
-                following
+                <b>{userDetails.followingsCount}</b> following
               </button>
             </div>
             <div className={ProfileMainCss.secthree}>
@@ -169,29 +191,27 @@ function ProfileMain() {
         </div>
         <div className={ProfileMainCss.mobileFollowInfo}>
           <ul className={ProfileMainCss.followInfo}>
-          <p>
-                <b>2</b> posts
-              </p>
-              <button
-              disabled={userDetails.followersCount ===0}
-                onClick={() => {
-                  modalStore.followModal.display = true;
-                  modalStore.followModal.type = "followers";
-                }}
-              >
-                <b>{userDetails.followersCount}</b>{" "}
-                followers
-              </button>
-              <button
-              disabled={userDetails.followingsCount ===0}
-                onClick={() => {
-                  modalStore.followModal.display = true;
-                  modalStore.followModal.type = "followings";
-                }}
-              >
-                <b>{userDetails.followingsCount}</b>{" "}
-                following
-              </button>
+            <p>
+              <b>2</b> posts
+            </p>
+            <button
+              disabled={userDetails.followersCount === 0}
+              onClick={() => {
+                modalStore.followModal.display = true;
+                modalStore.followModal.type = "followers";
+              }}
+            >
+              <b>{userDetails.followersCount}</b> followers
+            </button>
+            <button
+              disabled={userDetails.followingsCount === 0}
+              onClick={() => {
+                modalStore.followModal.display = true;
+                modalStore.followModal.type = "followings";
+              }}
+            >
+              <b>{userDetails.followingsCount}</b> following
+            </button>
           </ul>
         </div>
         <div className={ProfileMainCss.hrline}>
@@ -251,8 +271,8 @@ function ProfileMain() {
         )}
       </div>
     </div>
-    :
-    <Spinner/>
+  ) : (
+    <Spinner />
   );
 }
 let handelImageChange = async (e) => {
@@ -263,7 +283,6 @@ let handelImageChange = async (e) => {
   }
 };
 
-
 let handelImageChangeProfile = async (e) => {
   const [file] = e.target.files;
   let { err } = await updateProfilePic(file);
@@ -271,7 +290,5 @@ let handelImageChangeProfile = async (e) => {
     alert(err.message);
   }
 };
-
-
 
 export default view(ProfileMain);
