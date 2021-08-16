@@ -7,6 +7,12 @@ import modalStore from "./../../stores/modalStore";
 function UnfollowModal() {
   const handelUnfollowUser = async () => {
     modalStore.unfollowModal.display = false;
+    if (modalStore.followModal.type === "followers") {
+      modalStore.followModal.followerslist.find(ele => ele.uid === modalStore.unfollowModal.toUnfollow.uid).isUnFollowInProgress = true;
+    }
+    if (modalStore.followModal.type === "followings") {
+      modalStore.followModal.followingsList.find(ele => ele.uid === modalStore.unfollowModal.toUnfollow.uid).isUnFollowInProgress = true;
+    }
     modalStore.followModal.isUnfollowInProgress = true;
     const { err } = await unfollowUser(modalStore.unfollowModal.toUnfollow.uid);
     modalStore.followModal.isUnfollowInProgress = false;
@@ -14,22 +20,12 @@ function UnfollowModal() {
       return alert(err.message);
     }
     if (modalStore.followModal.type === "followers") {
-      modalStore.followModal.followerslist =
-        modalStore.followModal.followerslist.map((ele) => {
-          if (ele.uid === modalStore.unfollowModal.toUnfollow.uid) {
-            ele.isFollowedByUser = false;
-          }
-          return ele;
-        });
+      modalStore.followModal.followerslist.find(ele => ele.uid === modalStore.unfollowModal.toUnfollow.uid).isUnFollowInProgress = false;
+      modalStore.followModal.followerslist.find(ele => ele.uid === modalStore.unfollowModal.toUnfollow.uid).isFollowedByUser = false;
     }
     if (modalStore.followModal.type === "followings") {
-      modalStore.followModal.followingsList =
-        modalStore.followModal.followingsList.map((ele) => {
-          if (ele.uid === modalStore.unfollowModal.toUnfollow.uid) {
-            ele.isFollowedByUser = false;
-          }
-          return ele;
-        });
+      modalStore.followModal.followingsList.find(ele => ele.uid === modalStore.unfollowModal.toUnfollow.uid).isFollowedByUser = false;
+      modalStore.followModal.followingsList.find(ele => ele.uid === modalStore.unfollowModal.toUnfollow.uid).isUnFollowInProgress = false;
     }
   };
   return modalStore.unfollowModal.display ? (

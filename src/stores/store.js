@@ -15,4 +15,3 @@ const mystore = store({
 });
 
 export default mystore;
-export const currentUser = mystore.currentUser;

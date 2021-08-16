@@ -10,8 +10,8 @@ import mystore from "../../stores/store";
 import UnfollowModal from "../modals/UnfollowModal";
 import { firestore } from "../../services/firebase";
 import Spinner from "../spinners/Spinner";
+import LocalSpinner from "../spinners/LocalSpinner";
 import {
-
   addPost,
   getUserPosts,
   getUserDetailsByUsername,
@@ -28,6 +28,7 @@ function ProfileMain() {
     uid: null,
   });
   const [hasPosts, setHasPosts] = useState(false);
+  const [isprofilePicUpdating, setisprofilePicUpdating] = useState(false);
   const [userPosts, setUserPosts] = useState([]);
   const [isFollowed, setIsFollowed] = useState(false);
 
@@ -79,7 +80,24 @@ function ProfileMain() {
   const handelUnFollowUser = async () => {
     modalStore.unfollowModal.toUnfollow = userDetails;
     modalStore.unfollowModal.display = true;
+    modalStore.followModal.type = null;
   };
+  let handelImageChangeProfile = async (e) => {
+    const [file] = e.target.files;
+    setisprofilePicUpdating(true)
+    let { err } = await updateProfilePic(file);
+    setisprofilePicUpdating(false)
+    if (err) {
+      alert(err.message);
+    }
+  };
+  const handelImageChange = async (e) => {
+  const [file] = e.target.files;
+  let { err } = await addPost(file);
+  if (err) {
+    alert(err.message);
+  }
+};
   return !modalStore.spinner.show ? (
     <div className="ProfilePage">
       <div className={ProfileMainCss.profileWrap}>
@@ -105,6 +123,7 @@ function ProfileMain() {
               src={userDetails.profilePic}
               alt="profile_pic"
             />
+            {isprofilePicUpdating && <LocalSpinner />}
           </div>
           <div className={ProfileMainCss.profileInfo}>
             <div className={ProfileMainCss.secone}>
@@ -120,7 +139,7 @@ function ProfileMain() {
               {userDetails.uid !== mystore.auth.user.uid && !isFollowed && (
                 <div className={ProfileMainCss.followBtnwrap}>
                   <button
-                  disabled={modalStore.followModal.isFollowInProgress}
+                    disabled={modalStore.followModal.isFollowInProgress}
                     className={ProfileMainCss.followBtn}
                     onClick={() => handelFollowUser()}
                   >
@@ -131,7 +150,7 @@ function ProfileMain() {
               {userDetails.uid !== mystore.auth.user.uid && isFollowed && (
                 <div className={ProfileMainCss.followBtnwrap}>
                   <button
-                  disabled={modalStore.followModal.isFollowInProgress}
+                    disabled={modalStore.followModal.isFollowInProgress}
                     className={ProfileMainCss.followingBtn}
                     onClick={() => handelUnFollowUser()}
                   >
@@ -161,7 +180,7 @@ function ProfileMain() {
 
             <div className={ProfileMainCss.sectwo}>
               <p>
-                <b>2</b> posts
+                <b>{userPosts.length}</b> posts
               </p>
               <button
                 disabled={userDetails.followersCount === 0}
@@ -224,10 +243,9 @@ function ProfileMain() {
 
           <p>POSTS</p>
         </div>
-        {!hasPosts && (
+        {!hasPosts && userDetails.uid === mystore.currentUser.uid && (
           <div
             className={ProfileMainCss.sharePhotos}
-            style={{ display: hasPosts ? "none" : "block" }}
           >
             <div className={ProfileMainCss.cameraIcon}>
               <ion-icon name="camera-outline"></ion-icon>
@@ -256,6 +274,21 @@ function ProfileMain() {
             </div>
           </div>
         )}
+        {!hasPosts && userDetails.uid !== mystore.currentUser.uid && (
+          <div
+            className={ProfileMainCss.sharePhotos}
+          >
+            <div className={ProfileMainCss.cameraIcon}>
+              <ion-icon name="camera-outline"></ion-icon>
+            </div>
+            <div className={ProfileMainCss.textOne}>
+              <p>No Posts Yet</p>
+            </div>
+            <div className={ProfileMainCss.textTwo}>
+              <p>When {userDetails.username} posts, they will appear here.</p>
+            </div>
+          </div>
+        )}
         {hasPosts && (
           <div className={ProfileMainCss.userPosts}>
             <div className={ProfileMainCss.postsMainWrap}>
@@ -275,20 +308,8 @@ function ProfileMain() {
     <Spinner />
   );
 }
-let handelImageChange = async (e) => {
-  const [file] = e.target.files;
-  let { err } = await addPost(file);
-  if (err) {
-    alert(err.message);
-  }
-};
 
-let handelImageChangeProfile = async (e) => {
-  const [file] = e.target.files;
-  let { err } = await updateProfilePic(file);
-  if (err) {
-    alert(err.message);
-  }
-};
+
+
 
 export default view(ProfileMain);

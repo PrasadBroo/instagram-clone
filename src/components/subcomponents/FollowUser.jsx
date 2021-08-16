@@ -1,5 +1,5 @@
 import { view } from "@risingstack/react-easy-state";
-import React,{useState} from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import FollowUserCss from "../../css/subcomponents/FollowUser.module.css";
 import modalStore from "../../stores/modalStore";
@@ -8,34 +8,39 @@ import { followUser } from "../../utils/firebase_api";
 import LocalSpinner from "../spinners/LocalSpinner";
 
 function FollowUser({ data }) {
-  const [isFollowInProgress,setIsFollowInProgress] = useState(false)
+  const [isprofilePicLoading, setIsprofilePicLoading] = useState(true);
   const handelFollowUser = async () => {
-    setIsFollowInProgress(true)
+    if (modalStore.followModal.type === "followers") {
+      modalStore.followModal.followerslist.find(
+        (ele) => ele.uid === data.uid
+      ).isFollowInProgress = true;
+    }
+    if (modalStore.followModal.type === "followings") {
+      modalStore.followModal.followingsList.find(
+        (ele) => ele.uid === data.uid
+      ).isFollowInProgress = true;
+    }
     modalStore.followModal.isFollowInProgress = true;
     const { err } = await followUser(data);
-    setIsFollowInProgress(false)
     if (err) {
       alert(err.message);
-      setIsFollowInProgress(false)
       return (modalStore.followModal.isFollowInProgress = false);
     }
     if (modalStore.followModal.type === "followers") {
-      modalStore.followModal.followerslist =
-        modalStore.followModal.followerslist.map((ele) => {
-          if (ele.uid === data.uid) {
-            ele.isFollowedByUser = true;
-          }
-          return ele;
-        });
+      modalStore.followModal.followerslist.find(
+        (ele) => ele.uid === data.uid
+      ).isFollowInProgress = false;
+      modalStore.followModal.followerslist.find(
+        (ele) => ele.uid === data.uid
+      ).isFollowedByUser = true;
     }
     if (modalStore.followModal.type === "followings") {
-      modalStore.followModal.followingsList =
-        modalStore.followModal.followingsList.map((ele) => {
-          if (ele.uid === data.uid) {
-            ele.isFollowedByUser = true;
-          }
-          return ele;
-        });
+      modalStore.followModal.followingsList.find(
+        (ele) => ele.uid === data.uid
+      ).isFollowedByUser = true;
+      modalStore.followModal.followingsList.find(
+        (ele) => ele.uid === data.uid
+      ).isFollowInProgress = false;
     }
     modalStore.followModal.isFollowInProgress = false;
   };
@@ -47,7 +52,12 @@ function FollowUser({ data }) {
     <div className={FollowUserCss.wrap}>
       <div className={FollowUserCss.pic}>
         <Link to={"/" + data.username}>
-          <img src={data.profilePic} alt="user-pic" />
+          {isprofilePicLoading && <LocalSpinner />}
+          <img
+            src={data.profilePic}
+            onLoad={() => setIsprofilePicLoading(false)}
+            alt="user-pic"
+          />
         </Link>
       </div>
       <div className={FollowUserCss.name}>
@@ -58,20 +68,20 @@ function FollowUser({ data }) {
         {!data.isFollowedByUser && data.uid !== mystore.currentUser.uid && (
           <button
             className={FollowUserCss.followgBtn}
-            disabled={isFollowInProgress}
+            disabled={data.isFollowInProgress}
             onClick={() => handelFollowUser()}
           >
-            {isFollowInProgress && <LocalSpinner />}
+            {data.isFollowInProgress && <LocalSpinner />}
             Follow
           </button>
         )}
         {data.isFollowedByUser && data.uid !== mystore.currentUser.uid && (
           <button
             className={FollowUserCss.followingBtn}
-            disabled={isFollowInProgress}
+            disabled={data.isUnFollowInProgress}
             onClick={() => handelUnfollowUser()}
           >
-            {modalStore.followModal.isUnfollowInProgress && <LocalSpinner />}
+            {data.isUnFollowInProgress && <LocalSpinner />}
             Following
           </button>
         )}

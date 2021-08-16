@@ -3,7 +3,9 @@
     align-items: center;
     margin: 0.8rem 0;
 }
-
+.pic{
+    position: relative;
+}
 .pic a img {
     height: 40px;
     width: 40px;
