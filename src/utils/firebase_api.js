@@ -296,8 +296,14 @@ const has_followed = async (uid) => {
 const get_followers_list = async (uid, endcursor) => {
   try {
     let res = (await usersFollowersRef.doc(uid).collection('users').limit(5).get()).docs.map(doc => doc.data())
-    let modifiesRes =await Promise.all(res.map(async(follower) => {follower.isFollowedByUser = (await hasFollowed(follower.uid)).data;return follower}));
-    modifiesRes.forEach(follower => {follower.isUnFollowInProgress = false;follower.isFollowInProgress = false;}) 
+    let modifiesRes = await Promise.all(res.map(async (follower) => {
+      follower.isFollowedByUser = (await hasFollowed(follower.uid)).data;
+      return follower
+    }));
+    modifiesRes.forEach(follower => {
+      follower.isUnFollowInProgress = false;
+      follower.isFollowInProgress = false;
+    })
     return {
       err: false,
       data: modifiesRes
@@ -313,7 +319,10 @@ const get_followers_list = async (uid, endcursor) => {
 const get_followings_list = async (uid, endcursor) => {
   try {
     let res = (await usersFollowingsRef.doc(uid).collection('users').limit(5).get()).docs.map(doc => doc.data())
-    let modifiesRes =await Promise.all(res.map(async(follower) => {follower.isFollowedByUser = (await hasFollowed(follower.uid)).data;return follower}))
+    let modifiesRes = await Promise.all(res.map(async (follower) => {
+      follower.isFollowedByUser = (await hasFollowed(follower.uid)).data;
+      return follower
+    }))
     return {
       err: false,
       data: modifiesRes
@@ -325,6 +334,31 @@ const get_followings_list = async (uid, endcursor) => {
     }
   }
 
+}
+const update_profile_details = async (name, email, username, bio, website) => {
+  try {
+    const isVAlidUsername = new RegExp(/^[a-zA-Z0-9_-]{3,16}$/).test(username);
+    if(!isVAlidUsername)throw Error('Invalid Username');
+    const givenData = {
+      email: email,
+      fullName: name,
+      username,
+      bio,
+      website
+    }
+    const res = await usersRef.doc(auth().currentUser.uid).set(givenData, {
+      merge: true
+    });
+    return {
+      err: false,
+      data: res
+    }
+  } catch (error) {
+    return {
+      err: error,
+      data: false
+    }
+  }
 }
 export const registerUser = register_user;
 export const getUserDetailsByUid = get_user_details_by_uid;
@@ -339,3 +373,4 @@ export const unfollowUser = unfollow_user;
 export const hasFollowed = has_followed;
 export const getFollowerslist = get_followers_list;
 export const getFollowingsList = get_followings_list;
+export const updateProfileDetails = update_profile_details

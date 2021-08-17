@@ -27,7 +27,7 @@ function ChangePassword() {
       </div>
       <div className={ChangePasswordCss.btns}>
         <button>Change Password</button>
-        <button>Forget Password</button>
+        {/* <button>Forget Password</button> */}
       </div>
     </div>
   );

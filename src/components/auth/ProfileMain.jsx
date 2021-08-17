@@ -203,8 +203,8 @@ function ProfileMain() {
             </div>
             <div className={ProfileMainCss.secthree}>
               <h1>{userDetails.fullName}</h1>
-              <p>🍰Wish Me On 2 Dec🍰</p>
-              <p>😍Favourite Star-Amir Khan 😍</p>
+              {userDetails.website && <a className={ProfileMainCss.userWebsite} target="_blank" rel="noopener noreferrer" href={userDetails.website}>{userDetails.website}</a>}
+              <p>{userDetails.bio ?? ''}</p>
             </div>
           </div>
         </div>

@@ -177,7 +177,13 @@
 .textTwo{
     margin: 1rem 0;
 }
-
+.userWebsite{
+    text-decoration: none;
+    color: #0095F6;
+}
+.userWebsite:hover{
+    text-decoration: underline;
+}
 .uploadLink button{
     outline: none;
     border: 0;

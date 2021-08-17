@@ -82,7 +82,11 @@
     color: #385185;
     font-weight: 550;
 }
-
+.btns button:last-child{
+    color: #fff;
+    background-color: #0095F6;
+    padding: 0.2rem 1rem;
+}
 @media only screen and (max-width: 600px) {
     .wrap {
         width: 100%;
