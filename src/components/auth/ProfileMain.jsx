@@ -56,8 +56,8 @@ function ProfileMain() {
           .onSnapshot((next) => {
             if (isMounted) setIsFollowed(next.exists);
           });
-        setHasPosts(postsData.length !== 0);
-        setUserPosts(postsData);
+        setHasPosts(postsData.postsCount  !== 0);
+        setUserPosts(postsData.posts);
         modalStore.followModal.user = user_details;
         modalStore.spinner.show = false;
         // setIsFollowed(isFollowed);

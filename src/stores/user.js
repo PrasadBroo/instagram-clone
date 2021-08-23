@@ -5,6 +5,7 @@ const user = store(
         user:{
             userPosts:false,
             userDetails:false,
+            
         }
     }
 );

@@ -40,7 +40,12 @@
     .sideContainer,
     .settings {
         width: 100%;
-        margin-bottom: 15rem;
+    }
+    .settings{
+        height: auto;
+    }
+    .sideContainer{
+        margin-bottom: 2rem;
     }
     .container{
         flex-direction: column;

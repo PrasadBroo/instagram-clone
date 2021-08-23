@@ -1,16 +1,36 @@
 import { view } from '@risingstack/react-easy-state';
-import React from 'react'
+import React, { useEffect} from 'react'
+import { useParams } from 'react-router-dom';
 import Footer from '../components/Footer';
+import PostModal from '../components/modals/PostModal';
 import Navbar from './../components/auth/Navbar';
 import PostP from './../components/auth/PostP';
-
+import { getPostDetails } from './../utils/firebase_api';
+import mystore from './../stores/store';
+import SkeletonPostP from '../components/skeletons/SkeletonPostP';
 
 
 function PostPage() {
+    const { postid } = useParams();
+    useEffect(()=>{
+       const fetchDetails = async()=>{
+           const {data,err} = await getPostDetails(postid);
+           if(err){
+               return alert(err.message)
+           }
+           console.log(data)
+        mystore.currentUser.postDetails = data;
+        mystore.isAnythingLoading.postDetailsLoading = false;
+
+       }
+       fetchDetails()
+    },[postid])
+
     return (
         <div className="Post-Page">
             <Navbar/>
-            <PostP/>
+            {mystore.isAnythingLoading.postDetailsLoading ? <SkeletonPostP/> : <PostP/>}
+            <PostModal/>
             <Footer/>
         </div>  
     )

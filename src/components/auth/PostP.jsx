@@ -1,31 +1,36 @@
 import { view } from "@risingstack/react-easy-state";
 import React, { useState } from "react";
 import PostPCss from "../../css/auth/PostP.module.css";
-import tempImg from "../../media/181184050_246536270301764_5089686745904119707_n.jpg";
 import Comment from './Comment';
+import modalStore from './../../stores/modalStore';
+import mystore from "../../stores/store";
+import LocalSpinner from "../spinners/LocalSpinner";
 
 function PostP() {
   const [lc, sLc] = useState(false);
+  const [ispostImageLoaded,setIsPostImageLoaded] = useState(false)
+  const data = mystore.currentUser.postDetails;
   return (
     <div className={PostPCss.postWrapper}>
       <div className="leftSec">
         <div className={PostPCss.postMedia}>
-          <img src={tempImg} alt="postImage" />
+          {!ispostImageLoaded && <LocalSpinner/>}
+           <img src={data.post.postMediaUrl} onLoad={()=>setIsPostImageLoaded(true)} alt="postImage" />
         </div>
       </div>
       <div className={PostPCss.rightSec}>
         <div className="sub">
           <div className={PostPCss.postHeading}>
             <div className={PostPCss.postAuthor}>
-              <a href="/prasad__bro">
+              <a href={"/"+data.user.username}>
                 <img
-                  src="https://graph.facebook.com/240349964547826/picture"
+                  src={data.user.profilePic}
                   alt="post"
                 />
               </a>
-              <a href="/prasad__bro">prasad__bro</a>
+              <a href={"/"+data.user.username}>{data.user.username}</a>
             </div>
-            <div className={PostPCss.postOptions}>
+            <div className={PostPCss.postOptions} onClick={() => {modalStore.postModal.display = true;console.log(modalStore.postModal.display)}}>
               <svg
                 aria-label="More options"
                 className="_8-yf5 "
@@ -66,7 +71,7 @@ function PostP() {
         <div className="subsec">
           <div className={PostPCss.likeCS}>
             <div className={PostPCss.leftSide}>
-              <span>;
+              <span>
                 <i
                   className={
                     lc
@@ -80,7 +85,7 @@ function PostP() {
                 {/* <ion-icon name={lc ? "heart" : "heart-outline"}></ion-icon> */}
               </span>
               <span className={PostPCss.commentBtnWrap}>
-                <a href="/post/afsafasfas">
+                <a href={"/post/"+data.post.postId}>
                 <ion-icon name="chatbubble-outline"></ion-icon>
                 </a>
                 
@@ -96,7 +101,7 @@ function PostP() {
             </div>
           </div>
           <div className={PostPCss.likesCount}>
-            <p>25,143 likes</p>
+            <p>{data.post.likesCount} likes</p>
           </div>
           <div className={PostPCss.postComment}>
             <div className={PostPCss.inputComment}>

@@ -79,10 +79,11 @@ const get_user_posts = async (username) => {
     const {
       data: uid
     } = await get_uid_by_uername(username);
-    const details = (await postsRef.where("byUser", "==", uid).limit(6).get()).docs.map(snapshot => snapshot.data())
+    const posts = (await postsRef.where("byUser", "==", uid).limit(6).get()).docs.map(snapshot => snapshot.data())
+    const {data:postsCount} = await get_user_posts_count(uid)
     return {
       err: false,
-      data: details
+      data: {posts,postsCount}
     }
   } catch (error) {
     return {
@@ -93,18 +94,22 @@ const get_user_posts = async (username) => {
 
 
 }
+
 
 const add_post = async (file) => {
   try {
     let media = await add_media(file);
     const mediaUrl = await media.data.ref.getDownloadURL();
+    const postId =makeid()
     const givenData = {
       byUser: auth().currentUser.uid,
       createdAt: firestore.Timestamp.now(),
       postMediaUrl: mediaUrl,
-      postId: 1
+      postId: postId,
+      likesCount:0,
+      commentsCount:0,
     }
-    const details = await postsRef.add(givenData);
+    const details = await postsRef.doc(postId).set(givenData);
     return {
       err: false,
       data: details
@@ -117,6 +122,21 @@ const add_post = async (file) => {
   }
 }
 
+const get_post_details = async(postid)=>{
+  try {
+    const post = (await postsRef.doc(postid).get()).data()
+    const {data:user} = await getUserDetailsByUid(post.byUser)
+    return {
+      err: false,
+      data: {post,user}
+    }
+  } catch (error) {
+    return {
+      err: error,
+      data: false
+    }
+  }
+}
 const add_media = async (file) => {
   try {
     let fileName = new Date() + '-' + file.name;
@@ -360,6 +380,32 @@ const update_profile_details = async (name, email, username, bio, website) => {
     }
   }
 }
+const get_user_posts_count = async(uid)=>{
+  try {
+    const res = (await postsRef.where("byUser","==",uid).get()).docs.length;
+    return {
+      err: false,
+      data: res
+    }
+  } catch (error) {
+    return {
+      err: error,
+      data: false
+    }
+  }
+}
+
+function makeid() {
+  const length = 5;
+  let result           = '';
+  let characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-';
+  let charactersLength = characters.length;
+  for ( let i = 0; i < length; i++ ) {
+    result += characters.charAt(Math.floor(Math.random() * 
+charactersLength));
+ }
+ return result;
+}
 export const registerUser = register_user;
 export const getUserDetailsByUid = get_user_details_by_uid;
 export const getUserPosts = get_user_posts;
@@ -374,3 +420,4 @@ export const hasFollowed = has_followed;
 export const getFollowerslist = get_followers_list;
 export const getFollowingsList = get_followings_list;
 export const updateProfileDetails = update_profile_details
+export const getPostDetails = get_post_details;

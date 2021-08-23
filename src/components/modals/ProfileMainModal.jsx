@@ -13,7 +13,7 @@ import modalStore from './../../stores/modalStore';
         <div className={PostModalCss.postModal}>
             <div className={PostModalCss.modal}>
                 <button onClick={()=>{history.push('/settings/changePassword');modalStore.userNamePageModal.display = false}}>Change password</button>
-                <button onClick={()=> logout()}>Logout</button>
+                <button onClick={()=> {logout();modalStore.userNamePageModal.display = false}}>Logout</button>
                 <button onClick={()=> modalStore.userNamePageModal.display = false}>Cancel</button>
             </div>
         </div>

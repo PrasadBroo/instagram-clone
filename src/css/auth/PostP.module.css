@@ -59,10 +59,14 @@
     font-weight: 600;
     font-size: 14px;
 }
-
+.postMedia{
+    position: relative;
+    height: 400px;
+    width: 400px;
+}
 .postMedia img {
     width: 100%;
-
+    height: auto;
 }
 
 .likeCS {
@@ -213,7 +217,10 @@
         right: 0;
 
     }
-
+    .postMedia{
+        width: unset;
+        height: unset;
+    }
     .comment {
         font-size: 14px;
     }
