@@ -98,8 +98,8 @@ function Post() {
           <button>View All 12 Comments</button>
         </div>
         <div className={PostCss.comments}>
-          <Comment />
-          <Comment />
+          {/* <Comment />
+          <Comment /> */}
         </div>
         <div className={PostCss.postComment}>
           <div className={PostCss.inputComment}>

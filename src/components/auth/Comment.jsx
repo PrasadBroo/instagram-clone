@@ -1,15 +1,15 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import CommentCss from "../../css/auth/Comment.module.css";
 
-export default function Comment() {
+export default function Comment({data}) {
   const [lc, sLc] = useState(false);
   return (
     <div className={CommentCss.comment}>
       <span>
-        <a href="/prasad_bro">prasad_bro</a>
+        <Link to={"/"+data.user.username}>{data.user.username}</Link>
         <span>
-          Lorem ipsum dolor sit amet consectetur Lorem ipsum dolor sit amet
-          consectetur adipisicing elit. Eos, assumenda?
+          {data.message}
         </span>
       </span>
       <span>

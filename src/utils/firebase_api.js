@@ -11,7 +11,8 @@ const postsMedia = firebaseStorage().ref('postsMedia');
 const usersFollowersRef = firestore().collection('followers');
 const usersFollowingsRef = firestore().collection('followings');
 const profilePicsRef = firebaseStorage().ref('profilePics');
-
+const likesRef = firestore().collection('likes');
+const commentsRef = firestore().collection('comments');
 
 const get_user_details_by_uid = async (uid = auth().currentUser.uid) => {
   try {
@@ -126,9 +127,14 @@ const get_post_details = async(postid)=>{
   try {
     const post = (await postsRef.doc(postid).get()).data()
     const {data:user} = await getUserDetailsByUid(post.byUser)
+    let comments = (await get_comments(postid)).data;
+    const {data:ispostLiked} = await is_post_liked_by_user(postid);
+    post.isLiked = ispostLiked;
+    comments =await Promise.all(comments.map( async comment =>  {comment.user =  (await getUserDetailsByUid(comment.uid)).data;return comment})) 
+    
     return {
       err: false,
-      data: {post,user}
+      data: {comments,user,post}
     }
   } catch (error) {
     return {
@@ -395,8 +401,7 @@ const get_user_posts_count = async(uid)=>{
   }
 }
 
-function makeid() {
-  const length = 5;
+function makeid(length=5) {
   let result           = '';
   let characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-';
   let charactersLength = characters.length;
@@ -405,6 +410,103 @@ function makeid() {
 charactersLength));
  }
  return result;
+}
+
+const post_like_increment = async(postid)=>{
+  try {
+    let previusLikesCount = (await postsRef.doc(postid).get()).data().likesCount;
+    const res = await postsRef.doc(postid).set({likesCount:previusLikesCount+=1},{merge:true})
+    return {
+      err: false,
+      data: res
+    }
+  } catch (error) {
+    throw Error('cannot increment like count')
+  }
+}
+const post_like_decrement = async(postid)=>{
+  try {
+    let previusLikesCount = (await postsRef.doc(postid).get()).data().likesCount;
+    const res = await postsRef.doc(postid).set({likesCount:previusLikesCount-=1},{merge:true})
+    return {
+      err: false,
+      data: res
+    }
+  } catch (error) {
+    throw Error('cannot decrement like count')
+  }
+}
+const like_post = async(postid)=>{
+  try {
+    const res =  await likesRef.doc(postid).collection('users').doc(auth().currentUser.uid).set({});
+    await post_like_increment(postid)
+    return {
+      err: false,
+      data: res
+    }
+  } catch (error) {
+    return {
+      err: error,
+      data: false
+    }
+  }
+}
+const unlike_post = async(postid)=>{
+  try {
+    const res = await likesRef.doc(postid).collection('users').doc(auth().currentUser.uid).delete();
+    await post_like_decrement(postid)
+    return {
+      err: false,
+      data: res
+    }
+  } catch (error) {
+    return {
+      err: error,
+      data: false
+    }
+  }
+}
+const is_post_liked_by_user = async(postid)=>{
+  try {
+    const res = (await likesRef.doc(postid).collection('users').doc(auth().currentUser.uid).get()).exists;
+    return {
+      err: false,
+      data: res
+    }
+  } catch (error) {
+    throw Error('error getting response')
+  }
+}
+const add_comment = async(msg,postid)=>{
+  try {
+  const data_to_add = {
+    uid: auth().currentUser.uid,
+    createdAt: firestore.Timestamp.now(),
+    message:msg,
+    id:makeid(8)
+  }
+    const res = (await (await commentsRef.doc(postid).collection('comment').add(data_to_add)).get()).data()
+    return {
+      err: false,
+      data: res
+    }
+  } catch (error) {
+    
+  }
+}
+const get_comments = async(postid)=>{
+  try {
+    const res = (await commentsRef.doc(postid).collection('comment').limit(10).get()).docs.map(comment => comment.data())
+    return {
+      err: false,
+      data: res
+    }
+  } catch (error) {
+    return {
+      err: error,
+      data: false
+    }
+  }
 }
 export const registerUser = register_user;
 export const getUserDetailsByUid = get_user_details_by_uid;
@@ -421,3 +523,6 @@ export const getFollowerslist = get_followers_list;
 export const getFollowingsList = get_followings_list;
 export const updateProfileDetails = update_profile_details
 export const getPostDetails = get_post_details;
+export const addComment = add_comment;
+export const unlikePost = unlike_post;
+export const likePost = like_post;
