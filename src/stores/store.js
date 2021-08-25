@@ -10,7 +10,8 @@ const mystore = store({
         username: 'loading...',
         profilePic: defaultProfilePic,
         uid: null,
-        postDetails:null
+        postDetails:null,
+        userSuggetions:null,
     },
     isAnythingLoading:{
         postDetailsLoading:true,

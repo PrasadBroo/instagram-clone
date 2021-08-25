@@ -17,16 +17,20 @@ function PostP() {
   const handelPostLike = async () => {
     if (data.post.isLiked) {
       data.post.isLiked = false;
+      data.post.likesCount -=1;
       const { err } = await unlikePost(data.post.postId);
       if (err) {
         data.post.isLiked = true;
+        data.post.likesCount +=1;
         return alert(err.message);
       }
       
     } else {
       data.post.isLiked = true;
+      data.post.likesCount +=1;
       const { err } = await likePost(data.post.postId);
       if (err) {
+        data.post.likesCount -=1;
         data.post.isLiked = false;
         return alert(err.message);
 

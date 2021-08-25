@@ -548,6 +548,24 @@ export const unlike_comment = async(commentId)=>{
     }
   }
 }
+
+export const get_user_suggetions = async(count=5)=>{
+  try {
+    const res = (await usersRef.limit(count).orderBy('createdAt').get()).docs.map(user => user.data())
+    const modifiedRes = await Promise.all(res.map(async e => {e.isFollowedByUser = (await has_followed(e.uid)).data;return e}))
+    return {
+      err: false,
+      data: modifiedRes
+    }
+  } catch (error) {
+    return {
+      err: error,
+      data: false
+    }
+  }
+}
+
+
 export const registerUser = register_user;
 export const getUserDetailsByUid = get_user_details_by_uid;
 export const getUserPosts = get_user_posts;

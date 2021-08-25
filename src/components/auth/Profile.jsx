@@ -1,13 +1,28 @@
-import React from "react";
-import myPic from "../../media/my_pic.jpg";
+import React, { useEffect } from "react";
 import ProfileCss from "../../css/auth/Profile.module.css";
 import mystore from "../../stores/store";
 import { view } from "@risingstack/react-easy-state";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
+import { get_user_suggetions } from "../../utils/firebase_api";
+import modalStore from "../../stores/modalStore";
+import UnfollowModal from "../modals/UnfollowModal";
+import SuggestedUser from "./../subcomponents/SuggestedUser";
 
 function Profile() {
+  useEffect(() => {
+    const fetchDatails = async () => {
+      const { data, err } = await get_user_suggetions();
+      if (err) {
+        return alert(err.message);
+      }
+      modalStore.followModal.type = "followings";
+      mystore.currentUser.userSuggetions = data;
+    };
+    fetchDatails();
+  }, []);
   return (
     <div className={ProfileCss.profileWrapper}>
+      <UnfollowModal />
       <div className={ProfileCss.profile}>
         <div className={ProfileCss.head}>
           <div className={ProfileCss.profileImg}>
@@ -28,60 +43,10 @@ function Profile() {
           <p className={ProfileCss.suggepara}>Suggestions For You</p>
           {/*below is sub component makeble  */}
           <div className={ProfileCss.accountSuggestions}>
-            <div className={ProfileCss.head}>
-              <div
-                className={
-                  ProfileCss.profileImg + " " + ProfileCss.suggeprofileImg
-                }
-              >
-                <img src={myPic} alt="img" />
-              </div>
-              <div className={ProfileCss.profileinfo}>
-                <a href="/prasad__bro">
-                  <p className={ProfileCss.username}>Prasad__bro</p>
-                </a>
-                <p className={ProfileCss.fullName}>Prasad Shinde</p>
-              </div>
-              <div className={ProfileCss.followBtnWrap}>
-                <button className={ProfileCss.followBtn}>Follow</button>
-              </div>
-            </div>
-            <div className={ProfileCss.head}>
-              <div
-                className={
-                  ProfileCss.profileImg + " " + ProfileCss.suggeprofileImg
-                }
-              >
-                <img src={myPic} alt="img" />
-              </div>
-              <div className={ProfileCss.profileinfo}>
-                <a href="/prasad__bro">
-                  <p className={ProfileCss.username}>Prasad__bro</p>
-                </a>
-                <p className={ProfileCss.fullName}>Prasad Shinde</p>
-              </div>
-              <div className={ProfileCss.followBtnWrap}>
-                <button className={ProfileCss.followBtn}>Follow</button>
-              </div>
-            </div>
-            <div className={ProfileCss.head}>
-              <div
-                className={
-                  ProfileCss.profileImg + " " + ProfileCss.suggeprofileImg
-                }
-              >
-                <img src={myPic} alt="img" />
-              </div>
-              <div className={ProfileCss.profileinfo}>
-                <a href="/prasad__bro">
-                  <p className={ProfileCss.username}>Prasad__bro</p>
-                </a>
-                <p className={ProfileCss.fullName}>Prasad Shinde</p>
-              </div>
-              <div className={ProfileCss.followBtnWrap}>
-                <button className={ProfileCss.followBtn}>Follow</button>
-              </div>
-            </div>
+            {mystore.currentUser.userSuggetions &&
+              mystore.currentUser.userSuggetions.map((e, i) => (
+                <SuggestedUser user={e} key={i} />
+              ))}
           </div>
         </div>
         <div className={ProfileCss.bottomLinks}>

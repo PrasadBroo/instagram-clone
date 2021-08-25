@@ -25,7 +25,7 @@ function App() {
         const usersRef = firestore().collection("users");
       usersRef
         .doc(mystore.auth.user.uid)
-        .onSnapshot((next) => {if(isMounted.current){mystore.currentUser = next.data();setLoading(false)}});
+        .onSnapshot((next) => {if(isMounted.current){mystore.currentUser = {...mystore.currentUser,...next.data()};setLoading(false)}});
         // getUserDetailsByUid().then((res) => {
         //   if (isMounted) {
         //     mystore.currentUser = res.data;
