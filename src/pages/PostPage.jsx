@@ -18,7 +18,6 @@ function PostPage() {
            if(err){
                return alert(err.message)
            }
-           console.log(data)
         mystore.currentUser.postDetails = data;
         mystore.isAnythingLoading.postDetailsLoading = false;
 

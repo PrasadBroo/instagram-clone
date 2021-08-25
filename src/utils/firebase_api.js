@@ -13,7 +13,7 @@ const usersFollowingsRef = firestore().collection('followings');
 const profilePicsRef = firebaseStorage().ref('profilePics');
 const likesRef = firestore().collection('likes');
 const commentsRef = firestore().collection('comments');
-
+const commentsLikesRef = firestore().collection('commentsLikes');
 const get_user_details_by_uid = async (uid = auth().currentUser.uid) => {
   try {
     const details = (await (usersRef.doc(uid)).get()).data();
@@ -497,6 +497,46 @@ const add_comment = async(msg,postid)=>{
 const get_comments = async(postid)=>{
   try {
     const res = (await commentsRef.doc(postid).collection('comment').limit(10).get()).docs.map(comment => comment.data())
+    const modifiedRes = await Promise.all(res.map(async comment => {comment.isLiked =  await (await is_comment_liked(comment.id)).data;return comment}))
+    return {
+      err: false,
+      data: modifiedRes
+    }
+  } catch (error) {
+    return {
+      err: error,
+      data: false
+    }
+  }
+}
+const is_comment_liked = async(commentId)=>{
+  try {
+    const res = (await commentsLikesRef.doc(commentId).collection('user').doc(auth().currentUser.uid).get()).exists
+    return {
+      err: false,
+      data: res
+    }
+  } catch (error) {
+    throw Error('something wrong here')
+  }
+}
+export const like_comment = async(commentId)=>{
+  try {
+    const res = await commentsLikesRef.doc(commentId).collection('user').doc(auth().currentUser.uid).set({})
+    return {
+      err: false,
+      data: res
+    }
+  } catch (error) {
+    return {
+      err: error,
+      data: false
+    }
+  }
+}
+export const unlike_comment = async(commentId)=>{
+  try {
+    const res = await commentsLikesRef.doc(commentId).collection('user').doc(auth().currentUser.uid).delete()
     return {
       err: false,
       data: res

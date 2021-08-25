@@ -1,27 +1,48 @@
-import React, { useState } from "react";
+import { view } from "@risingstack/react-easy-state";
+import React from "react";
 import { Link } from "react-router-dom";
 import CommentCss from "../../css/auth/Comment.module.css";
+import mystore from "../../stores/store";
+import { like_comment,unlike_comment } from "../../utils/firebase_api";
 
-export default function Comment({data}) {
-  const [lc, sLc] = useState(false);
+ function Comment({ data }) {
+  const comments = mystore.currentUser.postDetails.comments;
+  const handelCommentLike = async()=>{
+    if(data.isLiked){
+      comments.find(ele => ele.id === data.id).isLiked=false
+      const {err} = await unlike_comment(data.id)
+      if(err){
+        comments.find(ele => ele.id === data.id).isLiked=true
+        return alert(err.message)
+      }
+    }
+    else{
+      comments.find(ele => ele.id === data.id).isLiked=true
+      const {err} = await like_comment(data.id)
+      if(err){
+        comments.find(ele => ele.id === data.id).isLiked=false
+        return alert(err.message)
+      }
+    }
+  }
   return (
     <div className={CommentCss.comment}>
-      <span>
-        <Link to={"/"+data.user.username}>{data.user.username}</Link>
-        <span>
-          {data.message}
-        </span>
-      </span>
-      <span>
-        <i
+      <div>
+        <Link to={"/" + data.user.username}>{data.user.username}</Link>
+        <span>{data.message}</span>
+      </div>
+      <div>
+        <i 
           className={
-            lc
+            data.isLiked
               ? CommentCss.likeBtnWrap + " fas fa-heart " + CommentCss.heart_red
               : CommentCss.likeBtnWrap + " far fa-heart "
           }
-          onClick={() => sLc(!lc)}
+          onClick={handelCommentLike}
         ></i>
-      </span>
+      </div>
     </div>
   );
 }
+
+export default view(Comment)

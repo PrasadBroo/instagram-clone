@@ -4,15 +4,17 @@
     margin: 0.3rem 0;
     font-size: 14px;
 }
-
-.comment span a {
+.comment div:first-child{
+    padding-right: 0.5rem;
+}
+.comment div a {
     text-decoration: none;
     color: #262626;
     margin-right: 0.5rem;
     font-weight: 600;
 }
 
-.comment span a:hover{
+.comment div a:hover{
     text-decoration: underline;
 }
 .heart_red {

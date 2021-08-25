@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import PostCss from "../../css/auth/Post.module.css";
-import Comment from "./Comment";
+// import Comment from "./Comment";
 import modalStore from "./../../stores/modalStore";
 import SkeletonPost from "../skeletons/SkeletonPost";
 import { view } from "@risingstack/react-easy-state";
