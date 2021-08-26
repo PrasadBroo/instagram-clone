@@ -565,6 +565,24 @@ export const get_user_suggetions = async(count=5)=>{
   }
 }
 
+export const get_suggested_posts = async()=>{
+  try {
+    const allPosts = [];
+    const{data:followingsList} = await getFollowingsList(auth().currentUser.uid);
+    const res = (await Promise.all(followingsList.map(async ele =>(await get_user_posts(ele.username)).data)))
+    res.forEach(e => e.posts.forEach(e => allPosts.push(e)))
+    const modifiedRes = await Promise.all(allPosts.map(async e => {e = (await get_post_details(e.postId)).data;return e}))
+    return {
+      err: false,
+      data: modifiedRes
+    }
+  } catch (error) {
+    return {
+      err: error,
+      data: false
+    }
+  }
+}
 
 export const registerUser = register_user;
 export const getUserDetailsByUid = get_user_details_by_uid;

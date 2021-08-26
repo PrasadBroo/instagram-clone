@@ -1,18 +1,29 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Post from './Post'
 import PostCss from '../../css/auth/Posts.module.css'
 import { view } from '@risingstack/react-easy-state'
+import mystore from './../../stores/store';
+import { get_suggested_posts } from '../../utils/firebase_api';
+import SkeletonPost from '../skeletons/SkeletonPost';
 
 function Posts() {
+    useEffect(()=>{
+        const fetchDatails = async () => {
+            const {data:suggestedPosts,err} = await get_suggested_posts();
+            if (err ) {
+              return alert(err.message);
+            }
+            
+            mystore.currentUser.userSuggestedPosts = suggestedPosts;
+            console.log(suggestedPosts)
+          };
+          fetchDatails();
+    },[])
     return (
         <div className={PostCss.posts}>
-            <Post/>
-            <Post/>
-            <Post/>
-            <Post/>
-            <Post/>
-            <Post/>
-            <Post/>
+            {mystore.currentUser.userSuggestedPosts && mystore.currentUser.userSuggestedPosts.map(e => <Post data={e} key={e.postId}/>)}
+            {!mystore.currentUser.userSuggestedPosts && [0,1,2].map(e => <SkeletonPost/>)}
+            
         </div>
     )
 }

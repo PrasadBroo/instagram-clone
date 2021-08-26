@@ -116,6 +116,7 @@
     border-bottom: 0px solid #000000;
     border-left: 0px solid #000000;
     color: #8E8E8E;
+    position: relative;
 }
 
 .commentForm{
@@ -123,14 +124,16 @@
     align-items: center;
     justify-content: space-between;
 }
-
+/* .inputComment{
+    position: relative;
+} */
 .commentForm button{
     border: 0;
     outline: 0;
     color: #0095F6;
     font-size: 14px;
     font-weight: 600;
-    background-color: #fff;
+    background-color: transparent;
     cursor: pointer;
 
 }

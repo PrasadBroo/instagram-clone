@@ -1,5 +1,6 @@
 import { view } from "@risingstack/react-easy-state";
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import ProfileCss from "../../css/auth/Profile.module.css";
 import { followUser, unfollowUser } from "../../utils/firebase_api";
 import LocalSpinner from "../spinners/LocalSpinner";
@@ -34,18 +35,18 @@ function SuggestedUser({ user }) {
         <img src={user.profilePic} alt="img" />
       </div>
       <div className={ProfileCss.profileinfo}>
-        <a href={"/" + user.username}>
+        <Link to={"/" + user.username}>
           <p className={ProfileCss.username}>{user.username}</p>
-        </a>
+        </Link>
         <p className={ProfileCss.fullName}>{user.fullName}</p>
       </div>
       <div className={ProfileCss.followBtnWrap}>
-        {user.isFollowedByUser && (
+        {user.isFollowedByUser &&  user.uid !== mystore.currentUser.uid && (
           <button className={ProfileCss.followingBtn} onClick={handelUnfollow}>
             {isUnFollowInProgress && <LocalSpinner />}Following
           </button>
         )}
-        {!user.isFollowedByUser && (
+        {!user.isFollowedByUser && user.uid !== mystore.currentUser.uid && (
           <button className={ProfileCss.followBtn} onClick={handelFollow}>
               {isFollowInProgress && <LocalSpinner />}
             Follow

@@ -75,7 +75,7 @@ function FollowUser({ data }) {
             Follow
           </button>
         )}
-        {data.isFollowedByUser && data.uid !== mystore.currentUser.uid && (
+        {data.isFollowedByUser  && data.uid !== mystore.currentUser.uid && (
           <button
             className={FollowUserCss.followingBtn}
             disabled={data.isUnFollowInProgress}

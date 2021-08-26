@@ -3,7 +3,7 @@ import ProfileCss from "../../css/auth/Profile.module.css";
 import mystore from "../../stores/store";
 import { view } from "@risingstack/react-easy-state";
 import { Link } from "react-router-dom";
-import { get_user_suggetions } from "../../utils/firebase_api";
+import { get_suggested_posts, get_user_suggetions } from "../../utils/firebase_api";
 import modalStore from "../../stores/modalStore";
 import UnfollowModal from "../modals/UnfollowModal";
 import SuggestedUser from "./../subcomponents/SuggestedUser";
@@ -12,11 +12,13 @@ function Profile() {
   useEffect(() => {
     const fetchDatails = async () => {
       const { data, err } = await get_user_suggetions();
-      if (err) {
+      const {data:suggestedPosts,err:err2} = await get_suggested_posts();
+      if (err || err2) {
         return alert(err.message);
       }
       modalStore.followModal.type = "followings";
       mystore.currentUser.userSuggetions = data;
+      mystore.currentUser.userSuggestedPosts = suggestedPosts;
     };
     fetchDatails();
   }, []);
@@ -41,7 +43,6 @@ function Profile() {
         </div>
         <div className={ProfileCss.suggestions}>
           <p className={ProfileCss.suggepara}>Suggestions For You</p>
-          {/*below is sub component makeble  */}
           <div className={ProfileCss.accountSuggestions}>
             {mystore.currentUser.userSuggetions &&
               mystore.currentUser.userSuggetions.map((e, i) => (

@@ -11,7 +11,32 @@
     width: 100%;
     border-radius: 0.2rem ;
 }
-
+.wrap:hover .commentIcon{
+    display: flex;
+}
+.commentIcon{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #333;
+    opacity: 0.5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    
+    display: none;
+}
+.commentIcon a{
+    color: #fff;
+}
+.commentsCount{
+    color: #fff;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
 @media screen and (max-width: 1075px) and (min-width: 890px){
     .wrap{
         max-width: 200px;

@@ -5,8 +5,9 @@ import CommentCss from "../../css/auth/Comment.module.css";
 import mystore from "../../stores/store";
 import { like_comment,unlike_comment } from "../../utils/firebase_api";
 
- function Comment({ data }) {
-  const comments = mystore.currentUser.postDetails.comments;
+ function Comment({ data,type="home" ,i}) {
+  const comments = type === "home" ? mystore.currentUser.userSuggestedPosts[i].comments : mystore.currentUser.postDetails.comments;
+  console.log(comments)
   const handelCommentLike = async()=>{
     if(data.isLiked){
       comments.find(ele => ele.id === data.id).isLiked=false

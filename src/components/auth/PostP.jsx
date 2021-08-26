@@ -117,7 +117,7 @@ function PostP() {
           </div>
           <div className={PostPCss.comments}>
             {data.comments &&
-              data.comments.map((c) => <Comment data={c} key={c.id} />)}
+              data.comments.map((c) => <Comment data={c} key={c.id} type="details" />)}
           </div>
         </div>
         <div className="subsec">

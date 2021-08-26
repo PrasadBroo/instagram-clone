@@ -12,6 +12,7 @@ const mystore = store({
         uid: null,
         postDetails:null,
         userSuggetions:null,
+        userSuggestedPosts:null
     },
     isAnythingLoading:{
         postDetailsLoading:true,
