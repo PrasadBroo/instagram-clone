@@ -156,7 +156,7 @@ function Post({ data }) {
         <div className={PostCss.comments}>
           {data.topComments &&
             data.topComments.map((c, i) => (
-              <Comment data={c} key={i} i={i} />
+              <Comment data={c} key={i} post={data} type="home"/>
             ))}
         </div>
         <div className={PostCss.postComment}>
