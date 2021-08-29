@@ -2,10 +2,10 @@ import { view } from "@risingstack/react-easy-state";
 import React from "react";
 import SpinnerCss from "../../css/spinners/Spinner.module.css";
 
-function Spinner() {
+function Spinner({noBc}) {
   return (
-    <div className={SpinnerCss.loaderWrapLocal}>
-      <div className={SpinnerCss.loaderLocal}></div>
+    <div className={noBc ? SpinnerCss.loaderWrapLocal + ' ' +SpinnerCss.noBc :SpinnerCss.loaderWrapLocal} >
+      <div className={SpinnerCss.loaderLocal} ></div>
     </div>
   );
 }

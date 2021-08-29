@@ -127,14 +127,14 @@ const get_post_details = async(postid)=>{
   try {
     const post = (await postsRef.doc(postid).get()).data()
     const {data:user} = await getUserDetailsByUid(post.byUser)
-    let comments = (await get_comments(postid)).data;
+    let {data} = (await get_comments(postid));
     const {data:ispostLiked} = await is_post_liked_by_user(postid);
     post.isLiked = ispostLiked;
-    comments =await Promise.all(comments.map( async comment =>  {comment.user =  (await getUserDetailsByUid(comment.uid)).data;return comment})) 
+    let comments =await Promise.all(data.modifiedRes.map( async comment =>  {comment.user =  (await getUserDetailsByUid(comment.uid)).data;return comment})) 
     
     return {
       err: false,
-      data: {comments,user,post}
+      data: {comments,user,post,commentsSnaps:data.commentSnapshots}
     }
   } catch (error) {
     return {
@@ -521,11 +521,12 @@ const add_comment = async(msg,postid)=>{
 }
 const get_comments = async(postid)=>{
   try {
+    const commentSnapshots = (await commentsRef.doc(postid).collection('comment').limit(10).get());
     const res = (await commentsRef.doc(postid).collection('comment').limit(10).get()).docs.map(comment => comment.data())
     const modifiedRes = await Promise.all(res.map(async comment => {comment.isLiked =  await (await is_comment_liked(comment.id)).data;return comment}))
     return {
       err: false,
-      data: modifiedRes
+      data: {modifiedRes,commentSnapshots}
     }
   } catch (error) {
     return {
@@ -608,7 +609,21 @@ export const get_suggested_posts = async()=>{
     }
   }
 }
-
+export const load_more_comments = async(postid,lastDocument)=>{
+  try {
+    const commentsRaw = (await commentsRef.doc(postid).collection('comment').limit(10).startAfter(lastDocument).get()).docs.map(e => e.data());
+    const comments = await Promise.all(commentsRaw.map(async e => {e.user = await (await getUserDetailsByUid(e.uid)).data;return e}))
+    return {
+      err: false,
+      data: comments
+    }
+  } catch (error) {
+    return {
+      err: error,
+      data: false
+    }
+  }
+}
 export const registerUser = register_user;
 export const getUserDetailsByUid = get_user_details_by_uid;
 export const getUserPosts = get_user_posts;

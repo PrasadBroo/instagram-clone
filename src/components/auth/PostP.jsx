@@ -6,57 +6,71 @@ import modalStore from "./../../stores/modalStore";
 import mystore from "../../stores/store";
 import LocalSpinner from "../spinners/LocalSpinner";
 import { Link } from "react-router-dom";
-import { addComment, likePost, unlikePost } from "../../utils/firebase_api";
+import {
+  addComment,
+  likePost,
+  load_more_comments,
+  unlikePost,
+} from "../../utils/firebase_api";
 
 function PostP() {
   const [ispostImageLoaded, setIsPostImageLoaded] = useState(false);
+  const [ismoreCommentsLoading, setIsmoreCommentsLoading] = useState(false);
   const data = mystore.currentUser.postDetails;
   const [comment, setComment] = useState("");
-  const [isCommentAdding,setIsCommentAdding] = useState(false);
+  const [isCommentAdding, setIsCommentAdding] = useState(false);
 
   const handelPostLike = async () => {
     if (data.post.isLiked) {
       data.post.isLiked = false;
-      data.post.likesCount -=1;
+      data.post.likesCount -= 1;
       const { err } = await unlikePost(data.post.postId);
       if (err) {
         data.post.isLiked = true;
-        data.post.likesCount +=1;
+        data.post.likesCount += 1;
         return alert(err.message);
       }
-      
     } else {
       data.post.isLiked = true;
-      data.post.likesCount +=1;
+      data.post.likesCount += 1;
       const { err } = await likePost(data.post.postId);
       if (err) {
-        data.post.likesCount -=1;
+        data.post.likesCount -= 1;
         data.post.isLiked = false;
         return alert(err.message);
-
       }
-      
     }
   };
   const handelFormSubmit = async (e) => {
     e.preventDefault();
     setComment("");
-    setIsCommentAdding(true)
-    const { err,data:commentData } = await addComment(comment, data.post.postId);
+    setIsCommentAdding(true);
+    const { err, data: commentData } = await addComment(
+      comment,
+      data.post.postId
+    );
     if (err) {
-      setIsCommentAdding(false)
+      setIsCommentAdding(false);
       return alert(err.message);
-      
     }
-    setIsCommentAdding(false)
+    setIsCommentAdding(false);
     data.comments.push({
-      
-        message:comment,
-        uid:commentData.uid,
-        user:data.user,
-        id:commentData.id
-      
-    })
+      message: comment,
+      uid: commentData.uid,
+      user: data.user,
+      id: commentData.id,
+    });
+  };
+  const handelLoadComments = async () => {
+    setIsmoreCommentsLoading(true)
+    const { data: moreComments, err } = await load_more_comments(
+      data.post.postId,
+      data.commentsSnaps.docs[data.commentsSnaps.docs.length - 1]
+    );
+    if (!err) {
+      moreComments.forEach((e) => data.comments.push(e));
+    }
+    setIsmoreCommentsLoading(false)
   };
   return (
     <div className={PostPCss.postWrapper}>
@@ -117,7 +131,16 @@ function PostP() {
           </div>
           <div className={PostPCss.comments}>
             {data.comments &&
-              data.comments.map((c) => <Comment data={c} key={c.id} type="details" />)}
+              data.comments.map((c,i) => (
+                <Comment data={c} key={i} type="details" />
+              ))}
+            <button
+              className={PostPCss.loadComments}
+              onClick={handelLoadComments}
+            >
+              {ismoreCommentsLoading && <LocalSpinner noBc/>}
+              {!ismoreCommentsLoading && 'Load more comments'}
+            </button>
           </div>
         </div>
         <div className="subsec">
@@ -156,7 +179,7 @@ function PostP() {
           </div>
           <div className={PostPCss.postComment}>
             <div className={PostPCss.inputComment}>
-              {isCommentAdding &&  <LocalSpinner/>}
+              {isCommentAdding && <LocalSpinner />}
               <form
                 className={PostPCss.commentForm}
                 onSubmit={handelFormSubmit}

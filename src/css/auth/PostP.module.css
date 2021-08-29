@@ -66,9 +66,20 @@
 }
 .postMedia img {
     width: 100%;
-    height: auto;
+    height: 100%;
 }
-
+.loadComments{
+    position: relative;
+    font-size: 14px;
+    padding: 0 1rem;
+    color: #8E8E8E;
+    cursor: pointer;
+    outline: none;
+    border: none;
+    background-color: transparent;
+    width: 100%;
+    height: 1rem;
+}
 .likeCS {
     display: flex;
     align-items: center;
