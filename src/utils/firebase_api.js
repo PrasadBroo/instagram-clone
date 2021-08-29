@@ -436,6 +436,30 @@ const post_like_decrement = async(postid)=>{
     throw Error('cannot decrement like count')
   }
 }
+// const comment_count_decrement = async(postid)=>{
+//   try {
+//     let previusCount = (await postsRef.doc(postid).get()).data().commentsCount;
+//     const res = await postsRef.doc(postid).set({commentsCount:previusCount-=1},{merge:true})
+//     return {
+//       err: false,
+//       data: res
+//     }
+//   } catch (error) {
+//     throw Error('cannot decrement comment count')
+//   }
+// }
+const comment_count_increment = async(postid)=>{
+  try {
+    let previusCount = (await postsRef.doc(postid).get()).data().commentsCount;
+    const res = await postsRef.doc(postid).set({commentsCount:previusCount+=1},{merge:true})
+    return {
+      err: false,
+      data: res
+    }
+  } catch (error) {
+    throw Error('cannot increment comment count')
+  }
+}
 const like_post = async(postid)=>{
   try {
     const res =  await likesRef.doc(postid).collection('users').doc(auth().currentUser.uid).set({});
@@ -486,6 +510,7 @@ const add_comment = async(msg,postid)=>{
     id:makeid(8)
   }
     const res = (await (await commentsRef.doc(postid).collection('comment').add(data_to_add)).get()).data()
+    await comment_count_increment(postid)
     return {
       err: false,
       data: res
@@ -571,7 +596,7 @@ export const get_suggested_posts = async()=>{
     const{data:followingsList} = await getFollowingsList(auth().currentUser.uid);
     const res = (await Promise.all(followingsList.map(async ele =>(await get_user_posts(ele.username)).data)))
     res.forEach(e => e.posts.forEach(e => allPosts.push(e)))
-    const modifiedRes = await Promise.all(allPosts.map(async e => {e = (await get_post_details(e.postId)).data;return e}))
+    const modifiedRes = await (await Promise.all(allPosts.map(async e => {e = (await get_post_details(e.postId)).data;return e}))).map(e => {e.topComments = e.comments.slice(0,2);return e})
     return {
       err: false,
       data: modifiedRes

@@ -7,6 +7,7 @@ import { view } from "@risingstack/react-easy-state";
 import { Link, useHistory } from "react-router-dom";
 import { likePost, unlikePost,addComment } from "../../utils/firebase_api";
 import LocalSpinner from "../spinners/LocalSpinner";
+import mystore from "../../stores/store";
 
 function Post({data}) {
   const [isLoading, setIsLoading] = useState(true);
@@ -48,7 +49,8 @@ function Post({data}) {
       
     }
     setIsCommentAdding(false)
-    data.comments.push({
+    mystore.currentUser.userSuggestedPosts.find(e => e.postId === data.postId)
+    .topComments.push({
       
         message:comment,
         uid:commentData.uid,
@@ -56,7 +58,12 @@ function Post({data}) {
         id:commentData.id
       
     })
+    mystore.currentUser.userSuggestedPosts.find(e => e.postId === data.postId).post.commentsCount +=1;
   };
+  const handelPostModal = ()=>{
+    modalStore.postModal.display = true
+    modalStore.postModal.postid = data.post.postId;
+  }
   return (
     <>
       <div className={PostCss.postWrapper} style={{display:isLoading ? 'none' : 'block'}}>
@@ -72,7 +79,7 @@ function Post({data}) {
           </div>
           <div
             className={PostCss.postOptions}
-            onClick={() => (modalStore.postModal.display = true)}
+            onClick={handelPostModal}
           >
             <svg
               aria-label="More options"
@@ -126,7 +133,7 @@ function Post({data}) {
               ></i>
             </span>
             <span className={PostCss.commentBtnWrap}>
-              <Link to={'/'+data.user.username}>
+              <Link to={'/'+data.post.postId}>
                 <ion-icon name="chatbubble-outline"></ion-icon>
               </Link>
             </span>
@@ -147,8 +154,8 @@ function Post({data}) {
           <button onClick={()=>history.push('/post/'+data.post.postId)}>View All {data.post.commentsCount} Comments</button>
         </div>
         <div className={PostCss.comments}>
-        {data.comments &&
-              data.comments.slice(0,2).map((c,i) => <Comment data={c} key={c.id} i={i}/>)} 
+        {data.topComments &&
+             data.topComments.map((c,i) => <Comment data={c} key={c.id} i={i}/>)} 
         </div>
         <div className={PostCss.postComment}>
         {isCommentAdding &&  <LocalSpinner/>}

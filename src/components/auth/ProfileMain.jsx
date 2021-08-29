@@ -211,7 +211,7 @@ function ProfileMain() {
         <div className={ProfileMainCss.mobileFollowInfo}>
           <ul className={ProfileMainCss.followInfo}>
             <p>
-              <b>2</b> posts
+              <b>{userPosts.length}</b> posts
             </p>
             <button
               disabled={userDetails.followersCount === 0}

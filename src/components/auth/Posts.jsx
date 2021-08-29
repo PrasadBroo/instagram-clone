@@ -13,16 +13,14 @@ function Posts() {
             if (err ) {
               return alert(err.message);
             }
-            
             mystore.currentUser.userSuggestedPosts = suggestedPosts;
-            console.log(suggestedPosts)
           };
           fetchDatails();
     },[])
     return (
         <div className={PostCss.posts}>
             {mystore.currentUser.userSuggestedPosts && mystore.currentUser.userSuggestedPosts.map(e => <Post data={e} key={e.postId}/>)}
-            {!mystore.currentUser.userSuggestedPosts && [0,1,2].map(e => <SkeletonPost/>)}
+            {!mystore.currentUser.userSuggestedPosts && [0,1,2].map((e,i) => <SkeletonPost key={i}/>)}
             
         </div>
     )

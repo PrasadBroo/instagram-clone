@@ -7,6 +7,7 @@ const modalStore = store(
         },
         postModal:{
             display:false,
+            postid:null,
         },
         followModal:{
             display:false,
