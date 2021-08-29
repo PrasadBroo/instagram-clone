@@ -3,7 +3,6 @@
 }
 .profileWrap{
     width: 80%;
-    margin-top: 2rem;
 }
 .wrap{
     /* width: 50%;
@@ -229,6 +228,7 @@
     }
     .profileWrap{
         width: auto;
+        margin-top: 2rem;
     }
     .wrap{
         justify-content: start;

@@ -7,6 +7,7 @@ import { get_suggested_posts, get_user_suggetions } from "../../utils/firebase_a
 import modalStore from "../../stores/modalStore";
 import UnfollowModal from "../modals/UnfollowModal";
 import SuggestedUser from "./../subcomponents/SuggestedUser";
+import SkeletonSuggUser from "../skeletons/SkeletonSuggUser";
 
 function Profile() {
   useEffect(() => {
@@ -48,6 +49,7 @@ function Profile() {
               mystore.currentUser.userSuggetions.map((e, i) => (
                 <SuggestedUser user={e} key={i} />
               ))}
+              {!mystore.currentUser.userSuggetions && [0,1,2,3,4].map(e => <SkeletonSuggUser key={e}/>)}
           </div>
         </div>
         <div className={ProfileCss.bottomLinks}>

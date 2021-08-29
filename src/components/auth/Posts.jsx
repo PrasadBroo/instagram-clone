@@ -19,7 +19,7 @@ function Posts() {
     },[])
     return (
         <div className={PostCss.posts}>
-            {mystore.currentUser.userSuggestedPosts && mystore.currentUser.userSuggestedPosts.map(e => <Post data={e} key={e.postId}/>)}
+            {mystore.currentUser.userSuggestedPosts && mystore.currentUser.userSuggestedPosts.map((e,i) => <Post data={e} key={i}/>)}
             {!mystore.currentUser.userSuggestedPosts && [0,1,2].map((e,i) => <SkeletonPost key={i}/>)}
             
         </div>
