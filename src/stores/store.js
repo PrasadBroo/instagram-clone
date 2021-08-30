@@ -12,7 +12,9 @@ const mystore = store({
         uid: null,
         postDetails:null,
         userSuggetions:null,
-        userSuggestedPosts:null
+        userSuggestedPosts:null,
+        suggestedUSer:null,
+        showSuggUsers:false,
     },
     isAnythingLoading:{
         postDetailsLoading:true,

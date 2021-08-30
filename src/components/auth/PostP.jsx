@@ -19,7 +19,6 @@ function PostP() {
   const data = mystore.currentUser.postDetails;
   const [comment, setComment] = useState("");
   const [isCommentAdding, setIsCommentAdding] = useState(false);
-
   const handelPostLike = async () => {
     if (data.post.isLiked) {
       data.post.isLiked = false;
@@ -68,7 +67,8 @@ function PostP() {
       data.commentsSnaps.docs[data.commentsSnaps.docs.length - 1]
     );
     if (!err) {
-      moreComments.forEach((e) => data.comments.push(e));
+      moreComments.modifiedRes.forEach((e) => data.comments.push(e));
+      data.commentsSnaps = moreComments.commentSnapshots;
     }
     setIsmoreCommentsLoading(false)
   };
@@ -130,17 +130,20 @@ function PostP() {
             </div>
           </div>
           <div className={PostPCss.comments}>
+            <div className={PostPCss.commentsWrap}>
             {data.comments &&
               data.comments.map((c,i) => (
                 <Comment data={c} key={i} type="details" />
               ))}
-            <button
+            {data.commentsSnaps.docs.length !==0 && <button
               className={PostPCss.loadComments}
               onClick={handelLoadComments}
             >
               {ismoreCommentsLoading && <LocalSpinner noBc/>}
-              {!ismoreCommentsLoading && 'Load more comments'}
-            </button>
+              {!ismoreCommentsLoading && 'View more comments'}
+            </button>}
+            </div>
+            
           </div>
         </div>
         <div className="subsec">

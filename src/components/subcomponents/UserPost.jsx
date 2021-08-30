@@ -11,7 +11,6 @@ function UserPost({ imageUrl, postid }) {
       <div className={UserPostCss.commentIcon}>
         <Link to={`/post/${postid}`}>
           <ion-icon name="chatbubble-outline"></ion-icon>
-          
         </Link>
       </div>
       <Link to={`/post/${postid}`}>

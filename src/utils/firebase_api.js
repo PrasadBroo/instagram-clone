@@ -611,12 +611,14 @@ export const get_suggested_posts = async()=>{
 }
 export const load_more_comments = async(postid,lastDocument)=>{
   try {
-    const commentsRaw = (await commentsRef.doc(postid).collection('comment').limit(10).startAfter(lastDocument).get()).docs.map(e => e.data());
+    const commentSnapshots = (await commentsRef.doc(postid).collection('comment').limit(10).startAfter(lastDocument).get())
+    const commentsRaw = commentSnapshots.docs.map(e => e.data());
     const comments = await Promise.all(commentsRaw.map(async e => {e.user = await (await getUserDetailsByUid(e.uid)).data;return e}))
     const modifiedRes = await Promise.all(comments.map(async comment => {comment.isLiked =  await (await is_comment_liked(comment.id)).data;return comment}))
+    
     return {
       err: false,
-      data: modifiedRes
+      data: {modifiedRes,commentSnapshots}
     }
   } catch (error) {
     return {

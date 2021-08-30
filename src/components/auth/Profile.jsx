@@ -17,6 +17,9 @@ function Profile() {
       if (err || err2) {
         return alert(err.message);
       }
+      if(suggestedPosts.length === 0){
+        mystore.currentUser.showSuggUsers = true;
+      }
       modalStore.followModal.type = "followings";
       mystore.currentUser.userSuggetions = data;
       mystore.currentUser.userSuggestedPosts = suggestedPosts;

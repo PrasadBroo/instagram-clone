@@ -1,0 +1,25 @@
+.suggestUsers{
+    height: auto;
+    width: 50%;
+    background-color: #fff;
+    padding: 0.5rem 0;
+    margin: auto;
+}
+.wrapUser{
+    margin: 1.5rem 0;
+}
+.backBtn{
+    outline: 0;
+    border: 0;
+    background-color: #0095F6;
+    color: #fff;
+    padding: 0.5rem;
+    width: 100%;
+    cursor: pointer;
+    font-size: 1rem;
+}
+@media only screen and (max-width: 610px){
+    .suggestUsers{
+        width: 100%;
+    }
+}

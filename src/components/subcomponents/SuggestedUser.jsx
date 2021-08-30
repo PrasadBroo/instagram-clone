@@ -4,9 +4,9 @@ import { Link } from "react-router-dom";
 import ProfileCss from "../../css/auth/Profile.module.css";
 import { followUser, unfollowUser } from "../../utils/firebase_api";
 import LocalSpinner from "../spinners/LocalSpinner";
-import mystore from './../../stores/store';
+import mystore from "./../../stores/store";
 
-function SuggestedUser({ user }) {
+function SuggestedUser({ user, type }) {
   const [isFollowInProgress, setIsFollowInProgress] = useState(false);
   const [isUnFollowInProgress, setUnIsFollowInProgress] = useState(false);
   const handelUnfollow = async () => {
@@ -17,7 +17,10 @@ function SuggestedUser({ user }) {
       return alert(err.message);
     }
     setUnIsFollowInProgress(false);
-    mystore.currentUser.userSuggetions.find(e => e.uid === user.uid).isFollowedByUser = false
+    const result = type
+      ? mystore.currentUser.suggestedUSer
+      : mystore.currentUser.userSuggetions;
+    result.find((e) => e.uid === user.uid).isFollowedByUser = false;
   };
   const handelFollow = async () => {
     setIsFollowInProgress(true);
@@ -27,7 +30,10 @@ function SuggestedUser({ user }) {
       return alert(err.message);
     }
     setIsFollowInProgress(false);
-    mystore.currentUser.userSuggetions.find(e => e.uid === user.uid).isFollowedByUser = true
+    const result = type
+      ? mystore.currentUser.suggestedUSer
+      : mystore.currentUser.userSuggetions;
+    result.find((e) => e.uid === user.uid).isFollowedByUser = true;
   };
   return (
     <div className={ProfileCss.head}>
@@ -41,14 +47,14 @@ function SuggestedUser({ user }) {
         <p className={ProfileCss.fullName}>{user.fullName}</p>
       </div>
       <div className={ProfileCss.followBtnWrap}>
-        {user.isFollowedByUser &&  user.uid !== mystore.currentUser.uid && (
+        {user.isFollowedByUser && user.uid !== mystore.currentUser.uid && (
           <button className={ProfileCss.followingBtn} onClick={handelUnfollow}>
             {isUnFollowInProgress && <LocalSpinner />}Following
           </button>
         )}
         {!user.isFollowedByUser && user.uid !== mystore.currentUser.uid && (
           <button className={ProfileCss.followBtn} onClick={handelFollow}>
-              {isFollowInProgress && <LocalSpinner />}
+            {isFollowInProgress && <LocalSpinner />}
             Follow
           </button>
         )}
@@ -56,4 +62,4 @@ function SuggestedUser({ user }) {
     </div>
   );
 }
-export default  view(SuggestedUser)
+export default view(SuggestedUser);
