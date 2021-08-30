@@ -81,10 +81,15 @@ const get_user_posts = async (username) => {
       data: uid
     } = await get_uid_by_uername(username);
     const posts = (await postsRef.where("byUser", "==", uid).limit(6).get()).docs.map(snapshot => snapshot.data())
-    const {data:postsCount} = await get_user_posts_count(uid)
+    const {
+      data: postsCount
+    } = await get_user_posts_count(uid)
     return {
       err: false,
-      data: {posts,postsCount}
+      data: {
+        posts,
+        postsCount
+      }
     }
   } catch (error) {
     return {
@@ -101,14 +106,14 @@ const add_post = async (file) => {
   try {
     let media = await add_media(file);
     const mediaUrl = await media.data.ref.getDownloadURL();
-    const postId =makeid()
+    const postId = makeid()
     const givenData = {
       byUser: auth().currentUser.uid,
       createdAt: firestore.Timestamp.now(),
       postMediaUrl: mediaUrl,
       postId: postId,
-      likesCount:0,
-      commentsCount:0,
+      likesCount: 0,
+      commentsCount: 0,
     }
     const details = await postsRef.doc(postId).set(givenData);
     return {
@@ -123,18 +128,32 @@ const add_post = async (file) => {
   }
 }
 
-const get_post_details = async(postid)=>{
+const get_post_details = async (postid) => {
   try {
     const post = (await postsRef.doc(postid).get()).data()
-    const {data:user} = await getUserDetailsByUid(post.byUser)
-    let {data} = (await get_comments(postid));
-    const {data:ispostLiked} = await is_post_liked_by_user(postid);
+    const {
+      data: user
+    } = await getUserDetailsByUid(post.byUser)
+    let {
+      data
+    } = (await get_comments(postid));
+    const {
+      data: ispostLiked
+    } = await is_post_liked_by_user(postid);
     post.isLiked = ispostLiked;
-    let comments =await Promise.all(data.modifiedRes.map( async comment =>  {comment.user =  (await getUserDetailsByUid(comment.uid)).data;return comment})) 
-    
+    let comments = await Promise.all(data.modifiedRes.map(async comment => {
+      comment.user = (await getUserDetailsByUid(comment.uid)).data;
+      return comment
+    }))
+
     return {
       err: false,
-      data: {comments,user,post,commentsSnaps:data.commentSnapshots}
+      data: {
+        comments,
+        user,
+        post,
+        commentsSnaps: data.commentSnapshots
+      }
     }
   } catch (error) {
     return {
@@ -364,7 +383,7 @@ const get_followings_list = async (uid, endcursor) => {
 const update_profile_details = async (name, email, username, bio, website) => {
   try {
     const isVAlidUsername = new RegExp(/^[a-zA-Z0-9_-]{3,16}$/).test(username);
-    if(!isVAlidUsername)throw Error('Invalid Username');
+    if (!isVAlidUsername) throw Error('Invalid Username');
     const givenData = {
       email: email,
       fullName: name,
@@ -386,9 +405,9 @@ const update_profile_details = async (name, email, username, bio, website) => {
     }
   }
 }
-const get_user_posts_count = async(uid)=>{
+const get_user_posts_count = async (uid) => {
   try {
-    const res = (await postsRef.where("byUser","==",uid).get()).docs.length;
+    const res = (await postsRef.where("byUser", "==", uid).get()).docs.length;
     return {
       err: false,
       data: res
@@ -401,21 +420,25 @@ const get_user_posts_count = async(uid)=>{
   }
 }
 
-function makeid(length=5) {
-  let result           = '';
-  let characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-';
+function makeid(length = 5) {
+  let result = '';
+  let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-';
   let charactersLength = characters.length;
-  for ( let i = 0; i < length; i++ ) {
-    result += characters.charAt(Math.floor(Math.random() * 
-charactersLength));
- }
- return result;
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() *
+      charactersLength));
+  }
+  return result;
 }
 
-const post_like_increment = async(postid)=>{
+const post_like_increment = async (postid) => {
   try {
     let previusLikesCount = (await postsRef.doc(postid).get()).data().likesCount;
-    const res = await postsRef.doc(postid).set({likesCount:previusLikesCount+=1},{merge:true})
+    const res = await postsRef.doc(postid).set({
+      likesCount: previusLikesCount += 1
+    }, {
+      merge: true
+    })
     return {
       err: false,
       data: res
@@ -424,10 +447,14 @@ const post_like_increment = async(postid)=>{
     throw Error('cannot increment like count')
   }
 }
-const post_like_decrement = async(postid)=>{
+const post_like_decrement = async (postid) => {
   try {
     let previusLikesCount = (await postsRef.doc(postid).get()).data().likesCount;
-    const res = await postsRef.doc(postid).set({likesCount:previusLikesCount-=1},{merge:true})
+    const res = await postsRef.doc(postid).set({
+      likesCount: previusLikesCount -= 1
+    }, {
+      merge: true
+    })
     return {
       err: false,
       data: res
@@ -448,10 +475,14 @@ const post_like_decrement = async(postid)=>{
 //     throw Error('cannot decrement comment count')
 //   }
 // }
-const comment_count_increment = async(postid)=>{
+const comment_count_increment = async (postid) => {
   try {
     let previusCount = (await postsRef.doc(postid).get()).data().commentsCount;
-    const res = await postsRef.doc(postid).set({commentsCount:previusCount+=1},{merge:true})
+    const res = await postsRef.doc(postid).set({
+      commentsCount: previusCount += 1
+    }, {
+      merge: true
+    })
     return {
       err: false,
       data: res
@@ -460,9 +491,9 @@ const comment_count_increment = async(postid)=>{
     throw Error('cannot increment comment count')
   }
 }
-const like_post = async(postid)=>{
+const like_post = async (postid) => {
   try {
-    const res =  await likesRef.doc(postid).collection('users').doc(auth().currentUser.uid).set({});
+    const res = await likesRef.doc(postid).collection('users').doc(auth().currentUser.uid).set({});
     await post_like_increment(postid)
     return {
       err: false,
@@ -475,7 +506,7 @@ const like_post = async(postid)=>{
     }
   }
 }
-const unlike_post = async(postid)=>{
+const unlike_post = async (postid) => {
   try {
     const res = await likesRef.doc(postid).collection('users').doc(auth().currentUser.uid).delete();
     await post_like_decrement(postid)
@@ -490,7 +521,7 @@ const unlike_post = async(postid)=>{
     }
   }
 }
-const is_post_liked_by_user = async(postid)=>{
+const is_post_liked_by_user = async (postid) => {
   try {
     const res = (await likesRef.doc(postid).collection('users').doc(auth().currentUser.uid).get()).exists;
     return {
@@ -501,14 +532,14 @@ const is_post_liked_by_user = async(postid)=>{
     throw Error('error getting response')
   }
 }
-const add_comment = async(msg,postid)=>{
+const add_comment = async (msg, postid) => {
   try {
-  const data_to_add = {
-    uid: auth().currentUser.uid,
-    createdAt: firestore.Timestamp.now(),
-    message:msg,
-    id:makeid(8)
-  }
+    const data_to_add = {
+      uid: auth().currentUser.uid,
+      createdAt: firestore.Timestamp.now(),
+      message: msg,
+      id: makeid(8)
+    }
     const res = (await (await commentsRef.doc(postid).collection('comment').add(data_to_add)).get()).data()
     await comment_count_increment(postid)
     return {
@@ -516,17 +547,23 @@ const add_comment = async(msg,postid)=>{
       data: res
     }
   } catch (error) {
-    
+
   }
 }
-const get_comments = async(postid)=>{
+const get_comments = async (postid) => {
   try {
     const commentSnapshots = (await commentsRef.doc(postid).collection('comment').limit(10).get());
     const res = (await commentsRef.doc(postid).collection('comment').limit(10).get()).docs.map(comment => comment.data())
-    const modifiedRes = await Promise.all(res.map(async comment => {comment.isLiked =  await (await is_comment_liked(comment.id)).data;return comment}))
+    const modifiedRes = await Promise.all(res.map(async comment => {
+      comment.isLiked = await (await is_comment_liked(comment.id)).data;
+      return comment
+    }))
     return {
       err: false,
-      data: {modifiedRes,commentSnapshots}
+      data: {
+        modifiedRes,
+        commentSnapshots
+      }
     }
   } catch (error) {
     return {
@@ -535,7 +572,7 @@ const get_comments = async(postid)=>{
     }
   }
 }
-const is_comment_liked = async(commentId)=>{
+const is_comment_liked = async (commentId) => {
   try {
     const res = (await commentsLikesRef.doc(commentId).collection('user').doc(auth().currentUser.uid).get()).exists
     return {
@@ -546,7 +583,7 @@ const is_comment_liked = async(commentId)=>{
     throw Error('something wrong here')
   }
 }
-export const like_comment = async(commentId)=>{
+export const like_comment = async (commentId) => {
   try {
     const res = await commentsLikesRef.doc(commentId).collection('user').doc(auth().currentUser.uid).set({})
     return {
@@ -560,7 +597,7 @@ export const like_comment = async(commentId)=>{
     }
   }
 }
-export const unlike_comment = async(commentId)=>{
+export const unlike_comment = async (commentId) => {
   try {
     const res = await commentsLikesRef.doc(commentId).collection('user').doc(auth().currentUser.uid).delete()
     return {
@@ -575,10 +612,13 @@ export const unlike_comment = async(commentId)=>{
   }
 }
 
-export const get_user_suggetions = async(count=5)=>{
+export const get_user_suggetions = async (count = 5) => {
   try {
-    const res = (await usersRef.limit(count).orderBy('createdAt').get()).docs.map(user => user.data())
-    const modifiedRes = await Promise.all(res.map(async e => {e.isFollowedByUser = (await has_followed(e.uid)).data;return e}))
+    const res = (await usersRef.limit(count).orderBy('createdAt',count<=5 ? 'desc' :'asc').get()).docs.map(user => user.data())
+    const modifiedRes = await Promise.all(res.map(async e => {
+      e.isFollowedByUser = (await has_followed(e.uid)).data;
+      return e
+    }))
     return {
       err: false,
       data: modifiedRes
@@ -591,13 +631,21 @@ export const get_user_suggetions = async(count=5)=>{
   }
 }
 
-export const get_suggested_posts = async()=>{
+export const get_suggested_posts = async () => {
   try {
     const allPosts = [];
-    const{data:followingsList} = await getFollowingsList(auth().currentUser.uid);
-    const res = (await Promise.all(followingsList.map(async ele =>(await get_user_posts(ele.username)).data)))
+    const {
+      data: followingsList
+    } = await getFollowingsList(auth().currentUser.uid);
+    const res = (await Promise.all(followingsList.map(async ele => (await get_user_posts(ele.username)).data)))
     res.forEach(e => e.posts.forEach(e => allPosts.push(e)))
-    const modifiedRes = await (await Promise.all(allPosts.map(async e => {e = (await get_post_details(e.postId)).data;return e}))).map(e => {e.topComments = e.comments.slice(0,2);return e})
+    const modifiedRes = await (await Promise.all(allPosts.map(async e => {
+      e = (await get_post_details(e.postId)).data;
+      return e
+    }))).map(e => {
+      e.topComments = e.comments.slice(0, 2);
+      return e
+    })
     return {
       err: false,
       data: modifiedRes
@@ -609,16 +657,25 @@ export const get_suggested_posts = async()=>{
     }
   }
 }
-export const load_more_comments = async(postid,lastDocument)=>{
+export const load_more_comments = async (postid, lastDocument) => {
   try {
     const commentSnapshots = (await commentsRef.doc(postid).collection('comment').limit(10).startAfter(lastDocument).get())
     const commentsRaw = commentSnapshots.docs.map(e => e.data());
-    const comments = await Promise.all(commentsRaw.map(async e => {e.user = await (await getUserDetailsByUid(e.uid)).data;return e}))
-    const modifiedRes = await Promise.all(comments.map(async comment => {comment.isLiked =  await (await is_comment_liked(comment.id)).data;return comment}))
-    
+    const comments = await Promise.all(commentsRaw.map(async e => {
+      e.user = await (await getUserDetailsByUid(e.uid)).data;
+      return e
+    }))
+    const modifiedRes = await Promise.all(comments.map(async comment => {
+      comment.isLiked = await (await is_comment_liked(comment.id)).data;
+      return comment
+    }))
+
     return {
       err: false,
-      data: {modifiedRes,commentSnapshots}
+      data: {
+        modifiedRes,
+        commentSnapshots
+      }
     }
   } catch (error) {
     return {

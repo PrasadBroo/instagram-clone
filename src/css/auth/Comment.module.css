@@ -1,7 +1,7 @@
 .comment {
     display: flex;
     justify-content: space-between;
-    margin: 0.3rem 0;
+    margin: 0.7rem 0;
     font-size: 14px;
 }
 .comment div:first-child{
@@ -16,6 +16,17 @@
 
 .comment div a:hover{
     text-decoration: underline;
+}
+.picUsername{
+    display: flex;
+}
+.profilePic{
+    display: flex;
+}
+.profilePic img{
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
 }
 .heart_red {
     color: red;
