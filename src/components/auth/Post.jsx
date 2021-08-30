@@ -55,6 +55,7 @@ function Post({ data }) {
         uid: commentData.uid,
         user: mystore.currentUser,
         id: commentData.id,
+        createdAt:commentData.createdAt
       });
     mystore.currentUser.userSuggestedPosts
     .find(

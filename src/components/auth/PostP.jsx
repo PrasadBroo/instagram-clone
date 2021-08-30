@@ -56,8 +56,9 @@ function PostP() {
     data.comments.push({
       message: comment,
       uid: commentData.uid,
-      user: data.user,
+      user: mystore.currentUser,
       id: commentData.id,
+      createdAt:commentData.createdAt
     });
   };
   const handelLoadComments = async () => {

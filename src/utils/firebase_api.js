@@ -554,10 +554,11 @@ const get_comments = async (postid) => {
   try {
     const commentSnapshots = (await commentsRef.doc(postid).collection('comment').limit(10).get());
     const res = (await commentsRef.doc(postid).collection('comment').limit(10).get()).docs.map(comment => comment.data())
-    const modifiedRes = await Promise.all(res.map(async comment => {
+    let modifiedRes = await Promise.all(res.map(async comment => {
       comment.isLiked = await (await is_comment_liked(comment.id)).data;
       return comment
     }))
+    modifiedRes = await Promise.all(modifiedRes.map(async e => {e.likesCount = (await get_comment_likes_count(e.id)).data;return e}))
     return {
       err: false,
       data: {
@@ -570,6 +571,17 @@ const get_comments = async (postid) => {
       err: error,
       data: false
     }
+  }
+}
+const get_comment_likes_count = async(commentId)=>{
+  try {
+    const res = (await commentsLikesRef.doc(commentId).collection('user').get()).docs.length;
+    return {
+      err: false,
+      data: res
+    }
+  } catch (error) {
+    throw Error('something wrong here')
   }
 }
 const is_comment_liked = async (commentId) => {
