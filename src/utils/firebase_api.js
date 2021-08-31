@@ -338,9 +338,11 @@ const has_followed = async (uid) => {
 
 }
 
-const get_followers_list = async (uid, endcursor) => {
+const get_followers_list = async (uid,lastVisible) => {
   try {
-    let res = await Promise.all((await usersFollowersRef.doc(uid).collection('users').limit(5).get()).docs.map(async doc => await (await getUserDetailsByUid(doc.id)).data))
+    const query = lastVisible ? usersFollowersRef.doc(uid).collection('users').startAfter(lastVisible) : usersFollowersRef.doc(uid).collection('users')
+    const followerSnapshot = (await query.limit(5).get());
+    let res = await Promise.all(followerSnapshot.docs.map(async doc => await (await getUserDetailsByUid(doc.id)).data))
     let modifiesRes = await Promise.all(res.map(async (follower) => {
       follower.isFollowedByUser = (await hasFollowed(follower.uid)).data;
       return follower
@@ -351,7 +353,8 @@ const get_followers_list = async (uid, endcursor) => {
     })
     return {
       err: false,
-      data: modifiesRes
+      data: modifiesRes,
+      snapshots:followerSnapshot
     }
   } catch (error) {
     return {
@@ -361,16 +364,19 @@ const get_followers_list = async (uid, endcursor) => {
   }
 
 }
-const get_followings_list = async (uid, endcursor) => {
+const get_followings_list = async (uid,lastVisible=null) => {
   try {
-    let res = await Promise.all((await usersFollowingsRef.doc(uid).collection('users').limit(5).get()).docs.map(async doc => await (await getUserDetailsByUid(doc.id)).data))
+    const query = lastVisible ? usersFollowingsRef.doc(uid).collection('users').startAfter(lastVisible) : usersFollowingsRef.doc(uid).collection('users')
+    const followingSnapshot = (await query.limit(5).get())
+    let res = await Promise.all(followingSnapshot.docs.map(async doc => await (await getUserDetailsByUid(doc.id)).data))
     let modifiesRes = await Promise.all(res.map(async (follower) => {
       follower.isFollowedByUser = (await hasFollowed(follower.uid)).data;
       return follower
     }))
     return {
       err: false,
-      data: modifiesRes
+      data: modifiesRes,
+      snapshots:followingSnapshot
     }
   } catch (error) {
     return {
@@ -553,7 +559,7 @@ const add_comment = async (msg, postid) => {
 const get_comments = async (postid) => {
   try {
     const commentSnapshots = (await commentsRef.doc(postid).collection('comment').limit(10).get());
-    const res = (await commentsRef.doc(postid).collection('comment').limit(10).get()).docs.map(comment => comment.data())
+    const res = commentSnapshots.docs.map(comment => comment.data())
     let modifiedRes = await Promise.all(res.map(async comment => {
       comment.isLiked = await (await is_comment_liked(comment.id)).data;
       return comment
@@ -647,8 +653,37 @@ export const get_suggested_posts = async () => {
   try {
     const allPosts = [];
     const {
-      data: followingsList
+      data: followingsList,
+      snapshots
     } = await getFollowingsList(auth().currentUser.uid);
+
+    const res = (await Promise.all(followingsList.map(async ele => (await get_user_posts(ele.username)).data)))
+    res.forEach(e => e.posts.forEach(e => allPosts.push(e)))
+    const modifiedRes = await (await Promise.all(allPosts.map(async e => {
+      e = (await get_post_details(e.postId)).data;
+      return e
+    }))).map(e => {
+      e.topComments = e.comments.slice(0, 2);
+      return e
+    })
+    return {
+      err: false,
+      data: modifiedRes,
+      followingSnapshots:snapshots
+    }
+  } catch (error) {
+    return {
+      err: error,
+      data: false
+    }
+  }
+}
+export const load_more_suggested_posts = async(lastVisible)=>{
+  try {
+    const allPosts = [];
+    const {
+      data: followingsList
+    } = await getFollowingsList(auth().currentUser.uid,lastVisible);
     const res = (await Promise.all(followingsList.map(async ele => (await get_user_posts(ele.username)).data)))
     res.forEach(e => e.posts.forEach(e => allPosts.push(e)))
     const modifiedRes = await (await Promise.all(allPosts.map(async e => {

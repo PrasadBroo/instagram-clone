@@ -33,6 +33,7 @@ function SuggestedUser({ user, type }) {
     const result = type
       ? mystore.currentUser.suggestedUSer
       : mystore.currentUser.userSuggetions;
+      console.log(result)
     result.find((e) => e.uid === user.uid).isFollowedByUser = true;
   };
   return (
