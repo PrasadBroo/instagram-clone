@@ -95,6 +95,7 @@
     cursor: pointer;
 }
 .secthree{
+    display: none;
     max-width: 400px;
 }
 .secthree h1{
@@ -104,7 +105,14 @@
 .secthree p:last-child{
     margin-top: 0.2rem;
 }
-
+.secthreeMobile{
+    max-width: 400px;
+    display: none;
+    padding-left: 0.3rem;
+}
+.secthreeMobile h1{
+    font-size: 1rem;
+}
 .hrline{
     /* width: 50%;
     margin: auto; */
@@ -218,6 +226,9 @@
     .sectwo{
         display: none;
     }
+    .secthreeMobile{
+        display: block;
+    }
     .mobileFollowInfo{
         display: block;
     }
@@ -256,7 +267,13 @@
 
 @media screen and (max-width: 580px){
    .postsMainWrap{
-       display: block;
-       flex-wrap: nowrap;
+       display: flex;
+       
    }
+}
+
+@media screen and (min-width: 735px){
+    .secthree{
+        display: block;
+    }
 }

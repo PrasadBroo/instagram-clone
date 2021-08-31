@@ -1,10 +1,10 @@
 .wrap{
+    height: 45%;
+    width: 45%;
+    margin: 0.5rem 0.3rem;
+    position: relative;
     max-width: 250px;
     max-height: 250px;
-    height: 250px;
-    width: 250px;
-    margin: 1rem;
-    position: relative;
 }
 .wrap a img{
     height: 100%;
@@ -37,15 +37,15 @@
     font-size: 1.5rem;
     font-weight: 600;
 }
-@media screen and (max-width: 1075px) and (min-width: 890px){
+/* @media screen and (max-width: 1075px) and (min-width: 890px){
     .wrap{
         max-width: 200px;
         max-height: 200px;
     }
-}
+} */
 
-@media screen and (max-width: 580px) {
+/* @media screen and (max-width: 580px) {
     .wrap{
         margin: 1rem auto;
     }
-}
+} */

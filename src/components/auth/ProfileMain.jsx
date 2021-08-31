@@ -19,7 +19,7 @@ import {
   followUser,
 } from "../../utils/firebase_api";
 
-
+// profileIndo --> profileWrap
 function ProfileMain() {
   const { username } = useParams();
   const [userDetails, setUserDetails] = useState({
@@ -208,6 +208,11 @@ function ProfileMain() {
             </div>
           </div>
         </div>
+        <div className={ProfileMainCss.secthreeMobile}>
+              <h1>{userDetails.fullName}</h1>
+              {userDetails.website && <a className={ProfileMainCss.userWebsite} target="_blank" rel="noopener noreferrer" href={userDetails.website}>{userDetails.website}</a>}
+              <p>{userDetails.bio ?? ''}</p>
+            </div>
         <div className={ProfileMainCss.mobileFollowInfo}>
           <ul className={ProfileMainCss.followInfo}>
             <p>
