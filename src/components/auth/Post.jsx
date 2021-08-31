@@ -132,7 +132,7 @@ function Post({ data }) {
               ></i>
             </span>
             <span className={PostCss.commentBtnWrap}>
-              <Link to={"/" + data.post.postId}>
+              <Link to={"/post/" + data.post.postId}>
                 <ion-icon name="chatbubble-outline"></ion-icon>
               </Link>
             </span>

@@ -76,7 +76,7 @@ function PostP() {
   };
   return (
     <div className={PostPCss.postWrapper}>
-      <div className="leftSec">
+      <div className={PostPCss.leftSec}>
         <div className={PostPCss.postMedia}>
           {!ispostImageLoaded && <LocalSpinner />}
           <img

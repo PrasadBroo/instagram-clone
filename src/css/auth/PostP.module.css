@@ -63,6 +63,7 @@
     position: relative;
     height: 400px;
     width: 400px;
+    min-height: 200px;
 }
 .postMedia img {
     width: 100%;
@@ -94,6 +95,9 @@
 .commentsWrap {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
+  height: auto;
+  max-height: 200px;
+  overflow-y: scroll;
 }
 .likeCS {
     display: flex;
@@ -180,8 +184,7 @@
 
 
 .comments {
-    padding: 0 1rem;
-    height: 200px;
+    padding: 0.5rem 0.1rem;
 }
 
 
@@ -237,14 +240,16 @@
 
 @media only screen and (max-width: 610px) {
     .postWrapper {
-        position: relative;
         margin-top: 8rem;
         display: block;
+    }
+    .leftSec{
+        position: relative;
     }
 
     .postHeading {
         position: absolute;
-        top: -7%;
+        top: 9%;
         left: 0;
         right: 0;
 
@@ -258,8 +263,8 @@
     }
 }
 
-@media only screen and (max-width: 410px) {
+/* @media only screen and (max-width: 410px) {
     .postHeading {
-        top: -8%;
+        top: -10%;
     }
-}
+} */
