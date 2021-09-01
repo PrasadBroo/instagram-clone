@@ -1,38 +1,13 @@
-import React, { useEffect } from "react";
+import React from "react";
 import ProfileCss from "../../css/auth/Profile.module.css";
 import mystore from "../../stores/store";
 import { view } from "@risingstack/react-easy-state";
 import { Link } from "react-router-dom";
-import { get_suggested_posts, get_user_suggetions} from "../../utils/firebase_api";
-import modalStore from "../../stores/modalStore";
 import UnfollowModal from "../modals/UnfollowModal";
 import SuggestedUser from "./../subcomponents/SuggestedUser";
 import SkeletonSuggUser from "../skeletons/SkeletonSuggUser";
 
 function Profile() {
-  useEffect(() => {
-    const fetchDatails = async () => {
-      const { data, err } = await get_user_suggetions();
-      const {data:suggestedPosts,err:err2} = await get_suggested_posts();
-      // setTimeout(async()=>{
-      //   const {data:suggestedPostsMore,err:err3} = await load_more_suggested_posts(followingSnapshots.docs[followingSnapshots.docs.length -1]);
-      // console.log(suggestedPostsMore)
-      // suggestedPostsMore.forEach(e => mystore.currentUser.userSuggestedPosts.push(e))
-      // },10000)
-      
-      if (err || err2) {
-        return alert(err.message);
-      }
-      if(suggestedPosts.length === 0){
-        mystore.currentUser.showSuggUsers = true;
-      }
-      modalStore.followModal.type = "followings";
-      mystore.currentUser.userSuggetions = data;
-      mystore.currentUser.userSuggestedPosts = suggestedPosts;
-    };
-    if(!mystore.currentUser.userSuggetions && !mystore.currentUser.userSuggestedPosts)fetchDatails();
-    
-  }, []);
   return (
     <div className={ProfileCss.profileWrapper}>
       <UnfollowModal />
