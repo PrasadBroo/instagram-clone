@@ -270,6 +270,14 @@
        display: flex;
        
    }
+   .secone p{
+       font-size: large;
+   }
+   .profilePic img{
+    height: 55px;
+    width: 55px;
+    margin: 0;
+}
 }
 
 @media screen and (min-width: 735px){

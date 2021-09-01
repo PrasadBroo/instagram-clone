@@ -51,6 +51,8 @@ const register_user = async (fullName, username, profilePic) => {
     email: auth().currentUser.email,
     fullName,
     username,
+    website:null,
+    bio:null,
     followersCount: 0,
     followingsCount: 0,
     profilePic: 'https://i.ibb.co/LCk6LbN/default-Profile-Pic-7fe14f0a.jpg',
