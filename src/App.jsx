@@ -11,8 +11,8 @@ import SettingsPage from "./pages/SettingsPage";
 import DefaultLoader from "./components/DefaultLoader";
 import PostPage from "./pages/PostPage";
 import mystore from "./stores/store";
-// import { getUserDetailsByUid } from "./utils/firebase_api";
-
+import NotFound from "./components/auth/NotFound";
+// import { getUserDetailsByUid } from "./utils/firebase_api"
 function App() {
   const isMounted = React.useRef(true);
   useEffect(() => {
@@ -59,6 +59,10 @@ function App() {
           exact
           path="/:username"
           component={() => <UsernamePage />}
+        ></Route>
+        <Route
+          path="*"
+          component={() => <NotFound />}
         ></Route>
       </Switch>
     </Router>

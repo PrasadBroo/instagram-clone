@@ -32,10 +32,11 @@ const get_user_details_by_uid = async (uid = auth().currentUser.uid) => {
 }
 const get_user_details_by_username = async (username) => {
   try {
-    const details = (await usersRef.where("username", "==", username).limit(1).get()).docs.map(user => user.data())[0];
+    const details = (await usersRef.where("username", "==", username).limit(1).get()).docs.map(user => user.data());
+    if(details.length ===0)throw Error('user not exists')
     return {
       err: false,
-      data: details
+      data: details[0]
     }
   } catch (error) {
     return {

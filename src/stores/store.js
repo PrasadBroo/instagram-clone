@@ -16,6 +16,7 @@ const mystore = store({
         suggestedUSer:null,
         showSuggUsers:false,
     },
+    showNotFound:false,
     isAnythingLoading:{
         postDetailsLoading:true,
         currentUserLoading:true,

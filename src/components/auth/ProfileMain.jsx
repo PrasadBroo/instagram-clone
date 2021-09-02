@@ -32,10 +32,12 @@ function ProfileMain() {
   const [userPosts, setUserPosts] = useState([]);
   const [isFollowed, setIsFollowed] = useState(false);
 
+
   useEffect(() => {
     let isMounted = true;
     modalStore.spinner.show = true;
     modalStore.followModal.display = false;
+    mystore.showNotFound = false;
     // isMounted.current = true;
     document.body.style.backgroundColor = "#FAFAFA";
     async function fetchDatails() {
@@ -62,6 +64,9 @@ function ProfileMain() {
         modalStore.spinner.show = false;
         // setIsFollowed(isFollowed);
         return;
+      }
+      if(userErr){
+        mystore.showNotFound = true;
       }
     }
     fetchDatails();

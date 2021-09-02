@@ -14,6 +14,8 @@ const modalStore = store(
             type:'followers',
             followerslist:[],
             followingsList:[],
+            followerslistSnapshots:[],
+            followingsListSnapshots:[],
             isFollowInProgress:false,
             isUnfollowInProgress:false,
             user:null

@@ -8,6 +8,7 @@ import PostP from "./../components/auth/PostP";
 import { getPostDetails } from "./../utils/firebase_api";
 import mystore from "./../stores/store";
 import SkeletonPostP from "../components/skeletons/SkeletonPostP";
+import NotFound from "../components/auth/NotFound";
 
 function PostPage() {
   const { postid } = useParams();
@@ -22,7 +23,8 @@ function PostPage() {
       mystore.isAnythingLoading.postDetailsLoading = true;
       const { data, err } = await getPostDetails(postid);
       if (err) {
-        return alert(err.message);
+        mystore.showNotFound = true;
+        return 
       }
       mystore.currentUser.postDetails = data;
       mystore.isAnythingLoading.postDetailsLoading = false;
@@ -31,7 +33,7 @@ function PostPage() {
   }, [postid]);
 
   return (
-    <div className="Post-Page">
+    !mystore.showNotFound ?<div className="Post-Page">
       <Navbar />
       {mystore.isAnythingLoading.postDetailsLoading ? (
         <SkeletonPostP />
@@ -41,6 +43,8 @@ function PostPage() {
       <PostModal />
       <Footer />
     </div>
+    :
+    <NotFound/>
   );
 }
 export default view(PostPage);
