@@ -99,6 +99,18 @@
 
 .inputWrap{
     margin-bottom: 0.5rem;
+    position: relative;
+}
+.rightCheckIcon,.closeCheckIcon{
+    position: absolute;
+    right: 10px;
+    top: 30%;
+    font-size: 1.2rem;
+    opacity: 0.5;
+    color: green;
+}
+.closeCheckIcon{
+    color: red;
 }
 .inputWrap2{
     margin-top: 0.9rem;

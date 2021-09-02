@@ -4,6 +4,7 @@ import SignupPageCss from "../../css/SignupPage.module.css";
 import appStorePng from "../../media/app-store.png";
 import googleStorePng from "../../media/google-storepng.png";
 import Spinner from "../Spinner";
+import { isValidEmail,isvalidFullName,isvalidUsername,isValidPassword } from './../../utils/validations';
 import {
   signupWithEmailPass,
   loginWithFacebook,
@@ -16,6 +17,10 @@ function Signup() {
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [username, setUSername] = useState("");
+  const [validemail, setvalidEmail] = useState(false);
+  const [validFullName,setValidFullName] = useState(false)
+  const [validUsername,setValidUsername] = useState(false);
+  const [validPass,setValidPass] = useState(false)
   const [spin, setSpin] = useState(false);
   return (
     <div className="signup-page">
@@ -57,6 +62,10 @@ function Signup() {
                   placeholder="Mobile Number or Email"
                   onChange={handelEmailChange}
                 />
+                <span className={validemail ? SignupPageCss.rightCheckIcon :SignupPageCss.closeCheckIcon}>
+                {validemail && <ion-icon name="checkmark-circle-outline"></ion-icon>}
+                {!validemail && <ion-icon name="close-circle-outline"></ion-icon>}
+                </span>
               </div>
               <div className={SignupPageCss.inputWrap}>
                 <input
@@ -68,6 +77,10 @@ function Signup() {
                   placeholder="Full Name"
                   onChange={handelFullNameChange}
                 />
+                <span className={validFullName? SignupPageCss.rightCheckIcon :SignupPageCss.closeCheckIcon}>
+                {validFullName && <ion-icon name="checkmark-circle-outline"></ion-icon>}
+                {!validFullName && <ion-icon name="close-circle-outline"></ion-icon>}
+                </span>
               </div>
               <div className={SignupPageCss.inputWrap}>
                 <input
@@ -79,6 +92,10 @@ function Signup() {
                   placeholder="Username"
                   onChange={handelUsernameChange}
                 />
+                <span className={validUsername? SignupPageCss.rightCheckIcon :SignupPageCss.closeCheckIcon}>
+                {validUsername && <ion-icon name="checkmark-circle-outline"></ion-icon>}
+                {!validUsername && <ion-icon name="close-circle-outline"></ion-icon>}
+                </span>
               </div>
               <div className={SignupPageCss.inputWrap}>
                 <input
@@ -90,11 +107,15 @@ function Signup() {
                   placeholder="Password"
                   onChange={handelPasswordChange}
                 />
+                <span className={validPass? SignupPageCss.rightCheckIcon :SignupPageCss.closeCheckIcon}>
+                {validPass && <ion-icon name="checkmark-circle-outline"></ion-icon>}
+                {!validPass && <ion-icon name="close-circle-outline"></ion-icon>}
+                </span>
               </div>
               <div className={SignupPageCss.inputWrap2}>
                 <button
                   type="submit"
-                  disabled={false}
+                  disabled={!sbtnChange}
                   className={
                     sbtnChange
                       ? SignupPageCss.submitButton +
@@ -210,31 +231,26 @@ function Signup() {
   }
   function handelEmailChange(e) {
     setEmail(e.target.value);
+    setvalidEmail(isValidEmail(e.target.value))
     handelSubmitBtncolor();
   }
   function handelPasswordChange(e) {
     setPassword(e.target.value);
+    setValidPass(isValidPassword(e.target.value))
     handelSubmitBtncolor();
   }
   function handelFullNameChange(e) {
     setFullName(e.target.value);
+    setValidFullName(isvalidFullName(e.target.value))
     handelSubmitBtncolor();
   }
   function handelUsernameChange(e) {
     setUSername(e.target.value);
+    setValidUsername(isvalidUsername(e.target.value))
     handelSubmitBtncolor();
   }
   function isValidDetails() {
-    if (
-      email.length < 1 ||
-      email === null ||
-      password.length < 1 ||
-      password === null ||
-      fullName.length < 1 ||
-      fullName === null ||
-      username.length < 4 ||
-      username === null
-    ) {
+    if (!validemail||!validFullName||!validUsername||!validPass) {
       return false;
     } else {
       return true;
@@ -243,7 +259,7 @@ function Signup() {
   async function handelFormSubmit(e) {
     e.preventDefault();
     if (!isValidDetails()) {
-      return alert("Plz fill the details.");
+      return alert("Plz correct the details.");
     }
     setSpin(true);
     const { err } = await signupWithEmailPass(

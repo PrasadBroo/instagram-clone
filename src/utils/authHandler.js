@@ -3,6 +3,7 @@ import {
 } from './../services/firebase';
 
 import {
+    is_username_exists,
     registerUser
 } from './firebase_api';
 import mystore from '../stores/store';
@@ -59,6 +60,8 @@ const log_out = async () => {
 
 const signup_with_email_pass = async (email, password, fullName, username) => {
     try {
+        const {data:isUsernameExists,err:gotErr} = await is_username_exists(username);
+        if(isUsernameExists || gotErr)throw Error(gotErr ?gotErr.message :'Username already exists')
         let res = await auth().createUserWithEmailAndPassword(email, password);
         await registerUser(fullName, username, null);
         mystore.auth.user = res.user;

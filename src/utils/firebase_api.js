@@ -4,6 +4,7 @@ import {
   firebaseStorage
 } from '../services/firebase';
 import mystore from '../stores/store';
+import { isvalidUsername, isvalidFullName, isvalideBio, isValidWebsiteLink } from './validations';
 
 const usersRef = firestore().collection('users');
 const postsRef = firestore().collection('posts');
@@ -45,7 +46,7 @@ const get_user_details_by_username = async (username) => {
 
 }
 
-const register_user = async (fullName, username, profilePic) => {
+const register_user = async (fullName, username) => {
 
   let details = {
     email: auth().currentUser.email,
@@ -59,7 +60,10 @@ const register_user = async (fullName, username, profilePic) => {
     uid: auth().currentUser.uid,
     createdAt: firestore.Timestamp.now()
   }
-  try {
+  try {const fullNameCheck = isvalidFullName(fullName)
+    const isValidUername = isvalidUsername(username);
+    if(!isValidUername)throw Error('Invalid Username')
+    if(!fullNameCheck)throw Error('Invalid Full Name')
     const res = await usersRef.doc(auth().currentUser.uid).set(details);
 
     return {
@@ -67,10 +71,7 @@ const register_user = async (fullName, username, profilePic) => {
       data: res
     }
   } catch (error) {
-    return {
-      err: error,
-      data: false
-    }
+    throw Error(error)
   }
 
 
@@ -388,10 +389,29 @@ const get_followings_list = async (uid,lastVisible=null) => {
   }
 
 }
+export const is_username_exists = async(username)=>{
+  try {
+    const res = !(await (await usersRef.where("username","==",username).get()).empty);
+    return {
+      err: false,
+      data: res
+    }
+  } catch (error) {
+    return {
+      err: error,
+      data: false
+    }
+  }
+}
 const update_profile_details = async (name, email, username, bio, website) => {
   try {
-    const isVAlidUsername = new RegExp(/^[a-zA-Z0-9_-]{3,16}$/).test(username);
+    
+    const isVAlidUsername = isvalidUsername(username)
     if (!isVAlidUsername) throw Error('Invalid Username');
+    const isValidBio = isvalideBio(bio)
+    if(!isValidBio)throw Error('Bio length must be less than 120 chars')
+    const validWebsite = isValidWebsiteLink(website);
+    if(!validWebsite)throw Error('invalid website')
     const givenData = {
       email: email,
       fullName: name,
