@@ -18,16 +18,17 @@ function Post({ data }) {
     if (data.post.isLiked) {
       data.post.isLiked = false;
       data.post.likesCount -= 1;
-      const { err } = await unlikePost(data.post.postId);
-      if (err) {
+      const { err:unlikePosrErr } = await unlikePost(data.post.postId);
+      if (unlikePosrErr) {
         // will show custom alert
         return
       }
     } else {
       data.post.isLiked = true;
       data.post.likesCount += 1;
-      const { err } = await likePost(data.post.postId);
-      if (err) {
+      
+      const { err:likePostErr } = await likePost(data.post.postId);
+      if (likePostErr) {
         // will show custom alert
         return 
       }

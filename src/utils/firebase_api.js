@@ -119,7 +119,8 @@ const add_post = async (file) => {
       likesCount: 0,
       commentsCount: 0,
     }
-    const details = await postsRef.doc(postId).set(givenData);
+    await postsRef.doc(postId).set(givenData);
+    const details = (await postsRef.doc(postId).get()).data()
     return {
       err: false,
       data: details

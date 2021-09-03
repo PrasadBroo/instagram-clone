@@ -98,10 +98,12 @@ function ProfileMain() {
   };
   const handelImageChange = async (e) => {
   const [file] = e.target.files;
-  let { err } = await addPost(file);
+  const { err,data:newPost } = await addPost(file);
   if (err) {
-    alert(err.message);
+   return alert(err.message);
   }
+  setUserPosts([...userPosts,newPost])
+  setHasPosts(true)
 };
   return !modalStore.spinner.show ? (
     <div className="ProfilePage">
