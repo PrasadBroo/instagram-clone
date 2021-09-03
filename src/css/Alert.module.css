@@ -3,8 +3,9 @@
     left: 0;
     z-index: 111;
     right: 0;
+    bottom: -5%;
     background-color: #333;
-    padding: 0.5rem;
+    padding: 0.8rem;
     animation-name: alert;
     animation-duration: 5s;
     animation-fill-mode: forwards;

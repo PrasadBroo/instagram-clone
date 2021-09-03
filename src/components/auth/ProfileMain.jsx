@@ -97,9 +97,12 @@ function ProfileMain() {
     mystore.alert.show = true;
     return;
     }
-    mystore.alert.show = false;
+
+      mystore.alert.show = false;
     mystore.alert.message = "Profile Pic Updated Successfully";
     mystore.alert.show = true;
+    
+    
   };
   const handelImageChange = async (e) => {
     const [file] = e.target.files;

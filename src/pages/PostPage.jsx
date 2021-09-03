@@ -9,6 +9,7 @@ import { getPostDetails } from "./../utils/firebase_api";
 import mystore from "./../stores/store";
 import SkeletonPostP from "../components/skeletons/SkeletonPostP";
 import NotFound from "../components/auth/NotFound";
+import Alert from "../components/Alert";
 
 function PostPage() {
   const { postid } = useParams();
@@ -18,6 +19,10 @@ function PostPage() {
       mystore.isAnythingLoading.postDetailsLoading = true;
     };
   }, []);
+  useEffect(()=>{
+    mystore.alert.show = false;
+    return ()=>mystore.alert.show = false;
+  },[])
   useEffect(() => {
     const fetchDetails = async () => {
       mystore.isAnythingLoading.postDetailsLoading = true;
@@ -42,6 +47,7 @@ function PostPage() {
       )}
       <PostModal />
       <Footer />
+      {mystore.alert.show && <Alert message={mystore.alert.message}/>}
     </div>
     :
     <NotFound/>

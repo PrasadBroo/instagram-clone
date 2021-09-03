@@ -1,5 +1,5 @@
 import { view } from "@risingstack/react-easy-state";
-import React from "react";
+import React, { useEffect } from "react";
 import { Redirect } from "react-router-dom";
 import Alert from "../components/Alert";
 import Navbar from "../components/auth/Navbar";
@@ -7,7 +7,13 @@ import NotFound from "../components/auth/NotFound";
 import ProfileMain from "../components/auth/ProfileMain";
 import mystore from "./../stores/store";
 
+
 function UsernamePage() {
+  useEffect(()=>{
+    mystore.alert.show = false;
+    return ()=>mystore.alert.show = false;
+  },[])
+  
 
   return mystore.auth.user ? (
     <>
