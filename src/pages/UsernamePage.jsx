@@ -1,6 +1,7 @@
 import { view } from "@risingstack/react-easy-state";
 import React from "react";
 import { Redirect } from "react-router-dom";
+import Alert from "../components/Alert";
 import Navbar from "../components/auth/Navbar";
 import NotFound from "../components/auth/NotFound";
 import ProfileMain from "../components/auth/ProfileMain";
@@ -13,6 +14,7 @@ function UsernamePage() {
       <div className="navProfile" style={{ backgroundColor: "#FAFAFA" }}>
         <Navbar />
         {!mystore.showNotFound?<ProfileMain />:<NotFound/>}
+        {mystore.alert.show && <Alert message={mystore.alert.message}/>}
       </div>
     </>
   ) : (

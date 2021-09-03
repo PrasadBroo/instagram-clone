@@ -32,7 +32,6 @@ function ProfileMain() {
   const [userPosts, setUserPosts] = useState([]);
   const [isFollowed, setIsFollowed] = useState(false);
 
-
   useEffect(() => {
     let isMounted = true;
     modalStore.spinner.show = true;
@@ -58,14 +57,14 @@ function ProfileMain() {
           .onSnapshot((next) => {
             if (isMounted) setIsFollowed(next.exists);
           });
-        setHasPosts(postsData.postsCount  !== 0);
+        setHasPosts(postsData.postsCount !== 0);
         setUserPosts(postsData.posts);
         modalStore.followModal.user = user_details;
         modalStore.spinner.show = false;
         // setIsFollowed(isFollowed);
         return;
       }
-      if(userErr){
+      if (userErr) {
         mystore.showNotFound = true;
       }
     }
@@ -89,22 +88,31 @@ function ProfileMain() {
   };
   let handelImageChangeProfile = async (e) => {
     const [file] = e.target.files;
-    setisprofilePicUpdating(true)
+    setisprofilePicUpdating(true);
     let { err } = await updateProfilePic(file);
-    setisprofilePicUpdating(false)
+    setisprofilePicUpdating(false);
     if (err) {
-      alert(err.message);
+      mystore.alert.show = false;
+    mystore.alert.message = "Error updating profile Pic";
+    mystore.alert.show = true;
+    return;
     }
+    mystore.alert.show = false;
+    mystore.alert.message = "Profile Pic Updated Successfully";
+    mystore.alert.show = true;
   };
   const handelImageChange = async (e) => {
-  const [file] = e.target.files;
-  const { err,data:newPost } = await addPost(file);
-  if (err) {
-   return alert(err.message);
-  }
-  setUserPosts([...userPosts,newPost])
-  setHasPosts(true)
-};
+    const [file] = e.target.files;
+    const { err, data: newPost } = await addPost(file);
+    if (err) {
+      return alert(err.message);
+    }
+    mystore.alert.show = false;
+    mystore.alert.message = "Post uploaded successfully";
+    mystore.alert.show = true;
+    setUserPosts([...userPosts, newPost]);
+    setHasPosts(true);
+  };
   return !modalStore.spinner.show ? (
     <div className="ProfilePage">
       <div className={ProfileMainCss.profileWrap}>
@@ -210,16 +218,34 @@ function ProfileMain() {
             </div>
             <div className={ProfileMainCss.secthree}>
               <h1>{userDetails.fullName}</h1>
-              {userDetails.website && <a className={ProfileMainCss.userWebsite} target="_blank" rel="noopener noreferrer" href={userDetails.website}>{userDetails.website}</a>}
-              <p>{userDetails.bio ?? ''}</p>
+              {userDetails.website && (
+                <a
+                  className={ProfileMainCss.userWebsite}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href={userDetails.website}
+                >
+                  {userDetails.website}
+                </a>
+              )}
+              <p>{userDetails.bio ?? ""}</p>
             </div>
           </div>
         </div>
         <div className={ProfileMainCss.secthreeMobile}>
-              <h1>{userDetails.fullName}</h1>
-              {userDetails.website && <a className={ProfileMainCss.userWebsite} target="_blank" rel="noopener noreferrer" href={userDetails.website}>{userDetails.website}</a>}
-              <p>{userDetails.bio ?? ''}</p>
-            </div>
+          <h1>{userDetails.fullName}</h1>
+          {userDetails.website && (
+            <a
+              className={ProfileMainCss.userWebsite}
+              target="_blank"
+              rel="noopener noreferrer"
+              href={userDetails.website}
+            >
+              {userDetails.website}
+            </a>
+          )}
+          <p>{userDetails.bio ?? ""}</p>
+        </div>
         <div className={ProfileMainCss.mobileFollowInfo}>
           <ul className={ProfileMainCss.followInfo}>
             <p>
@@ -256,9 +282,7 @@ function ProfileMain() {
           <p>POSTS</p>
         </div>
         {!hasPosts && userDetails.uid === mystore.currentUser.uid && (
-          <div
-            className={ProfileMainCss.sharePhotos}
-          >
+          <div className={ProfileMainCss.sharePhotos}>
             <div className={ProfileMainCss.cameraIcon}>
               <ion-icon name="camera-outline"></ion-icon>
             </div>
@@ -287,9 +311,7 @@ function ProfileMain() {
           </div>
         )}
         {!hasPosts && userDetails.uid !== mystore.currentUser.uid && (
-          <div
-            className={ProfileMainCss.sharePhotos}
-          >
+          <div className={ProfileMainCss.sharePhotos}>
             <div className={ProfileMainCss.cameraIcon}>
               <ion-icon name="camera-outline"></ion-icon>
             </div>
@@ -320,8 +342,5 @@ function ProfileMain() {
     <Spinner />
   );
 }
-
-
-
 
 export default view(ProfileMain);

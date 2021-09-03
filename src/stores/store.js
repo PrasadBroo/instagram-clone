@@ -20,6 +20,10 @@ const mystore = store({
     isAnythingLoading:{
         postDetailsLoading:true,
         currentUserLoading:true,
+    },
+    alert:{
+        show:false,
+        message:null
     }
 });
 

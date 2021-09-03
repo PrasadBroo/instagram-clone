@@ -20,7 +20,9 @@ function Post({ data }) {
       data.post.likesCount -= 1;
       const { err:unlikePosrErr } = await unlikePost(data.post.postId);
       if (unlikePosrErr) {
-        // will show custom alert
+        mystore.alert.show = false;
+        mystore.alert.message = "Couldn't unlike the post"
+        mystore.alert.show = true;
         return
       }
     } else {
@@ -29,7 +31,9 @@ function Post({ data }) {
       
       const { err:likePostErr } = await likePost(data.post.postId);
       if (likePostErr) {
-        // will show custom alert
+        mystore.alert.show = false;
+        mystore.alert.message = "Couldn't like the post"
+        mystore.alert.show = true;
         return 
       }
     }

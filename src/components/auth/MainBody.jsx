@@ -10,6 +10,7 @@ import mystore from '../../stores/store'
 import useWindowSize from './../../customHooks/useWindowSize';
 import modalStore from '../../stores/modalStore'
 import { get_suggested_posts, get_user_suggetions } from '../../utils/firebase_api'
+import Alert from '../Alert'
 
 function MainBody() {
     useEffect(() => {
@@ -44,6 +45,7 @@ function MainBody() {
                 {width >1000 && <Profile/>}
                 <PostModal/></>}
                 {mystore.currentUser.showSuggUsers && <SuggestUsers/>}
+                {mystore.alert.show && <Alert message={mystore.alert.message}/>}
             </div>
             
         </div>
