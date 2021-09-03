@@ -20,18 +20,16 @@ function Post({ data }) {
       data.post.likesCount -= 1;
       const { err } = await unlikePost(data.post.postId);
       if (err) {
-        data.post.isLiked = true;
-        data.post.likesCount += 1;
-        return alert(err.message);
+        // will show custom alert
+        return
       }
     } else {
       data.post.isLiked = true;
       data.post.likesCount += 1;
       const { err } = await likePost(data.post.postId);
       if (err) {
-        data.post.likesCount -= 1;
-        data.post.isLiked = false;
-        return alert(err.message);
+        // will show custom alert
+        return 
       }
     }
   };

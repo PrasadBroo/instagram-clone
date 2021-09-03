@@ -522,7 +522,9 @@ const comment_count_increment = async (postid) => {
 }
 const like_post = async (postid) => {
   try {
-    const res = await likesRef.doc(postid).collection('users').doc(auth().currentUser.uid).set({});
+    const alredyLiked = await (await likesRef.doc(postid).collection('users').doc(auth().currentUser.uid).get()).exists
+    if(alredyLiked)throw new Error('post alredy liked')
+    const res =  await likesRef.doc(postid).collection('users').doc(auth().currentUser.uid).set({});
     await post_like_increment(postid)
     return {
       err: false,
@@ -537,6 +539,8 @@ const like_post = async (postid) => {
 }
 const unlike_post = async (postid) => {
   try {
+    const alredyUnliked = (await (await likesRef.doc(postid).collection('users').doc(auth().currentUser.uid).get()).exists);
+    if(!alredyUnliked)throw new Error('post alredy unliked')
     const res = await likesRef.doc(postid).collection('users').doc(auth().currentUser.uid).delete();
     await post_like_decrement(postid)
     return {
