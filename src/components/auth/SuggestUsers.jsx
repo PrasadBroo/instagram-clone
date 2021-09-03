@@ -16,7 +16,7 @@ function SuggestUsers() {
     };
     fetchDetails();
   }, []);
-  const handelBack = ()=>window.location.reload();
+  const handelBack = () => window.location.reload();
   return (
     <div className={SuggestUserCss.suggestUsers}>
       {mystore.currentUser.suggestedUSer &&
@@ -25,8 +25,13 @@ function SuggestUsers() {
             <SuggestedUser user={e} type key={e.uid} />
           </div>
         ))}
-        {!mystore.currentUser.suggestedUSer && [0,1,2,3,4,5,6,7,8,9].map(e => <SkeletonSuggUser key={e}/>)}
-        <button onClick={handelBack} className={SuggestUserCss.backBtn}>Back to instagram</button>
+      {!mystore.currentUser.suggestedUSer &&
+        [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((e, i) => (
+          <SkeletonSuggUser key={i} />
+        ))}
+      <button onClick={handelBack} className={SuggestUserCss.backBtn}>
+        Back to instagram
+      </button>
     </div>
   );
 }
