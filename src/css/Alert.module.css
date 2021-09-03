@@ -1,6 +1,7 @@
 .customAlert{
     position: fixed;
     left: 0;
+    z-index: 111;
     right: 0;
     background-color: #333;
     padding: 0.5rem;

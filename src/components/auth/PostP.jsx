@@ -26,14 +26,20 @@ function PostP() {
       data.post.likesCount -= 1;
       const { err } = await unlikePost(data.post.postId);
       if (err) {
-        return alert(err.message)
+        mystore.alert.show = false;
+        mystore.alert.message = "Couldn't unlike the post"
+        mystore.alert.show = true;
+        return
       }
     } else {
       data.post.isLiked = true;
       data.post.likesCount += 1;
       const { err } = await likePost(data.post.postId);
       if (err) {
-        return alert(err.message)
+        mystore.alert.show = false;
+        mystore.alert.message = "Couldn't like the post"
+        mystore.alert.show = true;
+        return
       }
     }
   };
