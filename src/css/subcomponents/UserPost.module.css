@@ -1,17 +1,15 @@
 .wrap{
-    height: 45%;
+    height: auto;
     width: 45%;
-    flex: 1 0;
     margin: 0.5rem 0.3rem;
     position: relative;
     max-width: 250px;
     max-height: 250px;
     /* min-height: 200px; */
 }
-.imageWrap img{
+.wrap img{
     height: 100%;
     width: 100%;
-    border-radius: 0.2rem ;
 }
 .wrap:hover .commentIcon{
     display: flex;
@@ -46,8 +44,13 @@
     }
 } */
 
-/* @media screen and (max-width: 580px) {
+@media screen and (max-width: 580px) {
     .wrap{
-        margin: 1rem auto;
+        height: 100px;
     }
-} */
+}
+@media screen and (min-width: 580px) {
+    .wrap{
+        height: 200px;
+    }
+}

@@ -13,14 +13,13 @@ function UserPost({ imageUrl, postid }) {
           <ion-icon name="chatbubble-outline"></ion-icon>
         </span>
         
-        <div className={UserPostCss.imageWrap}>
+
           {!isLoaded && <LocalSpinner />}
           <img
             src={imageUrl}
             onLoad={() => setIsLoaded(true)}
             alt="user-post"
           />
-        </div>
       </Link>
 
       {/* <Link to={`/post/${postid}`}>
