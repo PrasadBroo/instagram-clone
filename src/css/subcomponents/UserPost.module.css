@@ -1,13 +1,14 @@
 .wrap{
     height: 45%;
     width: 45%;
+    flex: 1 0;
     margin: 0.5rem 0.3rem;
     position: relative;
     max-width: 250px;
     max-height: 250px;
-    min-height: 200px;
+    /* min-height: 200px; */
 }
-.wrap a img{
+.imageWrap img{
     height: 100%;
     width: 100%;
     border-radius: 0.2rem ;
@@ -30,7 +31,7 @@
     
     display: none;
 }
-.commentIcon a{
+.commentIcon{
     color: #fff;
 }
 .commentsCount{

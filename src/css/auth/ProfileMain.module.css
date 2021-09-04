@@ -119,7 +119,10 @@
     margin-top: 3rem;
     
 }
-.hrline hr{
+.hrlinetwo{
+ margin-top: 0.5rem;       
+}
+.hrline hr,.hrlinetwo hr{
     border-top: 1px solid  #DBDBDB;
     width: 70%;
     margin: auto;
@@ -174,6 +177,12 @@
     align-items: center;
     flex-wrap: wrap;
     margin: auto;
+    flex-direction: row;
+}
+.hidePost{
+    flex: 1 0;
+    margin: 0.5rem 0.3rem;
+    position: relative;
 }
 .cameraIcon{
     font-size: 5rem;
@@ -221,6 +230,13 @@
     display: block;
     text-align: center;
 }
+.wrapIcon{
+    display: flex;
+    align-items: center;
+    margin: 0 1rem;
+    text-decoration: none;
+    color: #333;
+}
 
 @media only screen and (max-width: 735px){
     .sectwo{
@@ -262,6 +278,9 @@
     }
     .hrline hr{
         display: none;
+    }
+    .hrlinetwo hr{
+        width: 100%;
     }
 }
 

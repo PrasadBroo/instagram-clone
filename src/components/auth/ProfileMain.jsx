@@ -18,9 +18,11 @@ import {
   updateProfilePic,
   followUser,
 } from "../../utils/firebase_api";
+import { Route, Switch, useRouteMatch } from "react-router-dom";
 
 // profileIndo --> profileWrap
 function ProfileMain() {
+  let { url } = useRouteMatch();
   const { username } = useParams();
   const [userDetails, setUserDetails] = useState({
     username: username,
@@ -93,16 +95,14 @@ function ProfileMain() {
     setisprofilePicUpdating(false);
     if (err) {
       mystore.alert.show = false;
-    mystore.alert.message = "Error updating profile Pic";
-    mystore.alert.show = true;
-    return;
+      mystore.alert.message = "Error updating profile Pic";
+      mystore.alert.show = true;
+      return;
     }
 
-      mystore.alert.show = false;
+    mystore.alert.show = false;
     mystore.alert.message = "Profile Pic Updated Successfully";
     mystore.alert.show = true;
-    
-    
   };
   const handelImageChange = async (e) => {
     const [file] = e.target.files;
@@ -278,56 +278,91 @@ function ProfileMain() {
           <hr />
         </div>
         <div className={ProfileMainCss.posts}>
-          <div className={ProfileMainCss.postsIcon}>
-            <ion-icon name="apps-outline"></ion-icon>
-          </div>
+          <Link className={ProfileMainCss.wrapIcon} to={url}>
+            <div className={ProfileMainCss.postsIcon}>
+              <ion-icon name="apps-outline"></ion-icon>
+            </div>
 
-          <p>POSTS</p>
+            <p>POSTS</p>
+          </Link>
+          <Link className={ProfileMainCss.wrapIcon} to={`${url}/saved`}>
+            <div className={ProfileMainCss.postsIcon}>
+              <ion-icon name="bookmark-outline"></ion-icon>
+            </div>
+            <p>SAVED</p>
+          </Link>
         </div>
-        {!hasPosts && userDetails.uid === mystore.currentUser.uid && (
-          <div className={ProfileMainCss.sharePhotos}>
-            <div className={ProfileMainCss.cameraIcon}>
-              <ion-icon name="camera-outline"></ion-icon>
-            </div>
-            <div className={ProfileMainCss.text}>
-              <p>Share Photos</p>
-            </div>
-            <div className={ProfileMainCss.textTwo}>
-              <p>When you share photos, they will appear on your profile.</p>
-            </div>
-            <div className={ProfileMainCss.uploadLink}>
-              <input
-                type="file"
-                accept="image/*"
-                alt="Input Image"
-                id="my_file"
-                hidden
-                multiple={false}
-                onChange={handelImageChange}
-              ></input>
-              <button
-                onClick={() => document.getElementById("my_file").click()}
-              >
-                Share your first photo
-              </button>
-            </div>
-          </div>
-        )}
-        {!hasPosts && userDetails.uid !== mystore.currentUser.uid && (
-          <div className={ProfileMainCss.sharePhotos}>
-            <div className={ProfileMainCss.cameraIcon}>
-              <ion-icon name="camera-outline"></ion-icon>
-            </div>
-            <div className={ProfileMainCss.textOne}>
-              <p>No Posts Yet</p>
-            </div>
-            <div className={ProfileMainCss.textTwo}>
-              <p>When {userDetails.username} posts, they will appear here.</p>
-            </div>
-          </div>
-        )}
-        {hasPosts && (
-          <div className={ProfileMainCss.userPosts}>
+        <div className={ProfileMainCss.hrlinetwo}>
+          <hr />
+        </div>
+        <div className="test">
+          <Switch>
+            <Route exact path={`${url}`}>
+              {!hasPosts && userDetails.uid === mystore.currentUser.uid && (
+                <div className={ProfileMainCss.sharePhotos}>
+                  <div className={ProfileMainCss.cameraIcon}>
+                    <ion-icon name="camera-outline"></ion-icon>
+                  </div>
+                  <div className={ProfileMainCss.text}>
+                    <p>Share Photos</p>
+                  </div>
+                  <div className={ProfileMainCss.textTwo}>
+                    <p>
+                      When you share photos, they will appear on your profile.
+                    </p>
+                  </div>
+                  <div className={ProfileMainCss.uploadLink}>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      alt="Input Image"
+                      id="my_file"
+                      hidden
+                      multiple={false}
+                      onChange={handelImageChange}
+                    ></input>
+                    <button
+                      onClick={() => document.getElementById("my_file").click()}
+                    >
+                      Share your first photo
+                    </button>
+                  </div>
+                </div>
+              )}
+              {!hasPosts && userDetails.uid !== mystore.currentUser.uid && (
+                <div className={ProfileMainCss.sharePhotos}>
+                  <div className={ProfileMainCss.cameraIcon}>
+                    <ion-icon name="camera-outline"></ion-icon>
+                  </div>
+                  <div className={ProfileMainCss.textOne}>
+                    <p>No Posts Yet</p>
+                  </div>
+                  <div className={ProfileMainCss.textTwo}>
+                    <p>
+                      When {userDetails.username} posts, they will appear here.
+                    </p>
+                  </div>
+                </div>
+              )}
+              {hasPosts && (
+                <div className={ProfileMainCss.postsMainWrap}>
+                  {userPosts.map((post, i) => (
+                    <UserPost
+                      imageUrl={post.postMediaUrl ?? post.postsMedia}
+                      postid={post.postId}
+                      key={i}
+                    />
+                  ))}
+                </div>
+              )}
+            </Route>
+            <Route path={`${url}/saved`}>
+              <h1>Saved</h1>
+            </Route>
+          </Switch>
+        </div>
+
+        {/* {hasPosts && (
             <div className={ProfileMainCss.postsMainWrap}>
               {userPosts.map((post, i) => (
                 <UserPost
@@ -337,8 +372,7 @@ function ProfileMain() {
                 />
               ))}
             </div>
-          </div>
-        )}
+        )} */}
       </div>
     </div>
   ) : (

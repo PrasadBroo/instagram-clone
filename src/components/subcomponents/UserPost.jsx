@@ -8,15 +8,25 @@ function UserPost({ imageUrl, postid }) {
   const [isLoaded, setIsLoaded] = useState(false);
   return (
     <div className={UserPostCss.wrap}>
-      <div className={UserPostCss.commentIcon}>
-        <Link to={`/post/${postid}`}>
-          <ion-icon name="chatbubble-outline"></ion-icon>
-        </Link>
-      </div>
       <Link to={`/post/${postid}`}>
+        <span className={UserPostCss.commentIcon}>
+          <ion-icon name="chatbubble-outline"></ion-icon>
+        </span>
+        
+        <div className={UserPostCss.imageWrap}>
+          {!isLoaded && <LocalSpinner />}
+          <img
+            src={imageUrl}
+            onLoad={() => setIsLoaded(true)}
+            alt="user-post"
+          />
+        </div>
+      </Link>
+
+      {/* <Link to={`/post/${postid}`}>
         {!isLoaded && <LocalSpinner />}
         <img src={imageUrl} onLoad={() => setIsLoaded(true)} alt="user-post" />
-      </Link>
+      </Link> */}
     </div>
   );
 }

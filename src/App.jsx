@@ -56,7 +56,6 @@ function App() {
         ></Route>
         <Route path="/post/:postid" component={() => <PostPage />}></Route>
         <Route
-          exact
           path="/:username"
           component={() => <UsernamePage />}
         ></Route>
