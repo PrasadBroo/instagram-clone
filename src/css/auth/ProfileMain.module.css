@@ -185,6 +185,7 @@
     align-items: center;
     flex-wrap: wrap;
     margin: auto;
+    margin-bottom: 3rem;
 }
 .hidePost{
     flex: 1 0;
