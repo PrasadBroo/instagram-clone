@@ -4,7 +4,12 @@ import {
   firebaseStorage
 } from '../services/firebase';
 import mystore from '../stores/store';
-import { isvalidUsername, isvalidFullName, isvalideBio, isValidWebsiteLink } from './validations';
+import {
+  isvalidUsername,
+  isvalidFullName,
+  isvalideBio,
+  isValidWebsiteLink
+} from './validations';
 
 const usersRef = firestore().collection('users');
 const postsRef = firestore().collection('posts');
@@ -34,7 +39,7 @@ const get_user_details_by_uid = async (uid = auth().currentUser.uid) => {
 const get_user_details_by_username = async (username) => {
   try {
     const details = (await usersRef.where("username", "==", username).limit(1).get()).docs.map(user => user.data());
-    if(details.length ===0)throw Error('user not exists')
+    if (details.length === 0) throw Error('user not exists')
     return {
       err: false,
       data: details[0]
@@ -54,18 +59,19 @@ const register_user = async (fullName, username) => {
     email: auth().currentUser.email,
     fullName,
     username,
-    website:null,
-    bio:null,
+    website: null,
+    bio: null,
     followersCount: 0,
     followingsCount: 0,
     profilePic: 'https://i.ibb.co/LCk6LbN/default-Profile-Pic-7fe14f0a.jpg',
     uid: auth().currentUser.uid,
     createdAt: firestore.Timestamp.now()
   }
-  try {const fullNameCheck = isvalidFullName(fullName)
+  try {
+    const fullNameCheck = isvalidFullName(fullName)
     const isValidUername = isvalidUsername(username);
-    if(!isValidUername)throw Error('Invalid Username')
-    if(!fullNameCheck)throw Error('Invalid Full Name')
+    if (!isValidUername) throw Error('Invalid Username')
+    if (!fullNameCheck) throw Error('Invalid Full Name')
     const res = await usersRef.doc(auth().currentUser.uid).set(details);
 
     return {
@@ -147,7 +153,9 @@ const get_post_details = async (postid) => {
       data: ispostLiked
     } = await is_post_liked_by_user(postid);
     post.isLiked = ispostLiked;
-    const {data:isBookmarked} = await is_post_bookmarked(undefined,postid);
+    const {
+      data: isBookmarked
+    } = await is_post_bookmarked(undefined, postid);
     post.isBookmarked = isBookmarked;
     let comments = await Promise.all(data.modifiedRes.map(async comment => {
       comment.user = (await getUserDetailsByUid(comment.uid)).data;
@@ -346,7 +354,7 @@ const has_followed = async (uid) => {
 
 }
 
-const get_followers_list = async (uid,lastVisible) => {
+const get_followers_list = async (uid, lastVisible) => {
   try {
     const query = lastVisible ? usersFollowersRef.doc(uid).collection('users').startAfter(lastVisible) : usersFollowersRef.doc(uid).collection('users')
     const followerSnapshot = (await query.limit(5).get());
@@ -362,7 +370,7 @@ const get_followers_list = async (uid,lastVisible) => {
     return {
       err: false,
       data: modifiesRes,
-      snapshots:followerSnapshot
+      snapshots: followerSnapshot
     }
   } catch (error) {
     return {
@@ -372,7 +380,7 @@ const get_followers_list = async (uid,lastVisible) => {
   }
 
 }
-const get_followings_list = async (uid,lastVisible=null) => {
+const get_followings_list = async (uid, lastVisible = null) => {
   try {
     const query = lastVisible ? usersFollowingsRef.doc(uid).collection('users').startAfter(lastVisible) : usersFollowingsRef.doc(uid).collection('users')
     const followingSnapshot = (await query.limit(5).get())
@@ -384,7 +392,7 @@ const get_followings_list = async (uid,lastVisible=null) => {
     return {
       err: false,
       data: modifiesRes,
-      snapshots:followingSnapshot
+      snapshots: followingSnapshot
     }
   } catch (error) {
     return {
@@ -394,9 +402,9 @@ const get_followings_list = async (uid,lastVisible=null) => {
   }
 
 }
-export const is_username_exists = async(username)=>{
+export const is_username_exists = async (username) => {
   try {
-    const res = !(await (await usersRef.where("username","==",username).get()).empty);
+    const res = !(await (await usersRef.where("username", "==", username).get()).empty);
     return {
       err: false,
       data: res
@@ -408,15 +416,20 @@ export const is_username_exists = async(username)=>{
     }
   }
 }
-const update_profile_details = async (name, email, username, bio, website) => {
+const update_profile_details = async (name, email, username, bio, website, uid) => {
   try {
-    
+
     const isVAlidUsername = isvalidUsername(username)
     if (!isVAlidUsername) throw Error('Invalid Username');
     const isValidBio = isvalideBio(bio)
-    if(!isValidBio)throw Error('Bio length must be less than 120 chars')
+    if (!isValidBio) throw Error('Bio length must be less than 120 chars')
     const validWebsite = isValidWebsiteLink(website);
-    if(!validWebsite)throw Error('invalid website')
+    if (!validWebsite) throw Error('invalid website')
+    const {
+      data: isUsernameExists,
+      err: gotErr
+    } = await is_username_exists(username);
+    if ((isUsernameExists || gotErr) && username !== mystore.currentUser.username) throw Error(gotErr ? gotErr.message : 'Username already exists')
     const givenData = {
       email: email,
       fullName: name,
@@ -427,6 +440,20 @@ const update_profile_details = async (name, email, username, bio, website) => {
     const res = await usersRef.doc(auth().currentUser.uid).set(givenData, {
       merge: true
     });
+    return {
+      err: false,
+      data: res
+    }
+  } catch (error) {
+    return {
+      err: error,
+      data: false
+    }
+  }
+}
+export const search_users = async(searchText)=>{
+  try {
+    const res = (await usersRef.orderBy('username').limit(5).startAt(searchText).endAt(searchText+ "\uf8ff").get()).docs.map(e => e.data());
     return {
       err: false,
       data: res
@@ -527,8 +554,8 @@ const comment_count_increment = async (postid) => {
 const like_post = async (postid) => {
   try {
     const alredyLiked = await (await likesRef.doc(postid).collection('users').doc(auth().currentUser.uid).get()).exists
-    if(alredyLiked)throw new Error('post alredy liked')
-    const res =  await likesRef.doc(postid).collection('users').doc(auth().currentUser.uid).set({});
+    if (alredyLiked) throw new Error('post alredy liked')
+    const res = await likesRef.doc(postid).collection('users').doc(auth().currentUser.uid).set({});
     await post_like_increment(postid)
     return {
       err: false,
@@ -544,7 +571,7 @@ const like_post = async (postid) => {
 const unlike_post = async (postid) => {
   try {
     const alredyUnliked = (await (await likesRef.doc(postid).collection('users').doc(auth().currentUser.uid).get()).exists);
-    if(!alredyUnliked)throw new Error('post alredy unliked')
+    if (!alredyUnliked) throw new Error('post alredy unliked')
     const res = await likesRef.doc(postid).collection('users').doc(auth().currentUser.uid).delete();
     await post_like_decrement(postid)
     return {
@@ -595,7 +622,10 @@ const get_comments = async (postid) => {
       comment.isLiked = await (await is_comment_liked(comment.id)).data;
       return comment
     }))
-    modifiedRes = await Promise.all(modifiedRes.map(async e => {e.likesCount = (await get_comment_likes_count(e.id)).data;return e}))
+    modifiedRes = await Promise.all(modifiedRes.map(async e => {
+      e.likesCount = (await get_comment_likes_count(e.id)).data;
+      return e
+    }))
     return {
       err: false,
       data: {
@@ -610,7 +640,7 @@ const get_comments = async (postid) => {
     }
   }
 }
-const get_comment_likes_count = async(commentId)=>{
+const get_comment_likes_count = async (commentId) => {
   try {
     const res = (await commentsLikesRef.doc(commentId).collection('user').get()).docs.length;
     return {
@@ -663,7 +693,7 @@ export const unlike_comment = async (commentId) => {
 
 export const get_user_suggetions = async (count = 5) => {
   try {
-    const res = (await usersRef.limit(count).orderBy('createdAt',count<=5 ? 'desc' :'asc').get()).docs.map(user => user.data())
+    const res = (await usersRef.limit(count).orderBy('createdAt', count <= 5 ? 'desc' : 'asc').get()).docs.map(user => user.data())
     const modifiedRes = await Promise.all(res.map(async e => {
       e.isFollowedByUser = (await has_followed(e.uid)).data;
       return e
@@ -700,7 +730,7 @@ export const get_suggested_posts = async () => {
     return {
       err: false,
       data: modifiedRes,
-      followingSnapshots:snapshots
+      followingSnapshots: snapshots
     }
   } catch (error) {
     return {
@@ -710,7 +740,7 @@ export const get_suggested_posts = async () => {
   }
 }
 
-export const get_saved_posts = async(uid=auth().currentUser.uid)=>{
+export const get_saved_posts = async (uid = auth().currentUser.uid) => {
   try {
     const res = await Promise.all((await savedPostsRef.doc(uid).collection('posts').limit(6).get()).docs.map(async e => await (await get_post_details(e.id)).data));
     return {
@@ -724,10 +754,10 @@ export const get_saved_posts = async(uid=auth().currentUser.uid)=>{
     }
   }
 }
-export const add_post_to_saved_posts = async(uid=auth().currentUser.uid,postId)=>{
+export const add_post_to_saved_posts = async (uid = auth().currentUser.uid, postId) => {
   try {
-    const alreadyBookmarked = (await is_post_bookmarked(uid,postId)).data;
-    if(alreadyBookmarked)throw Error('post alredy bookmarked')
+    const alreadyBookmarked = (await is_post_bookmarked(uid, postId)).data;
+    if (alreadyBookmarked) throw Error('post alredy bookmarked')
     const res = await savedPostsRef.doc(uid).collection('posts').doc(postId).set({});
     return {
       err: false,
@@ -740,10 +770,10 @@ export const add_post_to_saved_posts = async(uid=auth().currentUser.uid,postId)=
     }
   }
 }
-export const remove_post_from_saved = async(uid=auth().currentUser.uid,postId)=>{
+export const remove_post_from_saved = async (uid = auth().currentUser.uid, postId) => {
   try {
-    const alreadyRemoved = !((await is_post_bookmarked(uid,postId)).data);
-    if(alreadyRemoved)throw Error('post alredy removed from bookmarks')
+    const alreadyRemoved = !((await is_post_bookmarked(uid, postId)).data);
+    if (alreadyRemoved) throw Error('post alredy removed from bookmarks')
     const res = await savedPostsRef.doc(uid).collection('posts').doc(postId).delete();
     return {
       err: false,
@@ -756,7 +786,7 @@ export const remove_post_from_saved = async(uid=auth().currentUser.uid,postId)=>
     }
   }
 }
-export const is_post_bookmarked = async(uid=auth().currentUser.uid,postId)=>{
+export const is_post_bookmarked = async (uid = auth().currentUser.uid, postId) => {
   try {
     const alreadyBookmarked = await (await savedPostsRef.doc(uid).collection('posts').doc(postId).get()).exists;
     return {
@@ -770,12 +800,12 @@ export const is_post_bookmarked = async(uid=auth().currentUser.uid,postId)=>{
     }
   }
 }
-export const load_more_suggested_posts = async(lastVisible)=>{
+export const load_more_suggested_posts = async (lastVisible) => {
   try {
     const allPosts = [];
     const {
       data: followingsList
-    } = await getFollowingsList(auth().currentUser.uid,lastVisible);
+    } = await getFollowingsList(auth().currentUser.uid, lastVisible);
     const res = (await Promise.all(followingsList.map(async ele => (await get_user_posts(ele.username)).data)))
     res.forEach(e => e.posts.forEach(e => allPosts.push(e)))
     const modifiedRes = await (await Promise.all(allPosts.map(async e => {

@@ -7,24 +7,35 @@ import LocalSpinner from "../spinners/LocalSpinner";
 
 function EditProfile() {
   const currentUser = mystore.currentUser;
-  const handelProfileChanges = async()=>{
+  const handelProfileChanges = async () => {
     setIsUpdating(true);
-    const {err} = await updateProfileDetails(name,email,username,bio,website);
-    if(err){
-      alert(err.message)
+    const { err } = await updateProfileDetails(
+      name,
+      email,
+      username,
+      bio,
+      website
+    );
+    if (err) {
+      mystore.alert.show = false;
+      mystore.alert.message = err.message;
+      mystore.alert.show = true;
       return setIsUpdating(false);
     }
+    mystore.alert.show = false;
+    mystore.alert.message = "Profile Saved";
+    mystore.alert.show = true;
     setIsUpdating(false);
-  }
-  const [name,setName] = useState(currentUser.fullName)
-  const [email,setEmail] = useState(currentUser.email)
-  const [bio,setBio] = useState(currentUser.bio)
-  const [website,setWebsite] = useState(currentUser.website)
-  const [username,setUsername] = useState(currentUser.username)
-  const [isUpdating,setIsUpdating] = useState(false)
+  };
+  const [name, setName] = useState(currentUser.fullName);
+  const [email, setEmail] = useState(currentUser.email);
+  const [bio, setBio] = useState(currentUser.bio??'');
+  const [website, setWebsite] = useState(currentUser.website??'');
+  const [username, setUsername] = useState(currentUser.username);
+  const [isUpdating, setIsUpdating] = useState(false);
   return (
     <div className={EditProfileCss.wrap}>
-      {isUpdating && <LocalSpinner/>}
+      {isUpdating && <LocalSpinner />}
       <div className={EditProfileCss.picName}>
         <div className={EditProfileCss.pic}>
           <img src={currentUser.profilePic} alt="user-pic" />
@@ -40,8 +51,8 @@ function EditProfile() {
           type="text"
           name="oldPass"
           value={name}
-          onChange={(e)=>setName(e.target.value)}
-          disabled={name.trim().length ===0}
+          onChange={(e) => setName(e.target.value)}
+          disabled={name.trim().length === 0}
         />
       </div>
       <div className={EditProfileCss.NewPass}>
@@ -50,17 +61,26 @@ function EditProfile() {
           type="text"
           name="newPass"
           value={username}
-          onChange={(e)=>setUsername(e.target.value)}
-          disabled={username.trim().length ===0}
+          onChange={(e) => setUsername(e.target.value)}
         />
       </div>
       <div className={EditProfileCss.ConfirmPass}>
         <p>Website</p>
-        <input type="text" name="ConfirmPass" value={website} onChange={(e)=>setWebsite(e.target.value)} />
+        <input
+          type="text"
+          name="ConfirmPass"
+          value={website}
+          onChange={(e) => setWebsite(e.target.value)}
+        />
       </div>
       <div className={EditProfileCss.ConfirmPass}>
         <p>Bio</p>
-        <textarea type="text" name="ConfirmPass" value={bio} onChange={(e)=>setBio(e.target.value)}  />
+        <textarea
+          type="text"
+          name="ConfirmPass"
+          value={bio}
+          onChange={(e) => setBio(e.target.value)}
+        />
       </div>
       <div className={EditProfileCss.ConfirmPass}>
         <p>Email</p>
@@ -68,12 +88,17 @@ function EditProfile() {
           type="email"
           name="ConfirmPass"
           value={email}
-          onChange={(e)=>setEmail(e.target.value)}
-          disabled={email.trim().length ===0}
+          onChange={(e) => setEmail(e.target.value)}
+          disabled={email.trim().length === 0}
         />
       </div>
       <div className={EditProfileCss.btns}>
-        <button className={EditProfileCss.submitBtn} onClick={handelProfileChanges}>Submit</button>
+        <button
+          className={EditProfileCss.submitBtn}
+          onClick={handelProfileChanges}
+        >
+          Submit
+        </button>
       </div>
     </div>
   );

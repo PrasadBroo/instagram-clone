@@ -92,10 +92,45 @@
 .userProfilePic {
     margin: 0 0.6rem;
 }
+.usersList::-webkit-scrollbar {
+    display: none;
+}
+.usersList{
+    -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+    position: absolute;
+    background-color: #fff;
+    top: 50px;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    max-height: 200px;
+    overflow-y: scroll;
+    padding: 0.8rem;
+}
 
-
-
-
+.user{
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    font-size: 12px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    border-bottom: 2px solid #DBDBDB;
+}
+.user a{
+    font-weight: 600;
+    text-decoration: none;
+    color: #333;
+}
+.user img{
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    margin-right: 0.3rem;
+}
+.notFound{
+    color: rgb(177, 177, 177)BDB;
+}
 
 @media only screen and (max-width: 775px) {
     .heading {

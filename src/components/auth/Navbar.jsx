@@ -1,10 +1,20 @@
 import { view } from "@risingstack/react-easy-state";
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import NavbarCss from "../../css/auth/Navbar.module.css";
 import mystore from "../../stores/store";
+import { search_users } from "../../utils/firebase_api";
 
 function Navbar() {
+  const [userSearched,setUsersearched] = useState([])
+  const handelSearchTermChange = async(s)=>{
+    if(s.length ===0)return setUsersearched([])
+    const {data,err} = await search_users(s)
+    if(err){
+     return  
+    }
+    setUsersearched(data)
+  }
   return (
     <nav className={NavbarCss.navBar}>
       <div className={NavbarCss.navLinks}>
@@ -21,8 +31,19 @@ function Navbar() {
             name="search"
             required
             placeholder="Search"
-            onChange={null}
+            onChange={(e)=>handelSearchTermChange(e.target.value)}
           ></input>
+          {userSearched.length !==0 && <ul className={NavbarCss.usersList} >
+            { userSearched.map(user => <div key={user.username} className={NavbarCss.user}>
+              <img src={user.profilePic} alt={user.username} />
+              <div className="info">
+                <Link to={"/"+user.username}>{user.username}</Link>
+                <p>{user.fullName}</p>
+              </div>
+            </div>)}
+            {userSearched.length ===0 &&<p className={NavbarCss.notFound}>No Results Found</p>}
+            
+          </ul>}
         </div>
         <div className={NavbarCss.someLinks}>
           <Link to="/">
