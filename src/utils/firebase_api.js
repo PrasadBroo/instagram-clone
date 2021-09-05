@@ -15,6 +15,7 @@ const profilePicsRef = firebaseStorage().ref('profilePics');
 const likesRef = firestore().collection('likes');
 const commentsRef = firestore().collection('comments');
 const commentsLikesRef = firestore().collection('commentsLikes');
+const savedPostsRef = firestore().collection('saved');
 const get_user_details_by_uid = async (uid = auth().currentUser.uid) => {
   try {
     const details = (await (usersRef.doc(uid)).get()).data();
@@ -146,6 +147,8 @@ const get_post_details = async (postid) => {
       data: ispostLiked
     } = await is_post_liked_by_user(postid);
     post.isLiked = ispostLiked;
+    const {data:isBookmarked} = await is_post_bookmarked(undefined,postid);
+    post.isBookmarked = isBookmarked;
     let comments = await Promise.all(data.modifiedRes.map(async comment => {
       comment.user = (await getUserDetailsByUid(comment.uid)).data;
       return comment
@@ -698,6 +701,67 @@ export const get_suggested_posts = async () => {
       err: false,
       data: modifiedRes,
       followingSnapshots:snapshots
+    }
+  } catch (error) {
+    return {
+      err: error,
+      data: false
+    }
+  }
+}
+
+export const get_saved_posts = async(uid=auth().currentUser.uid)=>{
+  try {
+    const res = await (await savedPostsRef.doc(uid).collection('posts').limit(6).get()).docs.map(e => e.data());
+    return {
+      err: false,
+      data: res
+    }
+  } catch (error) {
+    return {
+      err: error,
+      data: false
+    }
+  }
+}
+export const add_post_to_saved_posts = async(uid=auth().currentUser.uid,postId)=>{
+  try {
+    const alreadyBookmarked = (await is_post_bookmarked(uid,postId)).data;
+    if(alreadyBookmarked)throw Error('post alredy bookmarked')
+    const res = await savedPostsRef.doc(uid).collection('posts').doc(postId).set({});
+    return {
+      err: false,
+      data: res
+    }
+  } catch (error) {
+    return {
+      err: error,
+      data: false
+    }
+  }
+}
+export const remove_post_from_saved = async(uid=auth().currentUser.uid,postId)=>{
+  try {
+    const alreadyRemoved = !((await is_post_bookmarked(uid,postId)).data);
+    if(alreadyRemoved)throw Error('post alredy removed from bookmarks')
+    const res = await savedPostsRef.doc(uid).collection('posts').doc(postId).delete();
+    return {
+      err: false,
+      data: res
+    }
+  } catch (error) {
+    return {
+      err: error,
+      data: false
+    }
+  }
+}
+export const is_post_bookmarked = async(uid=auth().currentUser.uid,postId)=>{
+  try {
+    const alreadyBookmarked = await (await savedPostsRef.doc(uid).collection('posts').doc(postId).get()).exists;
+    return {
+      err: false,
+      data: alreadyBookmarked
     }
   } catch (error) {
     return {

@@ -6,10 +6,13 @@ import modalStore from "./../../stores/modalStore";
 import mystore from "../../stores/store";
 import LocalSpinner from "../spinners/LocalSpinner";
 import { Link } from "react-router-dom";
+
 import {
   addComment,
   likePost,
   load_more_comments,
+  remove_post_from_saved,
+  add_post_to_saved_posts,
   unlikePost,
 } from "../../utils/firebase_api";
 
@@ -20,6 +23,7 @@ function PostP() {
   const data = mystore.currentUser.postDetails;
   const [comment, setComment] = useState("");
   const [isCommentAdding, setIsCommentAdding] = useState(false);
+  console.log(data)
   const handelPostLike = async () => {
     if (data.post.isLiked) {
       data.post.isLiked = false;
@@ -76,6 +80,29 @@ function PostP() {
     }
     setIsmoreCommentsLoading(false)
   };
+  const handelPostBookmark = async()=>{
+    if(data.post.isBookmarked){
+      data.post.isBookmarked = false
+      const {err} = await remove_post_from_saved(undefined,data.post.postId);
+    if(err){
+      mystore.alert.show = false;
+        mystore.alert.message = err.message
+        mystore.alert.show = true;
+        return;
+    }
+    }
+    else{
+      data.post.isBookmarked = true
+      const {err} = await add_post_to_saved_posts(undefined,data.post.postId);
+    if(err){
+      mystore.alert.show = false;
+        mystore.alert.message = err.message
+        mystore.alert.show = true;
+        return;
+    }
+    }
+    
+  }
   return (
     <div className={PostPCss.postWrapper}>
       <div className={PostPCss.leftSec}>
@@ -176,9 +203,9 @@ function PostP() {
               </span>
             </div>
             <div className={PostPCss.rightSide}>
-              <span className={PostPCss.saveBtn}>
-                <ion-icon name="bookmark-outline"></ion-icon>
-              </span>
+            <span className={PostPCss.saveBtn} onClick={handelPostBookmark}>
+              <ion-icon name={data.post.isBookmarked ? "bookmark" : "bookmark-outline"}></ion-icon>
+            </span>
             </div>
           </div>
           <div className={PostPCss.likesCount}>

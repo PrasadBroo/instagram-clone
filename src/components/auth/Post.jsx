@@ -5,7 +5,7 @@ import modalStore from "./../../stores/modalStore";
 import SkeletonPost from "../skeletons/SkeletonPost";
 import { view } from "@risingstack/react-easy-state";
 import { Link, useHistory } from "react-router-dom";
-import { likePost, unlikePost, addComment } from "../../utils/firebase_api";
+import { likePost, unlikePost, addComment,add_post_to_saved_posts,remove_post_from_saved } from "../../utils/firebase_api";
 import LocalSpinner from "../spinners/LocalSpinner";
 import mystore from "../../stores/store";
 
@@ -69,6 +69,29 @@ function Post({ data }) {
     modalStore.postModal.display = true;
     modalStore.postModal.postid = data.post.postId;
   };
+  const handelPostBookmark = async()=>{
+    if(data.post.isBookmarked){
+      mystore.currentUser.userSuggestedPosts.find(e => e.post.postId === data.post.postId).post.isBookmarked = false
+      const {err} = await remove_post_from_saved(undefined,data.post.postId);
+    if(err){
+      mystore.alert.show = false;
+        mystore.alert.message = err.message
+        mystore.alert.show = true;
+        return;
+    }
+    }
+    else{
+      mystore.currentUser.userSuggestedPosts.find(e => e.post.postId === data.post.postId).post.isBookmarked = true
+      const {err} = await add_post_to_saved_posts(undefined,data.post.postId);
+    if(err){
+      mystore.alert.show = false;
+        mystore.alert.message = err.message
+        mystore.alert.show = true;
+        return;
+    }
+    }
+    
+  }
   return (
     <>
       <div
@@ -144,8 +167,8 @@ function Post({ data }) {
             </span>
           </div>
           <div className={PostCss.rightSide}>
-            <span className={PostCss.saveBtn}>
-              <ion-icon name="bookmark-outline"></ion-icon>
+            <span className={PostCss.saveBtn} onClick={handelPostBookmark}>
+              <ion-icon name={data.post.isBookmarked ? "bookmark" : "bookmark-outline"}></ion-icon>
             </span>
           </div>
         </div>

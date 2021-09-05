@@ -91,7 +91,9 @@
   font-size: 1.8rem;
   cursor: pointer;
 }
-
+.saveBtn{
+    color: #333;
+}
 
 .comments {
     padding: 0 1rem;
