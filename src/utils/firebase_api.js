@@ -712,7 +712,7 @@ export const get_suggested_posts = async () => {
 
 export const get_saved_posts = async(uid=auth().currentUser.uid)=>{
   try {
-    const res = await (await savedPostsRef.doc(uid).collection('posts').limit(6).get()).docs.map(e => e.data());
+    const res = await Promise.all((await savedPostsRef.doc(uid).collection('posts').limit(6).get()).docs.map(async e => await (await get_post_details(e.id)).data));
     return {
       err: false,
       data: res

@@ -17,6 +17,7 @@ import {
   getUserDetailsByUsername,
   updateProfilePic,
   followUser,
+  get_saved_posts,
 } from "../../utils/firebase_api";
 import { Route, Switch, useRouteMatch } from "react-router-dom";
 
@@ -33,6 +34,7 @@ function ProfileMain() {
   const [isprofilePicUpdating, setisprofilePicUpdating] = useState(false);
   const [userPosts, setUserPosts] = useState([]);
   const [isFollowed, setIsFollowed] = useState(false);
+  const [savedPosts,setSavedPosts] = useState([])
 
   useEffect(() => {
     let isMounted = true;
@@ -47,6 +49,11 @@ function ProfileMain() {
       const { data: postsData, err: postsErr } = await getUserPosts(username);
       const usersRef = firestore().collection("users");
       const usersFollowersRef = firestore().collection("followers");
+      if(user_details && user_details.uid === mystore.currentUser.uid){
+        const {data,err} = await get_saved_posts();
+        if(!err)setSavedPosts(data);
+      }
+      
       if (!userErr && !postsErr && isMounted) {
         // setUserDetails(user_details);
         usersRef.doc(user_details.uid).onSnapshot((next) => {
@@ -285,19 +292,19 @@ function ProfileMain() {
 
             <p>POSTS</p>
           </Link>
-          <Link className={ProfileMainCss.wrapIcon} to={`${url}/saved`}>
+          {userDetails.uid === mystore.currentUser.uid && <Link className={ProfileMainCss.wrapIcon} to={`${url}/saved`}>
             <div className={ProfileMainCss.postsIcon}>
               <ion-icon name="bookmark-outline"></ion-icon>
             </div>
             <p>SAVED</p>
-          </Link>
+          </Link>}
         </div>
         <div className={ProfileMainCss.hrlinetwo}>
           <hr />
         </div>
         <div className="test">
           <Switch>
-            <Route exact path={`${url}`}>
+            <Route exact={userDetails.uid === mystore.currentUser.uid} path={`${url}`}>
               {!hasPosts && userDetails.uid === mystore.currentUser.uid && (
                 <div className={ProfileMainCss.sharePhotos}>
                   <div className={ProfileMainCss.cameraIcon}>
@@ -356,9 +363,19 @@ function ProfileMain() {
                 </div>
               )}
             </Route>
-            <Route path={`${url}/saved`}>
-              <h1>Saved</h1>
-            </Route>
+            {userDetails.uid === mystore.currentUser.uid &&<Route path={`${url}/saved`}>
+            {hasPosts && (
+                <div className={ProfileMainCss.postsMainWrap}>
+                  {savedPosts.map((post, i) => (
+                    <UserPost
+                      imageUrl={post.post.postMediaUrl ?? post.post.postsMedia}
+                      postid={post.post.postId}
+                      key={i}
+                    />
+                  ))}
+                </div>
+              )}
+            </Route>}
           </Switch>
         </div>
 

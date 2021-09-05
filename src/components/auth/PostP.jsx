@@ -23,7 +23,6 @@ function PostP() {
   const data = mystore.currentUser.postDetails;
   const [comment, setComment] = useState("");
   const [isCommentAdding, setIsCommentAdding] = useState(false);
-  console.log(data)
   const handelPostLike = async () => {
     if (data.post.isLiked) {
       data.post.isLiked = false;
