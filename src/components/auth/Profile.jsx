@@ -52,7 +52,7 @@ function Profile() {
         </div>
         <p className={ProfileCss.creditInfo}>
           © Made By <i className="fas fa-heart" aria-hidden="true"></i> Prasad
-          Shinde <b>/</b> prasadbro
+          Shinde <b>/</b><a href="https://www.prasadbro.com/">prasadbro</a> 
         </p>
       </div>
     </div>
