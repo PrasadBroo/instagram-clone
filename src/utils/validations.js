@@ -1,5 +1,5 @@
 export const isvalidUsername = (username) => {
-    const isVAlidUsername = new RegExp(/^[a-zA-Z0-9_-]{3,16}$/).test(username);
+    const isVAlidUsername = new RegExp(/^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{0,29}$/igm).test(username);
     return isVAlidUsername;
 }
 
@@ -13,7 +13,7 @@ export const isvalideBio = (bio) => {
 }
 
 export const isvalidFullName = (fullName) => {
-    if (fullName.length > 20 || fullName === undefined || fullName === null) {
+    if (fullName.length > 50 || fullName === undefined || fullName === null) {
         return false
     }
     return true;

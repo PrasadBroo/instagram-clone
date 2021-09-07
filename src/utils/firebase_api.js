@@ -402,6 +402,20 @@ const get_followings_list = async (uid, lastVisible = null) => {
   }
 
 }
+export const is_fb_uid_exists = async(uid)=>{
+  try {
+    const res = await (await usersRef.doc(uid).get()).exists;
+    return {
+      err: false,
+      data: res
+    } 
+  } catch (error) {
+    return {
+      err: error,
+      data: false
+    }
+  }
+}
 export const is_username_exists = async (username) => {
   try {
     const res = !(await (await usersRef.where("username", "==", username).get()).empty);
@@ -425,6 +439,7 @@ const update_profile_details = async (name, email, username, bio, website, uid) 
     if (!isValidBio) throw Error('Bio length must be less than 120 chars')
     const validWebsite = isValidWebsiteLink(website);
     if (!validWebsite) throw Error('invalid website')
+    if(!mystore.auth.user.emailVerified)throw new Error('Plz Verify Your Email First,Email Already Has Been Sent')
     const {
       data: isUsernameExists,
       err: gotErr

@@ -8,7 +8,7 @@ import modalStore from "./../../stores/modalStore";
 
 function FollowModal() {
   const [ismoreFollowLoading, setisMoreFollowLoading] = useState(false);
-  const [isDataLoaded,setIsDataLoaded] = useState(false)
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
   useEffect(() => {
     const fetchFollowDetails = async () => {
       const {
@@ -26,7 +26,7 @@ function FollowModal() {
         modalStore.followModal.followerslistSnapshots = followSnap;
         modalStore.followModal.followingsList = followingsList;
         modalStore.followModal.followingsListSnapshots = followingSnap;
-        setIsDataLoaded(true)
+        setIsDataLoaded(true);
       }
     };
     fetchFollowDetails();
@@ -44,13 +44,12 @@ function FollowModal() {
           modalStore.followModal.followerslistSnapshots.docs.length - 1
         ]
       );
-      if(!newErr){
+      if (!newErr) {
         modalStore.followModal.followerslistSnapshots = newSnap;
-        newData.forEach(e => modalStore.followModal.followerslist.push(e))
+        newData.forEach((e) => modalStore.followModal.followerslist.push(e));
       }
-      setisMoreFollowLoading(false)
-    }
-    else {
+      setisMoreFollowLoading(false);
+    } else {
       const {
         data: newData,
         err: newErr,
@@ -61,11 +60,11 @@ function FollowModal() {
           modalStore.followModal.followingsListSnapshots.docs.length - 1
         ]
       );
-      if(!newErr){
+      if (!newErr) {
         modalStore.followModal.followingsListSnapshots = newSnap;
-        newData.forEach(e => modalStore.followModal.followingsList.push(e))
+        newData.forEach((e) => modalStore.followModal.followingsList.push(e));
       }
-      setisMoreFollowLoading(false)
+      setisMoreFollowLoading(false);
     }
   };
   return modalStore.followModal.display ? (
@@ -91,22 +90,28 @@ function FollowModal() {
             modalStore.followModal.followingsList.map((follower, i) => (
               <FollowUser data={follower} key={i} />
             ))}
-          {isDataLoaded && (modalStore.followModal.type === "followers" ?
-          (modalStore.followModal.followerslistSnapshots.docs.length !==0 && <button
-            className={FollowModalCss.loadComments}
-            onClick={handelLoadFollow}
-          >
-            {ismoreFollowLoading && <LocalSpinner noBc/>}
-            {!ismoreFollowLoading && "View more"}
-          </button>)
-          :
-          (modalStore.followModal.followingsListSnapshots.docs.length !==0 &&<button
-            className={FollowModalCss.loadComments}
-            onClick={handelLoadFollow}
-          >
-            {ismoreFollowLoading && <LocalSpinner noBc/>}
-            {!ismoreFollowLoading && "View more"}
-          </button>))}
+          {isDataLoaded &&
+            (modalStore.followModal.type === "followers"
+              ? modalStore.followModal.followerslistSnapshots.docs.length !==
+                  0 && (
+                  <button
+                    className={FollowModalCss.loadComments}
+                    onClick={handelLoadFollow}
+                  >
+                    {ismoreFollowLoading && <LocalSpinner noBc />}
+                    {!ismoreFollowLoading && "View more"}
+                  </button>
+                )
+              : modalStore.followModal.followingsListSnapshots.docs.length !==
+                  0 && (
+                  <button
+                    className={FollowModalCss.loadComments}
+                    onClick={handelLoadFollow}
+                  >
+                    {ismoreFollowLoading && <LocalSpinner noBc />}
+                    {!ismoreFollowLoading && "View more"}
+                  </button>
+                ))}
         </div>
       </div>
     </div>
