@@ -45,6 +45,15 @@
 .commentInfo p:last-child{
     margin-left: 1rem;
 }
+.moreDetailwrap{
+    display: flex;
+    align-items: center;
+}
+.verifiedBadge{
+    width: 15px;
+    height: 15px;
+    margin-right: 0.5rem;
+}
 
 @keyframes pulse {
     0% {

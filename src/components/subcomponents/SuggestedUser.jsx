@@ -5,6 +5,7 @@ import ProfileCss from "../../css/auth/Profile.module.css";
 import { followUser, unfollowUser } from "../../utils/firebase_api";
 import LocalSpinner from "../spinners/LocalSpinner";
 import mystore from "./../../stores/store";
+import verifiedBadge from '../../media/verified-badge.png'
 
 function SuggestedUser({ user, type }) {
   const [isFollowInProgress, setIsFollowInProgress] = useState(false);
@@ -42,7 +43,11 @@ function SuggestedUser({ user, type }) {
       </div>
       <div className={ProfileCss.profileinfo}>
         <Link to={"/" + user.username}>
-          <p className={ProfileCss.username}>{user.username}</p>
+          <div className={ProfileCss.usernameVeriWrap}>
+            <p className={ProfileCss.username}>{user.username}</p>
+            {(user.isVerified ?? false) && <img src={verifiedBadge}alt="verifiedBadge" className={ProfileCss.verifiedBadge}/>}
+          </div>
+          
         </Link>
         <p className={ProfileCss.fullName}>{user.fullName}</p>
       </div>

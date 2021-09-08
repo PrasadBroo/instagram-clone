@@ -6,6 +6,7 @@ import modalStore from "./../../stores/modalStore";
 import mystore from "../../stores/store";
 import LocalSpinner from "../spinners/LocalSpinner";
 import { Link } from "react-router-dom";
+import verifiedBadge from '../../media/verified-badge.png'
 
 import {
   addComment,
@@ -122,6 +123,7 @@ function PostP() {
                 <img src={data.user.profilePic} alt="post" />
               </Link>
               <Link to={"/" + data.user.username}>{data.user.username}</Link>
+              {(data.user.isVerified ?? false) && <img src={verifiedBadge}alt="verifiedBadge" title="verified" className={PostPCss.verifiedBadge}/>}
             </div>
             <div
               className={PostPCss.postOptions}

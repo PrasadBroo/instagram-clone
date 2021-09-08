@@ -11,6 +11,7 @@ import UnfollowModal from "../modals/UnfollowModal";
 import { firestore } from "../../services/firebase";
 import Spinner from "../spinners/Spinner";
 import LocalSpinner from "../spinners/LocalSpinner";
+import verifiedBadge from '../../media/verified-badge.png'
 import {
   addPost,
   getUserPosts,
@@ -153,6 +154,7 @@ function ProfileMain() {
           <div className={ProfileMainCss.profileInfo}>
             <div className={ProfileMainCss.secone}>
               <p>{userDetails.username}</p>
+              {(userDetails.isVerified ?? false) && <img src={verifiedBadge}alt="verifiedBadge" title="verified" className={ProfileMainCss.verifiedBadge}/>}
               {userDetails.uid === mystore.auth.user.uid && (
                 <Link
                   to="/settings/edit"

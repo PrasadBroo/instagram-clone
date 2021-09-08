@@ -8,7 +8,7 @@ import { Link, useHistory } from "react-router-dom";
 import { likePost, unlikePost, addComment,add_post_to_saved_posts,remove_post_from_saved } from "../../utils/firebase_api";
 import LocalSpinner from "../spinners/LocalSpinner";
 import mystore from "../../stores/store";
-
+import verifiedBadge from '../../media/verified-badge.png'
 function Post({ data }) {
   const [isLoading, setIsLoading] = useState(true);
   const [comment, setComment] = useState("");
@@ -104,6 +104,7 @@ function Post({ data }) {
               <img src={data.user.profilePic} alt="post" />
             </Link>
             <Link to={"/" + data.user.username}>{data.user.username}</Link>
+            {(data.user.isVerified ?? false) && <img src={verifiedBadge}alt="verifiedBadge" title="verified" className={PostCss.verifiedBadge}/>}
           </div>
           <div className={PostCss.postOptions} onClick={handelPostModal}>
             <svg

@@ -59,6 +59,7 @@ const register_user = async (fullName, username) => {
     email: auth().currentUser.email,
     fullName,
     username,
+    isVerified:false,
     website: null,
     bio: null,
     followersCount: 0,

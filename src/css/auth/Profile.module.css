@@ -52,7 +52,15 @@
     color: #8E8E8E;
     margin: 1rem 0 1rem 10px;
 }
-
+.verifiedBadge{
+    width: 15px;
+    height: 15px;
+    margin: 0 0.5rem;
+}
+.usernameVeriWrap{
+    display: flex;
+    align-items: center;
+}
 .followBtn,.followingBtn{
     position: relative;
     border: none;
