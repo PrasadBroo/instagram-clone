@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import UnfollowModal from "../modals/UnfollowModal";
 import SuggestedUser from "./../subcomponents/SuggestedUser";
 import SkeletonSuggUser from "../skeletons/SkeletonSuggUser";
-
+import verifiedBadge from '../../media//verified-badge.png'
 function Profile() {
   return (
     <div className={ProfileCss.profileWrapper}>
@@ -20,7 +20,8 @@ function Profile() {
             <p className={ProfileCss.username}>
               <Link to={"/" + mystore.currentUser.username}>
                 {mystore.currentUser.username}
-              </Link>{" "}
+              </Link>
+              {(mystore.currentUser.isVerified ?? false) && <img src={verifiedBadge}alt="verifiedBadge" title="verified" className={ProfileCss.verifiedBadge}/>}
             </p>
             <p className={ProfileCss.fullName}>
               {mystore.currentUser.fullName}

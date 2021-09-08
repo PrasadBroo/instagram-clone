@@ -1,11 +1,11 @@
 import { view } from "@risingstack/react-easy-state";
-import * as moment from 'moment'
+import * as moment from "moment";
 import React from "react";
 import { Link } from "react-router-dom";
 import CommentCss from "../../css/auth/Comment.module.css";
 import mystore from "../../stores/store";
 import { like_comment, unlike_comment } from "../../utils/firebase_api";
-import verifiedBadge from '../../media/verified-badge.png'
+import verifiedBadge from "../../media/verified-badge.png";
 
 function Comment({ data, type, post }) {
   const comments =
@@ -36,21 +36,29 @@ function Comment({ data, type, post }) {
   return (
     <div className={CommentCss.comment}>
       <div className={CommentCss.picUsername}>
-        {type==='details' && <div className={CommentCss.profilePic}>
-          <img src={data.user.profilePic} alt={data.user.fullName} />
-        </div>}
-        <div>
-          <div className={CommentCss.moreDetailwrap}>
-            <Link to={"/" + data.user.username}>{data.user.username}</Link>
-          {(data.user.isVerified ?? false) && <img src={verifiedBadge}alt="verifiedBadge" title="verified" className={CommentCss.verifiedBadge}/>}
-          <span>{data.message}</span>
-          
+        {type === "details" && (
+          <div className={CommentCss.profilePic}>
+            <img src={data.user.profilePic} alt={data.user.fullName} />
           </div>
-          {type==='details' && <div className={CommentCss.commentInfo}>
-            <p>{moment(data.createdAt.seconds * 1000).fromNow()}</p>
-            <p>{data.likesCount} likes</p>
-          </div>}
-          
+        )}
+        <div>
+          <Link to={"/" + data.user.username}>{data.user.username}</Link>
+          {(data.user.isVerified ?? false) && (
+            <img
+              src={verifiedBadge}
+              alt="verifiedBadge"
+              title="verified"
+              className={CommentCss.verifiedBadge}
+            />
+          )}
+          <span>{data.message}</span>
+
+          {type === "details" && (
+            <div className={CommentCss.commentInfo}>
+              <p>{moment(data.createdAt.seconds * 1000).fromNow()}</p>
+              <p>{data.likesCount} likes</p>
+            </div>
+          )}
         </div>
       </div>
 
