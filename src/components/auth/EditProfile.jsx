@@ -27,8 +27,8 @@ function EditProfile() {
     mystore.alert.show = true;
     setIsUpdating(false);
   };
-  const [name, setName] = useState(currentUser.fullName);
-  const [email, setEmail] = useState(currentUser.email);
+  const [name, setName] = useState(currentUser.fullName ??'');
+  const [email, setEmail] = useState(currentUser.email ?? '');
   const [bio, setBio] = useState(currentUser.bio??'');
   const [website, setWebsite] = useState(currentUser.website??'');
   const [username, setUsername] = useState(currentUser.username);
