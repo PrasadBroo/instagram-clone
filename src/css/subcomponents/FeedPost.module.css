@@ -1,0 +1,35 @@
+
+.feedPost{
+    height: 100%;
+    position: relative;
+    width: 100%;
+    background-color: gray;
+    text-decoration: none;
+    display: block;
+    /* max-width: 200px;
+    max-height: 200px; */
+}
+.feedPost img{
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+.feedPost:hover .commentIcon{
+    display: flex;
+}
+.commentIcon{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #333;
+    color: #fff;
+    opacity: 0.5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    
+    display: none;
+}

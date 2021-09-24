@@ -1,0 +1,38 @@
+
+.mainWrap{
+    max-width: 1000px;
+    margin: auto;
+}
+.postsWrap{
+    margin-top: 4.5rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    overflow: hidden;
+    height: 300px;
+}
+
+.left,.right{
+    width: 50%;
+    height: 100%;
+
+}
+.left a,.right a{
+    border: 1px solid #fff;
+}
+
+
+.left a{
+    height: 50%;
+}
+
+.threePosts{
+    width: 100%;
+    height: 150px;
+    display: flex;
+    align-items: center;
+}
+.threePosts a{
+    border: 1px solid #fff;
+}

@@ -13,6 +13,7 @@ const mystore = store({
         postDetails:null,
         userSuggetions:null,
         userSuggestedPosts:null,
+        followingSnapshots:null,
         suggestedUSer:null,
         showSuggUsers:false,
     },

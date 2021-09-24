@@ -16,12 +16,13 @@ function MainBody() {
     useEffect(() => {
         const fetchDatails = async () => {
           const { data, err } = await get_user_suggetions();
-          const {data:suggestedPosts,err:err2} = await get_suggested_posts();
+          const {data:suggestedPosts,err:err2,followingSnapshots} = await get_suggested_posts();
           // setTimeout(async()=>{
           //   const {data:suggestedPostsMore,err:err3} = await load_more_suggested_posts(followingSnapshots.docs[followingSnapshots.docs.length -1]);
           // console.log(suggestedPostsMore)
           // suggestedPostsMore.forEach(e => mystore.currentUser.userSuggestedPosts.push(e))
           // },10000)
+          
           
           if (err || err2) {
             return alert(err.message);
@@ -29,9 +30,12 @@ function MainBody() {
           if(suggestedPosts.length === 0){
             mystore.currentUser.showSuggUsers = true;
           }
+          
           modalStore.followModal.type = "followings";
           mystore.currentUser.userSuggetions = data;
+          mystore.currentUser.followingSnapshots = followingSnapshots;
           mystore.currentUser.userSuggestedPosts = suggestedPosts;
+          
         };
         if(!mystore.currentUser.userSuggetions && !mystore.currentUser.userSuggestedPosts)fetchDatails();
         

@@ -2,6 +2,7 @@ import { view } from "@risingstack/react-easy-state";
 import React, { useEffect, useState } from "react";
 import FollowModalCss from "../../css/modals/FollowModal.module.css";
 import { getFollowerslist, getFollowingsList } from "../../utils/firebase_api";
+import SkeletonSuggUser from "../skeletons/SkeletonSuggUser";
 import LocalSpinner from "../spinners/LocalSpinner";
 import FollowUser from "../subcomponents/FollowUser";
 import modalStore from "./../../stores/modalStore";
@@ -90,6 +91,10 @@ function FollowModal() {
             modalStore.followModal.followingsList.map((follower, i) => (
               <FollowUser data={follower} key={i} />
             ))}
+            {!isDataLoaded && <><SkeletonSuggUser/>
+          <SkeletonSuggUser/>
+          <SkeletonSuggUser/>
+          <SkeletonSuggUser/></>}
           {isDataLoaded &&
             (modalStore.followModal.type === "followers"
               ? modalStore.followModal.followerslistSnapshots.docs.length !==

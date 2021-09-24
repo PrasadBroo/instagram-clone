@@ -632,7 +632,7 @@ const add_comment = async (msg, postid) => {
 }
 const get_comments = async (postid) => {
   try {
-    const commentSnapshots = (await commentsRef.doc(postid).collection('comment').limit(10).get());
+    const commentSnapshots = (await commentsRef.doc(postid).collection('comment').limit(10).orderBy('createdAt').get());
     const res = commentSnapshots.docs.map(comment => comment.data())
     let modifiedRes = await Promise.all(res.map(async comment => {
       comment.isLiked = await (await is_comment_liked(comment.id)).data;
@@ -820,7 +820,8 @@ export const load_more_suggested_posts = async (lastVisible) => {
   try {
     const allPosts = [];
     const {
-      data: followingsList
+      data: followingsList,
+      snapshots
     } = await getFollowingsList(auth().currentUser.uid, lastVisible);
     const res = (await Promise.all(followingsList.map(async ele => (await get_user_posts(ele.username)).data)))
     res.forEach(e => e.posts.forEach(e => allPosts.push(e)))
@@ -833,7 +834,8 @@ export const load_more_suggested_posts = async (lastVisible) => {
     })
     return {
       err: false,
-      data: modifiedRes
+      data: modifiedRes,
+      followingSnapshots: snapshots
     }
   } catch (error) {
     return {

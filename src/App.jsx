@@ -12,6 +12,8 @@ import DefaultLoader from "./components/DefaultLoader";
 import PostPage from "./pages/PostPage";
 import mystore from "./stores/store";
 import NotFound from "./components/auth/NotFound";
+import UserFeed from "./pages/UserFeed";
+
 // import { getUserDetailsByUid } from "./utils/firebase_api"
 function App() {
   const isMounted = React.useRef(true);
@@ -44,6 +46,8 @@ function App() {
       <Switch>
         <Route exact path="/" component={() => <HomePage />}></Route>
         <Route path="/settings" component={() => <SettingsPage />}></Route>
+        <Route path="/user/feed" component={() => <UserFeed />}></Route>
+
         <Route
           exact
           path="/accounts/emailsignup"
