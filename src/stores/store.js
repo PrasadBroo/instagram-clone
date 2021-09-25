@@ -16,6 +16,8 @@ const mystore = store({
         followingSnapshots:null,
         suggestedUSer:null,
         showSuggUsers:false,
+        feed_posts:null,
+        feed_posts_snapshots:null
     },
     showNotFound:false,
     isAnythingLoading:{

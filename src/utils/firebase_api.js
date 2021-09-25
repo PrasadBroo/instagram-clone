@@ -844,6 +844,22 @@ export const load_more_suggested_posts = async (lastVisible) => {
     }
   }
 }
+export const get_feed_posts = async(lastVisible=null)=>{
+  try {
+    const snapshots =  lastVisible ? await postsRef.orderBy('createdAt').startAfter(lastVisible).get():(await postsRef.orderBy('createdAt').limit(9).get());
+    const posts =  snapshots.docs.map(ele => ele.data());
+    return {
+      err: false,
+      data: posts,
+      snapshots
+    }
+  } catch (error) {
+    return {
+      err: error,
+      data: false,
+    }
+  }
+}
 export const load_more_comments = async (postid, lastDocument) => {
   try {
     const commentSnapshots = (await commentsRef.doc(postid).collection('comment').limit(10).startAfter(lastDocument).get())

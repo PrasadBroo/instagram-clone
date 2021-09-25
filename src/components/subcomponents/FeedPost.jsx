@@ -1,18 +1,19 @@
 import { view } from "@risingstack/react-easy-state";
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import FeedPostCss from "../../css/subcomponents/FeedPost.module.css";
 import LocalSpinner from "../spinners/LocalSpinner";
 
-function FeedPost({ src }) {
+function FeedPost({post}) {
   const [isLoaded, setIsLoaded] = useState(false);
   return (
-    <a className={FeedPostCss.feedPost} href="/">
+    <Link className={FeedPostCss.feedPost} to={"/post/"+post.postId}>
       <span className={FeedPostCss.commentIcon}>
         <ion-icon name="chatbubble-outline"></ion-icon>
       </span>
       {!isLoaded && <LocalSpinner />}
-      <img src={src} alt="feed-post" onLoad={() => setIsLoaded(true)} />
-    </a>
+      <img src={post.postMediaUrl} alt="feed-post" onLoad={() => setIsLoaded(true)} />
+    </Link>
   );
 }
 export default view(FeedPost);

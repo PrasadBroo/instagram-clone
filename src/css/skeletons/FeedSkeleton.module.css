@@ -1,0 +1,78 @@
+
+.mainWrap{
+    max-width: 1000px;
+    margin: auto;
+}
+.postsWrap,.postsWrapReverse{
+    margin-top: 4.2rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    overflow: hidden;
+    height: 300px;
+}
+.postsWrapReverse{
+    margin-top: 0;
+}
+.postsWrapReverse .left{
+    order: 2;
+}
+.left,.right{
+    width: 50%;
+    height: 100%;
+
+}
+.left div,.right div{
+    border: 1px solid #fff;
+}
+
+
+.left div{
+    height: 50%;
+}
+.right div{
+    height: 100%;
+}
+.threePosts{
+    width: 100%;
+    height: 150px;
+    display: flex;
+    align-items: center;
+}
+.threePosts div{
+    border: 1px solid #fff;
+    background-color: gray;
+    height: 100%;
+    width: 1000%;
+}
+.left div,.right div{
+    background-color: gray;
+}
+.threePosts div{
+    background-color: gray;
+}
+
+
+.left div,.right div,.threePosts div{
+    animation-duration: 1s;
+    animation-timing-function: ease-in-out;
+    animation-delay: 0.5s;
+    animation-iteration-count: infinite;
+    animation-direction: normal;
+    animation-fill-mode: none;
+    animation-play-state: running;
+    animation-name: MuiSkeleton-keyframes-pulsee;
+  }
+
+  @keyframes MuiSkeleton-keyframes-pulsee {
+    0%{
+     opacity: 1;
+    } 
+    50%{
+        opacity: 0.4;
+    }
+    100%{
+        opacity: 1;
+    }
+ }
