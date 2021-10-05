@@ -25,7 +25,7 @@ function Comment({ data, type, post }) {
     } else {
       comments.find((ele) => ele.id === data.id).isLiked = true;
       comments.find((ele) => ele.id === data.id).likesCount += 1;
-      const { err } = await like_comment(data.id);
+      const { err } = await like_comment(data.id,data.uid);
       if (err) {
         comments.find((ele) => ele.id === data.id).likesCount -= 1;
         comments.find((ele) => ele.id === data.id).isLiked = false;

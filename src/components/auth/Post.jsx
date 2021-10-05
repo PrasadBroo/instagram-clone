@@ -5,10 +5,18 @@ import modalStore from "./../../stores/modalStore";
 import SkeletonPost from "../skeletons/SkeletonPost";
 import { view } from "@risingstack/react-easy-state";
 import { Link, useHistory } from "react-router-dom";
-import { likePost, unlikePost, addComment,add_post_to_saved_posts,remove_post_from_saved } from "../../utils/firebase_api";
+import {
+  likePost,
+  unlikePost,
+  addComment,
+  add_post_to_saved_posts,
+  remove_post_from_saved,
+} from "../../utils/firebase_api";
 import LocalSpinner from "../spinners/LocalSpinner";
 import mystore from "../../stores/store";
-import verifiedBadge from '../../media/verified-badge.png'
+import verifiedBadge from "../../media/verified-badge.png";
+import moment from "moment";
+
 function Post({ data }) {
   const [isLoading, setIsLoading] = useState(true);
   const [comment, setComment] = useState("");
@@ -18,23 +26,23 @@ function Post({ data }) {
     if (data.post.isLiked) {
       data.post.isLiked = false;
       data.post.likesCount -= 1;
-      const { err:unlikePosrErr } = await unlikePost(data.post.postId);
+      const { err: unlikePosrErr } = await unlikePost(data.post.postId);
       if (unlikePosrErr) {
         mystore.alert.show = false;
-        mystore.alert.message = "Couldn't unlike the post"
+        mystore.alert.message = "Couldn't unlike the post";
         mystore.alert.show = true;
-        return
+        return;
       }
     } else {
       data.post.isLiked = true;
       data.post.likesCount += 1;
-      
-      const { err:likePostErr } = await likePost(data.post.postId);
+
+      const { err: likePostErr } = await likePost(data.post.postId);
       if (likePostErr) {
         mystore.alert.show = false;
-        mystore.alert.message = "Couldn't like the post"
+        mystore.alert.message = "Couldn't like the post";
         mystore.alert.show = true;
-        return 
+        return;
       }
     }
   };
@@ -58,10 +66,9 @@ function Post({ data }) {
         uid: commentData.uid,
         user: mystore.currentUser,
         id: commentData.id,
-        createdAt:commentData.createdAt
+        createdAt: commentData.createdAt,
       });
-    mystore.currentUser.userSuggestedPosts
-    .find(
+    mystore.currentUser.userSuggestedPosts.find(
       (e) => e.post.postId === data.post.postId
     ).post.commentsCount += 1;
   };
@@ -69,29 +76,34 @@ function Post({ data }) {
     modalStore.postModal.display = true;
     modalStore.postModal.postid = data.post.postId;
   };
-  const handelPostBookmark = async()=>{
-    if(data.post.isBookmarked){
-      mystore.currentUser.userSuggestedPosts.find(e => e.post.postId === data.post.postId).post.isBookmarked = false
-      const {err} = await remove_post_from_saved(undefined,data.post.postId);
-    if(err){
-      mystore.alert.show = false;
-        mystore.alert.message = err.message
+  const handelPostBookmark = async () => {
+    if (data.post.isBookmarked) {
+      mystore.currentUser.userSuggestedPosts.find(
+        (e) => e.post.postId === data.post.postId
+      ).post.isBookmarked = false;
+      const { err } = await remove_post_from_saved(undefined, data.post.postId);
+      if (err) {
+        mystore.alert.show = false;
+        mystore.alert.message = err.message;
         mystore.alert.show = true;
         return;
-    }
-    }
-    else{
-      mystore.currentUser.userSuggestedPosts.find(e => e.post.postId === data.post.postId).post.isBookmarked = true
-      const {err} = await add_post_to_saved_posts(undefined,data.post.postId);
-    if(err){
-      mystore.alert.show = false;
-        mystore.alert.message = err.message
+      }
+    } else {
+      mystore.currentUser.userSuggestedPosts.find(
+        (e) => e.post.postId === data.post.postId
+      ).post.isBookmarked = true;
+      const { err } = await add_post_to_saved_posts(
+        undefined,
+        data.post.postId
+      );
+      if (err) {
+        mystore.alert.show = false;
+        mystore.alert.message = err.message;
         mystore.alert.show = true;
         return;
+      }
     }
-    }
-    
-  }
+  };
   return (
     <>
       <div
@@ -104,7 +116,14 @@ function Post({ data }) {
               <img src={data.user.profilePic} alt="post" />
             </Link>
             <Link to={"/" + data.user.username}>{data.user.username}</Link>
-            {(data.user.isVerified ?? false) && <img src={verifiedBadge}alt="verifiedBadge" title="verified" className={PostCss.verifiedBadge}/>}
+            {(data.user.isVerified ?? false) && (
+              <img
+                src={verifiedBadge}
+                alt="verifiedBadge"
+                title="verified"
+                className={PostCss.verifiedBadge}
+              />
+            )}
           </div>
           <div className={PostCss.postOptions} onClick={handelPostModal}>
             <svg
@@ -169,7 +188,9 @@ function Post({ data }) {
           </div>
           <div className={PostCss.rightSide}>
             <span className={PostCss.saveBtn} onClick={handelPostBookmark}>
-              <ion-icon name={data.post.isBookmarked ? "bookmark" : "bookmark-outline"}></ion-icon>
+              <ion-icon
+                name={data.post.isBookmarked ? "bookmark" : "bookmark-outline"}
+              ></ion-icon>
             </span>
           </div>
         </div>
@@ -184,8 +205,11 @@ function Post({ data }) {
         <div className={PostCss.comments}>
           {data.topComments &&
             data.topComments.map((c, i) => (
-              <Comment data={c} key={i} post={data} type="home"/>
+              <Comment data={c} key={i} post={data} type="home" />
             ))}
+        </div>
+        <div className={PostCss.postDate}>
+          <p>{moment(data.post.createdAt.seconds * 1000).fromNow()}</p>
         </div>
         <div className={PostCss.postComment}>
           {isCommentAdding && <LocalSpinner />}

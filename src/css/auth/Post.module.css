@@ -29,7 +29,14 @@
     display: flex;
     align-items: center;
 }
-
+.postDate p{
+    font-size: 12px;
+    padding: 0 1rem;
+    color: #8E8E8E;
+    outline: none;
+    border: none;
+    background-color: transparent;
+}
 .viewAllComm button{
     font-size: 14px;
     padding: 0 1rem;

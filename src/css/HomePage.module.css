@@ -108,6 +108,9 @@
     border-radius: 3px;
     border: 1px solid rgb(202, 202, 202);
 }
+.submitButton:disabled{
+    background-color: rgba(0, 149, 246, .3);
+}
 .changebtnColor{
     background-color: #0095F6;
 }

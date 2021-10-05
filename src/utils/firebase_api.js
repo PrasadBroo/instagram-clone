@@ -21,6 +21,8 @@ const likesRef = firestore().collection('likes');
 const commentsRef = firestore().collection('comments');
 const commentsLikesRef = firestore().collection('commentsLikes');
 const savedPostsRef = firestore().collection('saved');
+const notificationsRef = firestore().collection('notifications');
+
 const get_user_details_by_uid = async (uid = auth().currentUser.uid) => {
   try {
     const details = (await (usersRef.doc(uid)).get()).data();
@@ -59,7 +61,7 @@ const register_user = async (fullName, username) => {
     email: auth().currentUser.email,
     fullName,
     username,
-    isVerified:false,
+    isVerified: false,
     website: null,
     bio: null,
     followersCount: 0,
@@ -85,6 +87,7 @@ const register_user = async (fullName, username) => {
 
 
 }
+
 
 const get_user_posts = async (username) => {
   try {
@@ -298,6 +301,7 @@ const follow_user = async (user) => {
       merge: true
     });
     await usersFollowingsRef.doc(auth().currentUser.uid).collection('users').doc(user.uid).set(followingData);
+    send_followed_event(user.uid)
     return {
       err: false,
       data: res
@@ -403,13 +407,13 @@ const get_followings_list = async (uid, lastVisible = null) => {
   }
 
 }
-export const is_fb_uid_exists = async(uid)=>{
+export const is_fb_uid_exists = async (uid) => {
   try {
     const res = await (await usersRef.doc(uid).get()).exists;
     return {
       err: false,
       data: res
-    } 
+    }
   } catch (error) {
     return {
       err: error,
@@ -440,7 +444,7 @@ const update_profile_details = async (name, email, username, bio, website, uid) 
     if (!isValidBio) throw Error('Bio length must be less than 120 chars')
     const validWebsite = isValidWebsiteLink(website);
     if (!validWebsite) throw Error('invalid website')
-    if(!mystore.auth.user.emailVerified)throw new Error('Plz Verify Your Email First,Email Already Has Been Sent')
+    if (!mystore.auth.user.emailVerified) throw new Error('Plz Verify Your Email First,Email Already Has Been Sent')
     const {
       data: isUsernameExists,
       err: gotErr
@@ -467,9 +471,9 @@ const update_profile_details = async (name, email, username, bio, website, uid) 
     }
   }
 }
-export const search_users = async(searchText)=>{
+export const search_users = async (searchText) => {
   try {
-    const res = (await usersRef.orderBy('username').limit(5).startAt(searchText).endAt(searchText+ "\uf8ff").get()).docs.map(e => e.data());
+    const res = (await usersRef.orderBy('username').limit(5).startAt(searchText).endAt(searchText + "\uf8ff").get()).docs.map(e => e.data());
     return {
       err: false,
       data: res
@@ -551,6 +555,48 @@ const post_like_decrement = async (postid) => {
 //     throw Error('cannot decrement comment count')
 //   }
 // }
+const send_post_like_event = async (postid) => {
+  const user_uid = (await postsRef.doc(postid).get()).data().byUser;
+  const data = {
+    uid: auth().currentUser.uid,
+    postid:postid,
+    createdAt: firestore.Timestamp.now(),
+    event:'post_like'
+  }
+ await notificationsRef.doc(user_uid).collection('notifications').add(data);
+}
+const send_followed_event = async(uid)=>{
+  const data = {
+    uid: auth().currentUser.uid,
+    createdAt: firestore.Timestamp.now(),
+    event:'followed'
+  }
+ await notificationsRef.doc(uid).collection('notifications').add(data);
+}
+const send_comment_like_event = async(uid)=>{
+  const data = {
+    uid: auth().currentUser.uid,
+    createdAt: firestore.Timestamp.now(),
+    event:'comment_like'
+  }
+ await notificationsRef.doc(uid).collection('notifications').add(data);
+}
+
+export const get_user_notifications = async(uid=auth().currentUser.uid)=>{
+  try {
+    const res= await (await notificationsRef.doc(uid).collection('notifications').get()).docs.map(doc => doc.data());
+    const events = await Promise.all(res.map(async event => {event.user = await (await get_user_details_by_uid(event.uid)).data;return event}))
+    return {
+      err: false,
+      data: events
+    }
+  } catch (error) {
+    return {
+      err: error,
+      data: false
+    }
+  }
+}
 const comment_count_increment = async (postid) => {
   try {
     let previusCount = (await postsRef.doc(postid).get()).data().commentsCount;
@@ -572,7 +618,8 @@ const like_post = async (postid) => {
     const alredyLiked = await (await likesRef.doc(postid).collection('users').doc(auth().currentUser.uid).get()).exists
     if (alredyLiked) throw new Error('post alredy liked')
     const res = await likesRef.doc(postid).collection('users').doc(auth().currentUser.uid).set({});
-    await post_like_increment(postid)
+    await post_like_increment(postid);
+    send_post_like_event(postid);
     return {
       err: false,
       data: res
@@ -678,9 +725,10 @@ const is_comment_liked = async (commentId) => {
     throw Error('something wrong here')
   }
 }
-export const like_comment = async (commentId) => {
+export const like_comment = async (commentId,uid) => {
   try {
     const res = await commentsLikesRef.doc(commentId).collection('user').doc(auth().currentUser.uid).set({})
+    send_comment_like_event(uid);
     return {
       err: false,
       data: res
@@ -844,10 +892,10 @@ export const load_more_suggested_posts = async (lastVisible) => {
     }
   }
 }
-export const get_feed_posts = async(lastVisible=null)=>{
+export const get_feed_posts = async (lastVisible = null) => {
   try {
-    const snapshots =  lastVisible ? await postsRef.orderBy('createdAt').startAfter(lastVisible).get():(await postsRef.orderBy('createdAt').limit(9).get());
-    const posts =  snapshots.docs.map(ele => ele.data());
+    const snapshots = lastVisible ? await postsRef.orderBy('createdAt').startAfter(lastVisible).get() : (await postsRef.orderBy('createdAt').limit(9).get());
+    const posts = snapshots.docs.map(ele => ele.data());
     return {
       err: false,
       data: posts,
